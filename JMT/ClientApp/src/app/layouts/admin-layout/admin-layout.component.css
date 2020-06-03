@@ -1,0 +1,34 @@
+#testing2{
+    background-image: url('../../../assets/img/Main.png');
+    background-size: cover;
+}
+.wrappingbutton {
+    text-align: center;
+    display: inline-block;
+    position: absolute;
+    top: 40%;
+    left: 43%;
+}
+
+#buttonmid
+{
+    width: 250px;
+}
+
+.wrappinglogin{
+    position: absolute;
+    top: 20%;
+    left: 39%;
+}
+
+  
+  
+  
+ 
+
+
+
+
+
+
+
