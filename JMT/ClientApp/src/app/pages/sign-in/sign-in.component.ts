@@ -12,6 +12,21 @@ export interface customer{
   phoneNumber : string;
   roleDesc : string;
 }
+export interface Developer{
+  developerID : number;
+  email : string;
+  firstName : string;
+  lastName : string;
+  password : string;
+  phoneNumber : string;
+  description : string;
+  pLanguages : string;
+  skills : string;
+  education : string;
+  certification : string;
+  title : string;
+  roleDesc : string;
+}
 @Component({
   selector: 'app-sign-in',
   templateUrl: './sign-in.component.html',
@@ -20,8 +35,11 @@ export interface customer{
 })
 export class SignInComponent implements OnInit {
   constructor(public globals: Globals , private router : Router , private toastr: ToastrService , private http : HttpClient) { }
-  Email: string; Password: string; errormessage: string; loginresponse: customer[];
-  FirstName : string; LastName : string; Email2 : string; Password2: string; CustomerID : number; PhoneNumber : string; RoleDesc : string;
+  Email: string; Password: string; errormessage: string; loginresponse: customer[]; developerlogin : Developer[];
+  CFirstName : string; CLastName : string; CEmail2 : string; CPassword2: string; CustomerID : number; CPhoneNumber : string; CRoleDesc : string;
+  DFirstName : string; DLastName : string; DEmail2 : string; DPassword2: string; DeveloperID : number; DPhoneNumber : string; 
+  DDescription: string; DPLanguages: string; DSkills: string; DEducation: string; DCertificates: string; DTitle: string; DRoleDesc : string;
+  CnotD : boolean =  false;
   regexp = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
   ngOnInit() {
 
@@ -41,25 +59,52 @@ export class SignInComponent implements OnInit {
       this.showNotification('top', 'center' , this.errormessage);
       return;
     }
-
+          
     this.http.get('https://localhost:44380/api/getCustomerInfo/' + this.Email + '/' + this.Password)
      .subscribe(
          (response : customer[] ) => {
           this.loginresponse = response;
           if(this.loginresponse.length === 0){
-            this.toastr.clear();
-            this.errormessage = '*Email or Password Incorrect. Try again!';
-            this.showNotification('top', 'center' , this.errormessage);
-            return;
+            this.http.get('https://localhost:44380/api/getDeveloperInfo/' + this.Email + '/' + this.Password)
+            .subscribe(
+                    (response2 : Developer[] ) => { 
+                      this.developerlogin = response2;
+                      if(this.developerlogin.length === 0){
+                        this.toastr.clear();
+                        this.errormessage = '*Email or Password Incorrect. Try again!';
+                        this.showNotification('top', 'center' , this.errormessage);
+                      }else{
+                        this.DFirstName = this.developerlogin[0].firstName;
+                        this.DLastName = this.developerlogin[0].lastName;
+                        this.DEmail2 = this.developerlogin[0].email;
+                        this.DPassword2 = this.developerlogin[0].password;
+                        this.DeveloperID = this.developerlogin[0].developerID;
+                        this.DPhoneNumber = this.developerlogin[0].phoneNumber;
+                        this.DDescription = this.developerlogin[0].description;
+                        this.DPLanguages = this.developerlogin[0].pLanguages;
+                        this.DSkills = this.developerlogin[0].skills;
+                        this.DEducation = this.developerlogin[0].education;
+                        this.DCertificates = this.developerlogin[0].certification;
+                        this.DTitle = this.developerlogin[0].title;
+                        this.DRoleDesc = this.developerlogin[0].roleDesc;
+                        this.CnotD = false;
+                        this.router.navigate(['./dashboard'], 
+                        {state: {type: this.CnotD, FirstName: this.DFirstName , LastName: this.DLastName, PhoneNumber : this.DPhoneNumber , Email : this.DEmail2, Password : this.DPassword2
+                        , Description : this.DDescription , PLanguages : this.DPLanguages , Skills : this.DSkills, Education : this.DEducation , Certification : this.DCertificates,
+                          Title : this.DTitle , DeveloperID : this.DeveloperID , RoleDesc : this.DRoleDesc }});
+                      }
+                    }, (error) => {console.log('error message ' + error)}
+                    )
           }else {
-            this.FirstName = this.loginresponse[0].firstName;
-            this.LastName = this.loginresponse[0].lastName;
-            this.Email2 = this.loginresponse[0].email;
-            this.Password2 = this.loginresponse[0].password;
+            this.CFirstName = this.loginresponse[0].firstName;
+            this.CLastName = this.loginresponse[0].lastName;
+            this.CEmail2 = this.loginresponse[0].email;
+            this.CPassword2 = this.loginresponse[0].password;
             this.CustomerID = this.loginresponse[0].customerID;
-            this.PhoneNumber = this.loginresponse[0].phoneNumber;
-            this.RoleDesc = this.loginresponse[0].roleDesc;
-            this.router.navigate(['./dashboard'], {state: { FirstName: this.FirstName , LastName: this.LastName, PhoneNumber : this.PhoneNumber , Email : this.Email2, Password : this.Password2 ,CustomerID : this.CustomerID ,RoleDesc : this.RoleDesc}});
+            this.CPhoneNumber = this.loginresponse[0].phoneNumber;
+            this.CRoleDesc = this.loginresponse[0].roleDesc;
+            this.CnotD = true;
+            this.router.navigate(['./dashboard'], {state: {type: this.CnotD, FirstName: this.CFirstName , LastName: this.CLastName, PhoneNumber : this.CPhoneNumber , Email : this.CEmail2, Password : this.CPassword2 ,CustomerID : this.CustomerID ,RoleDesc : this.CRoleDesc}});
           }
           this.toastr.clear();
          }, (error) => {console.log('error message ' + error)}

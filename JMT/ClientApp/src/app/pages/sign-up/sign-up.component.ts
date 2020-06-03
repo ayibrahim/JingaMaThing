@@ -6,23 +6,29 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 export interface headers{}
-interface IServerCustomer {
-  "customerID": number;
-  "firstName": string;
-  "lastName": string;
-  "phoneNumber": string;
-  "email": string;
-  "password": string;
-  "roleDesc": string;
+export interface customer{
+  customerID : number;
+  email : string;
+  firstName : string;
+  lastName : string;
+  password : string;
+  phoneNumber : string;
+  roleDesc : string;
 }
-export interface ICustomer {
-  customerID: string;
-  firstName: string;
-  lastName: string;
-  phoneNumber: string;
-  email: string;
-  password: string;
-  roleDesc: string;
+export interface Developer{
+  developerID : number;
+  email : string;
+  firstName : string;
+  lastName : string;
+  password : string;
+  phoneNumber : string;
+  description : string;
+  pLanguages : string;
+  skills : string;
+  education : string;
+  certification : string;
+  title : string;
+  roleDesc : string;
 }
 @Component({
   selector: 'app-sign-up',
@@ -38,9 +44,10 @@ export class SignUpComponent implements OnInit {
   isDeveloper : boolean = false;
   isDeveloper2 : boolean = false;
   isDeveloper3 : boolean = false;
-  CFirstName: string; CLastName: string; CPhoneNumber: number; CEmail: string; CPassword: string; CConfirmPassword: string;
-  DFirstName: string; DLastName: string; DPhoneNumber: number; DEmail: string; DPassword: string; DConfirmPassword: string;
-  DDescription: string; DPLanguages: string; DSkills: string; DEducation: string; DCertificates: string; DTitle: string;
+  CFirstName: string; CLastName: string; CPhoneNumber: string; CEmail: string; CPassword: string; CConfirmPassword: string; CustomerID : number;  CRoleDesc : String;
+  DFirstName: string; DLastName: string; DPhoneNumber: string; DEmail: string; DPassword: string; DConfirmPassword: string; DeveloperID : number; DRoleDesc : string;
+  DDescription: string; DPLanguages: string; DSkills: string; DEducation: string; DCertificates: string; DTitle: string; 
+  loginresponse: customer[]; developerlogin : Developer[];
   regexp = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
   CnotD : boolean = false;
   constructor(private toastr: ToastrService , private http : HttpClient , private router : Router) { }
@@ -82,14 +89,22 @@ export class SignUpComponent implements OnInit {
       return;
     }
      this.http.get('https://localhost:44380/api/InserNewCustomer/' + this.CFirstName + '/' + this.CLastName + '/' + this.CPhoneNumber + '/' + this.CEmail + '/' + this.CPassword)
+      this.http.get('https://localhost:44380/api/getCustomerInfo/' + this.CEmail + '/' + this.CPassword)
      .subscribe(
-         (response : headers[] ) => {
-          this.newdata = response;
+         (response : customer[] ) => {
+          this.loginresponse = response;
+            this.CFirstName = this.loginresponse[0].firstName;
+            this.CLastName = this.loginresponse[0].lastName;
+            this.CEmail = this.loginresponse[0].email;
+            this.CPassword = this.loginresponse[0].password;
+            this.CustomerID = this.loginresponse[0].customerID;
+            this.CPhoneNumber = this.loginresponse[0].phoneNumber;
+            this.CRoleDesc = this.loginresponse[0].roleDesc;
+          this.toastr.clear();
+          this.CnotD = true;
+          this.router.navigate(['./dashboard'], {state: {type: this.CnotD, FirstName: this.CFirstName , LastName: this.CLastName, PhoneNumber : this.CPhoneNumber , Email : this.CEmail, Password : this.CPassword ,CustomerID : this.CustomerID ,RoleDesc : this.CRoleDesc}});
          }, (error) => {console.log('error message ' + error)}
        )
-       this.toastr.clear();
-       this.CnotD = true;
-      this.router.navigate(['./dashboard'], {state: {type: this.CnotD, FirstName: this.CFirstName , LastName: this.CLastName, PhoneNumber : this.CPhoneNumber , Email : this.CEmail, Password : this.CPassword}});
   }
   //Set on phone number fields so user cant enter a character such as the letter e or - only numbers.
   test(){
@@ -110,13 +125,32 @@ export class SignUpComponent implements OnInit {
    }
    this.http.get('https://localhost:44380/api/InsertNewDeveloper/' + this.DFirstName + '/' + this.DLastName + '/' + this.DPhoneNumber + '/' + this.DEmail + '/' + this.DPassword
     + '/' + this.DDescription + '/' + this.DPLanguages + '/' + this.DSkills + '/' + this.DEducation + '/' + this.DCertificates + '/' + this.DTitle)
-
-    this.toastr.clear();
+    this.http.get('https://localhost:44380/api/getDeveloperInfo/' + this.DEmail + '/' + this.DPassword)
+            .subscribe(
+                    (response2 : Developer[] ) => { 
+                      this.developerlogin = response2;
+                      this.DFirstName = this.developerlogin[0].firstName;
+                      this.DLastName = this.developerlogin[0].lastName;
+                      this.DEmail = this.developerlogin[0].email;
+                      this.DPassword = this.developerlogin[0].password;
+                      this.DeveloperID = this.developerlogin[0].developerID;
+                      this.DPhoneNumber = this.developerlogin[0].phoneNumber;
+                      this.DDescription = this.developerlogin[0].description;
+                      this.DPLanguages = this.developerlogin[0].pLanguages;
+                      this.DSkills = this.developerlogin[0].skills;
+                      this.DEducation = this.developerlogin[0].education;
+                      this.DCertificates = this.developerlogin[0].certification;
+                      this.DTitle = this.developerlogin[0].title;
+                      this.DRoleDesc = this.developerlogin[0].roleDesc;
+      this.toastr.clear();
       this.CnotD = false;
       this.router.navigate(['./dashboard'], 
       {state: {type: this.CnotD, FirstName: this.DFirstName , LastName: this.DLastName, PhoneNumber : this.DPhoneNumber , Email : this.DEmail, Password : this.DPassword
       , Description : this.DDescription , PLanguages : this.DPLanguages , Skills : this.DSkills, Education : this.DEducation , Certification : this.DCertificates,
-      Title : this.DTitle }});
+        Title : this.DTitle , DeveloperID : this.DeveloperID , RoleDesc : this.DRoleDesc }});
+    
+    }, (error) => {console.log('error message ' + error)}
+    )
   }
 
 

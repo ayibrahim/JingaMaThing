@@ -39,6 +39,8 @@ export class AdminLayoutComponent implements OnInit {
     console.log(history.state.PhoneNumber);
     console.log(history.state.Email);
     console.log(history.state.Password);
+    console.log(history.state.CustomerID);
+    console.log(history.state.CRoleDesc);
     }
     if(history.state.type === false){
       console.log(history.state.FirstName);
