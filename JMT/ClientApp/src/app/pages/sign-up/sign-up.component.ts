@@ -88,8 +88,17 @@ export class SignUpComponent implements OnInit {
       this.showNotification('top', 'center' , this.errormessage);
       return;
     }
-     this.http.get('https://localhost:44380/api/InserNewCustomer/' + this.CFirstName + '/' + this.CLastName + '/' + this.CPhoneNumber + '/' + this.CEmail + '/' + this.CPassword)
-      this.http.get('https://localhost:44380/api/getCustomerInfo/' + this.CEmail + '/' + this.CPassword)
+     this.http.get('https://localhost:44380/api/InserNewCustomer/' + this.CFirstName + '/' + this.CLastName + '/' + this.CPhoneNumber + '/' + this.CEmail + '/' + this.CPassword) .subscribe(
+       (response2 : headers[]) => {
+         this.newdata = response2
+         console.log(this.newdata);
+       }, (error) => {console.log('error message ' + error)}
+       
+     )
+    this.getCusotmerInfo();
+  }
+  getCusotmerInfo(){
+    this.http.get('https://localhost:44380/api/getCustomerInfo/' + this.CEmail + '/' + this.CPassword)
      .subscribe(
          (response : customer[] ) => {
           this.loginresponse = response;
@@ -124,7 +133,19 @@ export class SignUpComponent implements OnInit {
     return;
    }
    this.http.get('https://localhost:44380/api/InsertNewDeveloper/' + this.DFirstName + '/' + this.DLastName + '/' + this.DPhoneNumber + '/' + this.DEmail + '/' + this.DPassword
-    + '/' + this.DDescription + '/' + this.DPLanguages + '/' + this.DSkills + '/' + this.DEducation + '/' + this.DCertificates + '/' + this.DTitle)
+    + '/' + this.DDescription + '/' + this.DPLanguages + '/' + this.DSkills + '/' + this.DEducation + '/' + this.DCertificates + '/' + this.DTitle).subscribe(
+      (response2 : headers[]) => {
+        this.newdata = response2
+        console.log(this.newdata);
+      }, (error) => {console.log('error message ' + error)}
+      
+    )
+    
+ this.getDeveloperInfo();
+    
+  }
+
+  getDeveloperInfo(){
     this.http.get('https://localhost:44380/api/getDeveloperInfo/' + this.DEmail + '/' + this.DPassword)
             .subscribe(
                     (response2 : Developer[] ) => { 
@@ -152,10 +173,6 @@ export class SignUpComponent implements OnInit {
     }, (error) => {console.log('error message ' + error)}
     )
   }
-
-
-
-
   refresh(){
     window.location.reload();
   }
