@@ -40,7 +40,7 @@ export class AdminLayoutComponent implements OnInit {
     console.log(history.state.Email);
     console.log(history.state.Password);
     console.log(history.state.CustomerID);
-    console.log(history.state.CRoleDesc);
+    console.log(history.state.RoleDesc);
     }
     if(history.state.type === false){
       console.log(history.state.FirstName);
@@ -54,6 +54,8 @@ export class AdminLayoutComponent implements OnInit {
       console.log(history.state.Education);
       console.log(history.state.Certification);
       console.log(history.state.Title);
+      console.log(history.state.DeveloperID);
+      console.log(history.state.RoleDesc);
       }
   }
 
