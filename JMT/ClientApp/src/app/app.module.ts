@@ -17,6 +17,7 @@ import { AngularTiltModule } from 'angular-tilt';
 import { SignInComponent } from './pages/sign-in/sign-in.component';
 import { SignUpComponent } from './pages/sign-up/sign-up.component';
 import { Globals } from './Shared/globals';
+import {BrowserModule} from '@angular/platform-browser';
 
 @NgModule({
   imports: [
@@ -28,6 +29,7 @@ import { Globals } from './Shared/globals';
     RouterModule,
     AngularTiltModule,
     AppRoutingModule,
+    BrowserModule,
     ToastrModule.forRoot(),
 
   ],

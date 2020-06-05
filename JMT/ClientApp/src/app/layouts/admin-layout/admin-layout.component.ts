@@ -9,6 +9,7 @@ import { Globals } from '../../Shared/globals'
 })
 export class AdminLayoutComponent implements OnInit {
   public sidebarColor: string = "red";
+  RoleDesc : string;
   constructor(private router: Router , public globals: Globals) {}
   changeSidebarColor(color){
     var sidebar = document.getElementsByClassName('sidebar')[0];
@@ -33,30 +34,17 @@ export class AdminLayoutComponent implements OnInit {
     }
   }
   ngOnInit() {
-    if(history.state.type === true){
-    console.log(history.state.FirstName);
-    console.log(history.state.LastName);
-    console.log(history.state.PhoneNumber);
-    console.log(history.state.Email);
-    console.log(history.state.Password);
-    console.log(history.state.CustomerID);
-    console.log(history.state.RoleDesc);
+    if(!history.state.type){
+      this.router.navigate(['./home']);
     }
-    if(history.state.type === false){
-      console.log(history.state.FirstName);
-      console.log(history.state.LastName);
-      console.log(history.state.PhoneNumber);
-      console.log(history.state.Email);
-      console.log(history.state.Password);
-      console.log(history.state.Description);
-      console.log(history.state.PLanguages);
-      console.log(history.state.Skills);
-      console.log(history.state.Education);
-      console.log(history.state.Certification);
-      console.log(history.state.Title);
-      console.log(history.state.DeveloperID);
-      console.log(history.state.RoleDesc);
+    if(history.state.type == 'customer'){
+      this.RoleDesc = history.state.RoleDesc;
+    }
+    if(history.state.type == 'developer'){
+
+      this.RoleDesc = history.state.RoleDesc;
       }
+
   }
 
 }
