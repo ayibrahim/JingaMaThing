@@ -10,6 +10,8 @@ using Microsoft.Data.SqlClient;
 using JMT.Exceptions;
 using JMT.Model;
 using System.Data;
+using Microsoft.AspNetCore.Hosting;
+using System.Net.Http.Headers;
 namespace JMT.Controllers
 {
     public class UserData : ControllerBase
@@ -125,11 +127,19 @@ namespace JMT.Controllers
                     finalcustomer.Email = (rdr["Email"].ToString());
                     finalcustomer.Password = (rdr["Password"].ToString());
                     finalcustomer.RoleDesc = (rdr["RoleDesc"].ToString());
+                    finalcustomer.Photo = (rdr["Photo"].ToString());
                     customer.Add(finalcustomer);
                 }
 
             }
             return customer;
+        }
+        [HttpGet]
+        [Route("api/getPhoto")]
+        public IActionResult Get()
+        {
+            Byte[] b = System.IO.File.ReadAllBytes(@"C:\\Image2.png");   // You can use your own method over here.         
+            return File(b, "image/png");
         }
 
         [HttpGet]
@@ -162,11 +172,132 @@ namespace JMT.Controllers
                     finalcustomer.Certification = (rdr["Certification"].ToString());
                     finalcustomer.Title = (rdr["Title"].ToString());
                     finalcustomer.RoleDesc = (rdr["RoleDesc"].ToString());
+                    finalcustomer.Photo = (rdr["Photo"].ToString());
                     customer.Add(finalcustomer);
                 }
 
             }
             return customer;
+        }
+        [HttpGet]
+        [Route("api/getCustomerInfoByID/{ID}")]
+        public List<CustomerInfo> GetCustomerInfobyID(string ID = "")
+        {
+            string con2 = "Server=DESKTOP-62GK3U2;Database=JMT;Trusted_Connection=True;";
+            List<CustomerInfo> customer = new List<CustomerInfo>();
+            using (SqlConnection con = new SqlConnection(con2))
+            {
+                SqlCommand cmd = new SqlCommand("GetCustomerInfoByID", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@ID", ID);
+                con.Open();
+                SqlDataReader rdr = cmd.ExecuteReader();
+                while (rdr.Read())
+                {
+                    CustomerInfo finalcustomer = new CustomerInfo();
+                    finalcustomer.CustomerID = (Convert.ToInt32(rdr["CustomerID"]));
+                    finalcustomer.FirstName = (rdr["FirstName"].ToString());
+                    finalcustomer.LastName = (rdr["LastName"].ToString());
+                    finalcustomer.PhoneNumber = (rdr["PhoneNumber"].ToString());
+                    finalcustomer.Email = (rdr["Email"].ToString());
+                    finalcustomer.Password = (rdr["Password"].ToString());
+                    finalcustomer.RoleDesc = (rdr["RoleDesc"].ToString());
+                    finalcustomer.Photo = (rdr["Photo"].ToString());
+                    customer.Add(finalcustomer);
+                }
+
+            }
+            return customer;
+        }
+        [HttpGet]
+        [Route("api/getDeveloperInfoByID/{ID}")]
+        public List<DeveloperInfo> GetDeveloperInfobyID(string ID = "")
+        {
+            string con2 = "Server=DESKTOP-62GK3U2;Database=JMT;Trusted_Connection=True;";
+            List<DeveloperInfo> customer = new List<DeveloperInfo>();
+            using (SqlConnection con = new SqlConnection(con2))
+            {
+                SqlCommand cmd = new SqlCommand("GetDeveloperInfoByID", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@ID", ID);
+                con.Open();
+                SqlDataReader rdr = cmd.ExecuteReader();
+                while (rdr.Read())
+                {
+                    DeveloperInfo finalcustomer = new DeveloperInfo();
+                    finalcustomer.DeveloperID = (Convert.ToInt32(rdr["DeveloperID"]));
+                    finalcustomer.FirstName = (rdr["FirstName"].ToString());
+                    finalcustomer.LastName = (rdr["LastName"].ToString());
+                    finalcustomer.PhoneNumber = (rdr["PhoneNumber"].ToString());
+                    finalcustomer.Email = (rdr["Email"].ToString());
+                    finalcustomer.Password = (rdr["Password"].ToString());
+                    finalcustomer.Description = (rdr["Description"].ToString());
+                    finalcustomer.PLanguages = (rdr["PLanguages"].ToString());
+                    finalcustomer.Skills = (rdr["Skills"].ToString());
+                    finalcustomer.Education = (rdr["Education"].ToString());
+                    finalcustomer.Certification = (rdr["Certification"].ToString());
+                    finalcustomer.Title = (rdr["Title"].ToString());
+                    finalcustomer.RoleDesc = (rdr["RoleDesc"].ToString());
+                    finalcustomer.Photo = (rdr["Photo"].ToString());
+                    customer.Add(finalcustomer);
+                }
+
+            }
+            return customer;
+        }
+
+        [HttpGet]
+        [Route("api/UpdateCustomerInfo/{CustomerID}/{FirstName}/{LastName}/{PhoneNumber}/{Email}")]
+        public string UpdateCustomerInfo(string CustomerID = "" , string FirstName = "" , string LastName = "" , string PhoneNumber = "" , string Email = "")
+        {
+            string response = "positive";
+            string con2 = "Server=DESKTOP-62GK3U2;Database=JMT;Trusted_Connection=True;";
+            using (SqlConnection con = new SqlConnection(con2))
+            {
+                SqlCommand cmd = new SqlCommand("UpdateCustomerInfo", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@CustomerID", CustomerID);
+                cmd.Parameters.AddWithValue("@FirstName", FirstName);
+                cmd.Parameters.AddWithValue("@LastName", LastName);
+                cmd.Parameters.AddWithValue("@PhoneNumber", PhoneNumber);
+                cmd.Parameters.AddWithValue("@Email", Email);
+                con.Open();
+                cmd.ExecuteNonQuery();
+                
+
+            }
+            return response;
+        }
+
+        [HttpGet]
+        [Route("api/UpdateDeveloperInfo/{DeveloperID}/{FirstName}/{LastName}/{PhoneNumber}/{Email}/{Title}/{Skills}/{PLanguages}/{Education}/{Certificates}/{Description}")]
+        public string UpdateCustomerInfo(string DeveloperID = "", string FirstName = "", string LastName = "", string PhoneNumber = "", string Email = "" , string Title = "" , string Skills = "" , string PLanguages = "" , string Education = "",
+            string Certificates = "" , string Description = "")
+        {
+            string response = "positive";
+            string con2 = "Server=DESKTOP-62GK3U2;Database=JMT;Trusted_Connection=True;";
+            using (SqlConnection con = new SqlConnection(con2))
+            {
+                SqlCommand cmd = new SqlCommand("UpdateDeveloperInfo", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@DeveloperID", DeveloperID);
+                cmd.Parameters.AddWithValue("@FirstName", FirstName);
+                cmd.Parameters.AddWithValue("@LastName", LastName);
+                cmd.Parameters.AddWithValue("@PhoneNumber", PhoneNumber);
+                cmd.Parameters.AddWithValue("@Email", Email);
+                cmd.Parameters.AddWithValue("@Title", Title);
+                cmd.Parameters.AddWithValue("@Skills", Skills);
+                cmd.Parameters.AddWithValue("@PLanguages", PLanguages);
+                cmd.Parameters.AddWithValue("@Education", Education);
+                cmd.Parameters.AddWithValue("@Certificates", Certificates);
+                cmd.Parameters.AddWithValue("@Description", Description);
+                
+                con.Open();
+                cmd.ExecuteNonQuery();
+
+
+            }
+            return response;
         }
     }
    

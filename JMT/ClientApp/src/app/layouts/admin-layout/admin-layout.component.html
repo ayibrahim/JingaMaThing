@@ -1,9 +1,15 @@
 
 <div  class="wrapper">
-  <div class="sidebar"><app-sidebar [RoleDesc]="RoleDesc"></app-sidebar></div>
+  <div *ngIf="iscustomer" class="sidebar">
+    <app-sidebar [custfull]="custfull"></app-sidebar>
+  </div>
+  <div *ngIf="isdeveloper" class="sidebar">
+    <app-sidebar [devfull]="devfull"></app-sidebar>
+  </div>
+        
   <div class="main-panel">
     <app-navbar></app-navbar>
-    <router-outlet></router-outlet>
+    <router-outlet (activate)="onRouterOutletActivate($event)"></router-outlet>
     <app-footer></app-footer>
   </div>
 </div>

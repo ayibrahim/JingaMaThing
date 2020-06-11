@@ -18,6 +18,7 @@ import { SignInComponent } from './pages/sign-in/sign-in.component';
 import { SignUpComponent } from './pages/sign-up/sign-up.component';
 import { Globals } from './Shared/globals';
 import {BrowserModule} from '@angular/platform-browser';
+import { UserProfileComponent } from './pages/user-profile/user-profile.component'; 
 
 @NgModule({
   imports: [
@@ -30,10 +31,11 @@ import {BrowserModule} from '@angular/platform-browser';
     AngularTiltModule,
     AppRoutingModule,
     BrowserModule,
+
     ToastrModule.forRoot(),
 
   ],
-  declarations: [AppComponent, AdminLayoutComponent, AuthLayoutComponent, HomeComponent, SignInComponent, SignUpComponent],
+  declarations: [AppComponent, AdminLayoutComponent, AuthLayoutComponent, HomeComponent, SignInComponent, SignUpComponent, UserProfileComponent ],
   providers: [Globals],
   bootstrap: [AppComponent]
 })

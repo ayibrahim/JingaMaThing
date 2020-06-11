@@ -11,6 +11,7 @@ export interface customer{
   password : string;
   phoneNumber : string;
   roleDesc : string;
+  photo : string;
 }
 export interface Developer{
   developerID : number;
@@ -26,6 +27,7 @@ export interface Developer{
   certification : string;
   title : string;
   roleDesc : string;
+  photo : string;
 }
 @Component({
   selector: 'app-sign-in',
@@ -36,13 +38,15 @@ export interface Developer{
 export class SignInComponent implements OnInit {
   constructor(public globals: Globals , private router : Router , private toastr: ToastrService , private http : HttpClient) { }
   Email: string; Password: string; errormessage: string; loginresponse: customer[]; developerlogin : Developer[];
-  CFirstName : string; CLastName : string; CEmail2 : string; CPassword2: string; CustomerID : number; CPhoneNumber : string; CRoleDesc : string;
-  DFirstName : string; DLastName : string; DEmail2 : string; DPassword2: string; DeveloperID : number; DPhoneNumber : string; 
+  CFirstName : string; CLastName : string; CEmail2 : string; CPassword2: string; CustomerID : number; CPhoneNumber : string; CRoleDesc : string; CPhoto : string;
+  DFirstName : string; DLastName : string; DEmail2 : string; DPassword2: string; DeveloperID : number; DPhoneNumber : string;  DPhoto: string;
   DDescription: string; DPLanguages: string; DSkills: string; DEducation: string; DCertificates: string; DTitle: string; DRoleDesc : string;
-  CnotD : string ;
+  CnotD : string ; 
   regexp = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
   ngOnInit() {
-
+    this.Email = 'ayibrahi@hotmail.com';
+    this.Password = 'testing332211'
+    this.Login();
   }
   Login(){
     if(!this.Email || !this.Password){
@@ -87,11 +91,12 @@ export class SignInComponent implements OnInit {
                         this.DCertificates = this.developerlogin[0].certification;
                         this.DTitle = this.developerlogin[0].title;
                         this.DRoleDesc = this.developerlogin[0].roleDesc;
+                        this.DPhoto = this.developerlogin[0].photo
                         this.CnotD = 'developer';
                         this.router.navigate(['./dashboard'], 
                         {state: {type: this.CnotD, FirstName: this.DFirstName , LastName: this.DLastName, PhoneNumber : this.DPhoneNumber , Email : this.DEmail2, Password : this.DPassword2
                         , Description : this.DDescription , PLanguages : this.DPLanguages , Skills : this.DSkills, Education : this.DEducation , Certification : this.DCertificates,
-                          Title : this.DTitle , DeveloperID : this.DeveloperID , RoleDesc : this.DRoleDesc }});
+                          Title : this.DTitle , DeveloperID : this.DeveloperID , RoleDesc : this.DRoleDesc , Photo : this.DPhoto }});
                       }
                     }, (error) => {console.log('error message ' + error)}
                     )
@@ -103,8 +108,10 @@ export class SignInComponent implements OnInit {
             this.CustomerID = this.loginresponse[0].customerID;
             this.CPhoneNumber = this.loginresponse[0].phoneNumber;
             this.CRoleDesc = this.loginresponse[0].roleDesc;
+            this.CPhoto = this.loginresponse[0].photo
             this.CnotD = 'customer';
-            this.router.navigate(['./dashboard'], {state: {type: this.CnotD, FirstName: this.CFirstName , LastName: this.CLastName, PhoneNumber : this.CPhoneNumber , Email : this.CEmail2, Password : this.CPassword2 ,CustomerID : this.CustomerID ,RoleDesc : this.CRoleDesc}});
+            this.router.navigate(['./dashboard'], {state: {type: this.CnotD, FirstName: this.CFirstName , LastName: this.CLastName, PhoneNumber : this.CPhoneNumber , Email : this.CEmail2, Password : this.CPassword2 
+              ,CustomerID : this.CustomerID ,RoleDesc : this.CRoleDesc , Photo : this.CPhoto}});
           }
           this.toastr.clear();
          }, (error) => {console.log('error message ' + error)}

@@ -1,0 +1,262 @@
+<div class=" content">
+  <div *ngIf="iscustomer" class=" row">
+    <div class=" col-md-8">
+      <div class=" card">
+        <div class=" card-header">
+          <h5 class=" title">Edit Profile</h5>
+        </div>
+        <div class=" card-body">
+          <form>
+            <div class=" row">
+              <div class=" col-md-12">
+                <div class=" form-group">
+                  <label> Company (disabled) </label>
+                  <input class=" form-control" disabled="" placeholder="Company" type="text" value="Jinga-Ma-Thing" />
+                </div>
+              </div>
+            </div>
+            <div class=" row">
+              <div class=" col-md-12">
+                <div class=" form-group">
+                  <label> FirstName </label>
+                  <input class=" form-control" type="text" placeholder="FirstName" [(ngModel)]="CFirstName"
+                    name="CFirstName" autocomplete="doNotAutoComplete">
+                </div>
+              </div>
+            </div>
+            <div class=" row">
+              <div class=" col-md-12">
+                <div class=" form-group">
+                  <label for="exampleInputEmail1"> LastName </label>
+                  <input class=" form-control" type="text" placeholder="LastName" [(ngModel)]="CLastName"
+                    name="CLastName" autocomplete="doNotAutoComplete">
+                </div>
+              </div>
+            </div>
+            <div class=" row">
+              <div class=" col-md-12">
+                <div class=" form-group">
+                  <label for="exampleInputEmail1"> Email address </label>
+                  <input class=" form-control" type="text" placeholder="Email" [(ngModel)]="CEmail" name="CEmail"
+                    autocomplete="doNotAutoComplete">
+                </div>
+              </div>
+            </div>
+            <div class=" row">
+              <div class=" col-md-12">
+                <div class=" form-group">
+                  <label for="exampleInputEmail1"> PhoneNumber </label>
+                  <input class=" form-control" type="text" placeholder="PhoneNumber" [(ngModel)]="CPhoneNumber"
+                    name="CPhoneNumber" autocomplete="doNotAutoComplete">
+                </div>
+              </div>
+            </div>
+
+
+          </form>
+        </div>
+        <div class=" card-footer">
+          <button class=" btn btn-fill btn-danger" type="submit" (click)="UpdateCustomerInfo()">Save</button>
+        </div>
+      </div>
+    </div>
+    <div class=" col-md-4">
+      <div class=" card card-user">
+        <div class=" card-body">
+          <p class=" card-text"></p>
+          <div class=" author">
+            <div class=" block block-one"></div>
+            <div class=" block block-two"></div>
+            <div class=" block block-three"></div>
+            <div class=" block block-four"></div>
+            <a href="javascript:void(0)">
+              <img alt="..." class=" avatar" src={{CPhoto}} />
+
+              <h5 class=" title">{{CFirstName}} {{CLastName}}</h5>
+            </a>
+            <p class=" description">Customer</p>
+            <br>
+            <input #file type="file" name="file" id="file" class="inputfile" />
+            <label for="file"><strong>Choose a file</strong></label>
+            <br>
+            <br>
+            <button class="btn btn-primary animation-on-hover btn-round" (click)="CUploadPhoto(file.files)">Update
+              Photo</button>
+            <br />
+            <span style="font-weight:bold;color:green;" *ngIf="progress > 0 && progress < 100">
+              {{progress}}%
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="isdeveloper" class=" row">
+    <div class=" col-md-8">
+      <div class=" card">
+        <div class=" card-header">
+          <h5 class=" title">Edit Profile</h5>
+        </div>
+        <div class=" card-body">
+          <form>
+            <div class=" row">
+              <div class=" col-md-6">
+                <div class=" form-group">
+                  <label> Company (disabled) </label>
+                  <input class=" form-control" disabled="" placeholder="Company" type="text" value="Jinga-Ma-Thing" />
+                </div>
+              </div>
+              <div class=" col-md-6">
+                <div class=" form-group">
+                  <label for="exampleInputEmail1"> Title </label>
+                  <input class=" form-control" type="text" placeholder="Title" [(ngModel)]="DTitle" name="DTitle"
+                    autocomplete="doNotAutoComplete">
+                </div>
+              </div>
+            </div>
+            <div class=" row">
+              <div class=" col-md-6">
+                <div class=" form-group">
+                  <label> FirstName </label>
+                  <input class=" form-control" type="text" placeholder="FirstName" [(ngModel)]="DFirstName"
+                    name="DFirstName" autocomplete="doNotAutoComplete">
+                </div>
+              </div>
+              <div class=" col-md-6">
+                <div class=" form-group">
+                  <label for="exampleInputEmail1"> LastName </label>
+                  <input class=" form-control" type="text" placeholder="LastName" [(ngModel)]="DLastName"
+                    name="DLastName" autocomplete="doNotAutoComplete">
+                </div>
+              </div>
+            </div>
+            <div class=" row">
+              <div class=" col-md-6">
+                <div class=" form-group">
+                  <label for="exampleInputEmail1"> Email address </label>
+                  <input class=" form-control" type="text" placeholder="Email" [(ngModel)]="DEmail" name="DEmail"
+                    autocomplete="doNotAutoComplete">
+                </div>
+              </div>
+              <div class=" col-md-6">
+                <div class=" form-group">
+                  <label for="exampleInputEmail1"> PhoneNumber </label>
+                  <input class=" form-control" type="text" placeholder="PhoneNumber" [(ngModel)]="DPhoneNumber"
+                    name="DPhoneNumber" autocomplete="doNotAutoComplete">
+                </div>
+              </div>
+
+            </div>
+
+            <div class=" row">
+
+              <div class=" col-md-6">
+                <div class=" form-group">
+                  <label> Programming Languages </label>
+                  <textarea class=" form-control" cols="80" placeholder="Here can be your Programming Languages"
+                    [(ngModel)]="DPLanguages" name="DPLanguages"></textarea>
+                </div>
+              </div>
+              <div class=" col-md-6">
+                <div class=" form-group">
+                  <label> Skills </label>
+                  <textarea class=" form-control" cols="80" placeholder="Here can be your Skills" [(ngModel)]="DSkills"
+                    name="DSkills"></textarea>
+                </div>
+              </div>
+              <div class=" col-md-6">
+                <div class=" form-group">
+                  <label> Education </label>
+                  <textarea class=" form-control" cols="80" placeholder="Here can be your Education"
+                    [(ngModel)]="DEducation" name="DEducation"></textarea>
+                </div>
+              </div>
+              <div class=" col-md-6">
+                <div class=" form-group">
+                  <label> Certificates </label>
+                  <textarea class=" form-control" cols="80" placeholder="Here can be your Certificates"
+                    [(ngModel)]="DCertificates" name="DCertificates"></textarea>
+                </div>
+              </div>
+              <div class=" col-md-12">
+                <div class=" form-group">
+                  <label> Description </label>
+                  <textarea class=" form-control" cols="80" placeholder="Here can be your description"
+                    [(ngModel)]="DDescription" name="DDescription"></textarea>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class=" card-footer">
+          <button class=" btn btn-fill btn-danger" type="submit" (click)="UpdateDeveloperInfo()">Save</button>
+        </div>
+      </div>
+    </div>
+    <div class=" col-md-4">
+      <div class=" card card-user">
+        <div class=" card-body">
+          <p class=" card-text"></p>
+          <div class=" author">
+            <div class=" block block-one"></div>
+            <div class=" block block-two"></div>
+            <div class=" block block-three"></div>
+            <div class=" block block-four"></div>
+            <a href="javascript:void(0)">
+              <img alt="..." class=" avatar" src={{DPhoto}} />
+
+              <h5 class=" title">{{DFirstName}} {{DLastName}}</h5>
+            </a>
+            <p class=" description">{{DTitle}}</p>
+            <br>
+            <input #file type="file" name="file" id="file" class="inputfile" />
+            <label for="file"><strong>Choose a file</strong></label>
+            <br>
+            <br>
+            <button class="btn btn-primary animation-on-hover btn-round" (click)="DUploadPhoto(file.files)">Update
+              Photo</button>
+            <br />
+            <span style="font-weight:bold;color:green;" *ngIf="progress > 0 && progress < 100">
+              {{progress}}%
+            </span>
+          </div>
+          <div class=" card-description">
+            {{DDescription}}
+          </div>
+          <br>
+          <div class=" card-description">
+            <hr>
+            ' <p-galleria #galleria [(value)]="images" [(activeIndex)]="activeIndex" [numVisible]="5"
+            '   [containerStyle]="{'max-width':'640px'}" [containerClass]="galleriaClass()"
+            '   [showThumbnails]="showThumbnails" [showItemNavigators]="true" [showItemNavigatorsOnHover]="true"
+            '   [circular]="true" [autoPlay]="true" [transitionInterval]="3000">
+            '   <ng-template pTemplate="item" let-item>
+            '     <img [src]="item.previewImageSrc"
+            '       [ngStyle]="{'width': !fullscreen ? '100%' : '', 'display': !fullscreen ? 'block' : ''}" />
+            '   </ng-template>
+            '   <ng-template pTemplate="thumbnail" let-item>
+            '     <div class="p-grid p-nogutter p-justify-center">
+            '       <img [src]="item.thumbnailImageSrc" />
+            '     </div>
+            '   </ng-template>
+            '   <ng-template pTemplate="footer" let-item>
+            '     <div class="custom-galleria-footer">
+            '       <button pButton icon="pi pi-list" (click)="onThumbnailButtonClick()"></button>
+            '       <span *ngIf="images" class="title-container">
+            '         <span>{{activeIndex + 1}}/{{images.length}}</span>
+            '         <span class="title">{{images[activeIndex].title}}</span>
+            '         <span>{{images[activeIndex].alt}}</span>
+            '       </span>
+            '       <button pButton [icon]="fullScreenIcon()" (click)="toggleFullScreen()"
+            '         class="fullscreen-button"></button>
+            '     </div>
+            '   </ng-template>
+            ' </p-galleria>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>

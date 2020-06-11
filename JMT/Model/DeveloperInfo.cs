@@ -20,5 +20,6 @@ namespace JMT.Model
         public string Certification { get; set; }
         public string Title { get; set; }
         public string RoleDesc { get; set; }
+        public string Photo { get; set; }
     }
 }

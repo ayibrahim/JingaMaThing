@@ -3,7 +3,8 @@ import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: "app-notifications",
-  templateUrl: "notifications.component.html"
+  templateUrl: "notifications.component.html",
+  styleUrls: [ "./notifications.component.scss" ],
 })
 export class NotificationsComponent implements OnInit {
   staticAlertClosed  = false;
@@ -14,7 +15,7 @@ export class NotificationsComponent implements OnInit {
   staticAlertClosed5 = false;
   staticAlertClosed6 = false;
   staticAlertClosed7 = false;
-
+  channel: boolean = true;
   constructor(private toastr: ToastrService) {}
 
   showNotification(from, align){

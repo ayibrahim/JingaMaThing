@@ -14,6 +14,7 @@ export interface customer{
   password : string;
   phoneNumber : string;
   roleDesc : string;
+  photo : string;
 }
 export interface Developer{
   developerID : number;
@@ -29,6 +30,7 @@ export interface Developer{
   certification : string;
   title : string;
   roleDesc : string;
+  photo : string;
 }
 @Component({
   selector: 'app-sign-up',
@@ -44,8 +46,8 @@ export class SignUpComponent implements OnInit {
   isDeveloper : boolean = false;
   isDeveloper2 : boolean = false;
   isDeveloper3 : boolean = false;
-  CFirstName: string; CLastName: string; CPhoneNumber: string; CEmail: string; CPassword: string; CConfirmPassword: string; CustomerID : number;  CRoleDesc : String;
-  DFirstName: string; DLastName: string; DPhoneNumber: string; DEmail: string; DPassword: string; DConfirmPassword: string; DeveloperID : number; DRoleDesc : string;
+  CFirstName: string; CLastName: string; CPhoneNumber: string; CEmail: string; CPassword: string; CConfirmPassword: string; CustomerID : number;  CRoleDesc : String; CPhoto : string;
+  DFirstName: string; DLastName: string; DPhoneNumber: string; DEmail: string; DPassword: string; DConfirmPassword: string; DeveloperID : number; DRoleDesc : string; DPhoto : string;
   DDescription: string; DPLanguages: string; DSkills: string; DEducation: string; DCertificates: string; DTitle: string; 
   loginresponse: customer[]; developerlogin : Developer[];
   regexp = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
@@ -95,7 +97,10 @@ export class SignUpComponent implements OnInit {
        }, (error) => {console.log('error message ' + error)}
        
      )
-    this.getCusotmerInfo();
+     setTimeout(()=>{    //<<<---    using ()=> syntax
+      this.getCusotmerInfo();
+ }, 1000);
+    
   }
   getCusotmerInfo(){
     this.http.get('https://localhost:44380/api/getCustomerInfo/' + this.CEmail + '/' + this.CPassword)
@@ -109,9 +114,11 @@ export class SignUpComponent implements OnInit {
             this.CustomerID = this.loginresponse[0].customerID;
             this.CPhoneNumber = this.loginresponse[0].phoneNumber;
             this.CRoleDesc = this.loginresponse[0].roleDesc;
+            this.CPhoto = this.loginresponse[0].photo;
           this.toastr.clear();
           this.CnotD = 'customer';
-          this.router.navigate(['./dashboard'], {state: {type: this.CnotD, FirstName: this.CFirstName , LastName: this.CLastName, PhoneNumber : this.CPhoneNumber , Email : this.CEmail, Password : this.CPassword ,CustomerID : this.CustomerID ,RoleDesc : this.CRoleDesc}});
+          this.router.navigate(['./dashboard'], {state: {type: this.CnotD, FirstName: this.CFirstName , LastName: this.CLastName, PhoneNumber : this.CPhoneNumber ,
+             Email : this.CEmail, Password : this.CPassword ,CustomerID : this.CustomerID ,RoleDesc : this.CRoleDesc , Photo : this.CPhoto}});
          }, (error) => {console.log('error message ' + error)}
        )
   }
@@ -140,8 +147,10 @@ export class SignUpComponent implements OnInit {
       }, (error) => {console.log('error message ' + error)}
       
     )
-    
- this.getDeveloperInfo();
+    setTimeout(()=>{    //<<<---    using ()=> syntax
+      this.getDeveloperInfo();
+ }, 1000);
+ 
     
   }
 
@@ -163,12 +172,13 @@ export class SignUpComponent implements OnInit {
                       this.DCertificates = this.developerlogin[0].certification;
                       this.DTitle = this.developerlogin[0].title;
                       this.DRoleDesc = this.developerlogin[0].roleDesc;
+                      this.DPhoto = this.developerlogin[0].photo;
       this.toastr.clear();
       this.CnotD = 'developer';
       this.router.navigate(['./dashboard'], 
       {state: {type: this.CnotD, FirstName: this.DFirstName , LastName: this.DLastName, PhoneNumber : this.DPhoneNumber , Email : this.DEmail, Password : this.DPassword
       , Description : this.DDescription , PLanguages : this.DPLanguages , Skills : this.DSkills, Education : this.DEducation , Certification : this.DCertificates,
-        Title : this.DTitle , DeveloperID : this.DeveloperID , RoleDesc : this.DRoleDesc }});
+        Title : this.DTitle , DeveloperID : this.DeveloperID , RoleDesc : this.DRoleDesc , Photo : this.DPhoto }});
     
     }, (error) => {console.log('error message ' + error)}
     )
