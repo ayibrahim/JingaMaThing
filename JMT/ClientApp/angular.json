@@ -25,17 +25,12 @@
             "assets": [
               "src/favicon.ico",
               "src/assets"
-             
             ],
             "styles": [
               "src/styles.scss",
               "node_modules/ngx-toastr/toastr.css",
               "src/assets/scss/black-dashboard.scss",
-              "src/assets/css/nucleo-icons.css",
-              "node_modules/primeicons/primeicons.css",
-               "node_modules/primeng/resources/themes/nova-light/theme.css",
-              "node_modules/primeng/resources/primeng.min.css"
-
+              "src/assets/css/nucleo-icons.css"
             ],
             "scripts": [],
             "es5BrowserSupport": true
