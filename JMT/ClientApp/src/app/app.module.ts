@@ -19,7 +19,11 @@ import { SignUpComponent } from './pages/sign-up/sign-up.component';
 import { Globals } from './Shared/globals';
 import {BrowserModule} from '@angular/platform-browser';
 import { UserProfileComponent } from './pages/user-profile/user-profile.component'; 
-
+import {SharedModule} from 'primeng';
+import {CalendarModule} from 'primeng/calendar';
+import {GalleriaModule} from 'primeng/galleria';
+import {DialogModule} from 'primeng/dialog';
+import {TableModule} from 'primeng/table';
 @NgModule({
   imports: [
     BrowserAnimationsModule,
@@ -31,7 +35,11 @@ import { UserProfileComponent } from './pages/user-profile/user-profile.componen
     AngularTiltModule,
     AppRoutingModule,
     BrowserModule,
-
+    SharedModule,
+    CalendarModule,
+    TableModule,
+    DialogModule,
+    GalleriaModule,
     ToastrModule.forRoot(),
 
   ],

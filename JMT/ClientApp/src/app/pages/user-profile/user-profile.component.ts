@@ -3,34 +3,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient, HttpRequest, HttpEventType } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
-
+import { Galleria } from 'primeng';
 import { PhotoServiceService } from 'src/app/Shared/photo-service.service';
 export interface headers{}
-export interface customer{
-  customerID : number;
-  email : string;
-  firstName : string;
-  lastName : string;
-  password : string;
-  phoneNumber : string;
-  roleDesc : string;
-  photo : string;
+export interface customer{ 
+  customerID : number; email : string; firstName : string; lastName : string; password : string; phoneNumber : string; roleDesc : string; photo : string;
 }
 export interface Developer{
-  developerID : number;
-  email : string;
-  firstName : string;
-  lastName : string;
-  password : string;
-  phoneNumber : string;
-  description : string;
-  pLanguages : string;
-  skills : string;
-  education : string;
-  certification : string;
-  title : string;
-  roleDesc : string;
-  photo : string;
+  developerID : number; email : string; firstName : string; lastName : string; password : string; phoneNumber : string; description : string; pLanguages : string; skills : string; education : string; certification : string; title : string; roleDesc : string; photo : string;
 }
 @Component({
   selector: 'app-user-profile',
@@ -38,7 +18,9 @@ export interface Developer{
   styleUrls: ['./user-profile.component.css']
 })
 export class UserProfileComponent implements OnInit {
-  newdata : any[];
+  selecteddata : any;
+  display : boolean = false; GData : any[]; GHeader : any[]; i : number; 
+  newdata : any[]; filename: any[];
   errormessage : string;
   retrievedID : string;
   retrievedRole : string;
@@ -47,23 +29,24 @@ export class UserProfileComponent implements OnInit {
   developerlogin : Developer[]; loginresponse : customer[];
   iscustomer : boolean  = false;
   isdeveloper : boolean = false;
-  CFirstName : string; CLastName : string; CEmail : string;  CustomerID : number; CPhoneNumber : string;  CPassword: string; CRoleDesc : string; CPhoto : any;
-  DFirstName : string; DLastName : string; DEmail : string; DPassword: string; DeveloperID : number; DPhoneNumber : string; DPhoto : string;
+  CFirstName : string; CLastName : string; CEmail : string;  CustomerID : number; CPhoneNumber : string;  CPassword: string; CRoleDesc : string; CPhoto : any; CEmail2: string;
+  DFirstName : string; DLastName : string; DEmail : string; DPassword: string; DeveloperID : number; DPhoneNumber : string; DPhoto : string; DEmail2 : string;
   DDescription: string; DPLanguages: string; DSkills: string; DEducation: string; DCertificates: string; DTitle: string; DRoleDesc : string;
   public progress: number; public message: string; isImageLoading : boolean; 
+  PDescription : string ; PTitle : string ;
   regexp = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
+  constructor(private route: ActivatedRoute , private router : Router , private http: HttpClient , private toastr: ToastrService , private photoService : PhotoServiceService) { }
   images: any[];
 
-    showThumbnails: boolean;
+  showThumbnails: boolean;
 
-    fullscreen: boolean = false;
+  fullscreen: boolean = false;
 
-    activeIndex: number = 0;
+  activeIndex: number = 0;
 
-    onFullScreenListener: any;
+  onFullScreenListener: any;
 
-    // @ViewChild('galleria') galleria: Galleria;
-  constructor(private route: ActivatedRoute , private router : Router , private http: HttpClient , private toastr: ToastrService , private photoService: PhotoServiceService) { }
+  @ViewChild('galleria') galleria: Galleria;
   responsiveOptions:any[] = [
     {
         breakpoint: '1024px',
@@ -79,6 +62,7 @@ export class UserProfileComponent implements OnInit {
     }
 ];
   ngOnInit( ) {
+    
     this.route.queryParams.subscribe((params=>{
       this.retrievedID = params.data;
       this.retrievedRole = params.data2;
@@ -89,10 +73,9 @@ export class UserProfileComponent implements OnInit {
         this.developerId = this.retrievedID;
       }
     }))
-    console.log(this.customerId);
-    console.log(this.developerId);
-    // this.photoService.getImages().then(images => this.images = images);
-    // this.bindDocumentListeners();
+
+
+
     if(this.customerId != undefined){
       this.iscustomer = true;
       this.http.get('https://localhost:44380/api/getCustomerInfoByID/' + this.customerId)
@@ -102,6 +85,7 @@ export class UserProfileComponent implements OnInit {
            this.CFirstName = this.loginresponse[0].firstName;
             this.CLastName = this.loginresponse[0].lastName;
             this.CEmail = this.loginresponse[0].email;
+            this.CEmail2 = this.loginresponse[0].email;
             this.CPassword = this.loginresponse[0].password;
             this.CustomerID = this.loginresponse[0].customerID;
             this.CPhoneNumber = this.loginresponse[0].phoneNumber;
@@ -119,6 +103,7 @@ export class UserProfileComponent implements OnInit {
                         this.DFirstName = this.developerlogin[0].firstName;
                         this.DLastName = this.developerlogin[0].lastName;
                         this.DEmail = this.developerlogin[0].email;
+                        this.DEmail2 = this.developerlogin[0].email;
                         this.DPassword = this.developerlogin[0].password;
                         this.DeveloperID = this.developerlogin[0].developerID;
                         this.DPhoneNumber = this.developerlogin[0].phoneNumber;
@@ -130,9 +115,14 @@ export class UserProfileComponent implements OnInit {
                         this.DTitle = this.developerlogin[0].title;
                         this.DRoleDesc = this.developerlogin[0].roleDesc;
                         this.DPhoto = this.developerlogin[0].photo;
+                        this.photoService.getImages(this.DeveloperID).then(images => this.images = images);
                     }, (error) => {console.log('error message ' + error)}
                     )
     }
+    
+  }
+  onFileChange(event){
+    this.filename = event.target.files[0].name;
   }
   CUploadPhoto(files) {
     if (files.length === 0){
@@ -147,7 +137,7 @@ export class UserProfileComponent implements OnInit {
     for (let file of files)
       formData.append(file.name, file);
 
-    const uploadReq = new HttpRequest('POST', 'https://localhost:44380/api/upload/'+ this.CEmail + '/' + this.CRoleDesc , formData, {
+    const uploadReq = new HttpRequest('POST', 'https://localhost:44380/api/upload/'+ this.CEmail2 + '/' + this.CRoleDesc , formData, {
       reportProgress: true,
     });
     this.http.request(uploadReq).subscribe(event => {
@@ -172,7 +162,7 @@ export class UserProfileComponent implements OnInit {
     }
  }
   getImage(): Observable<Blob> {
-    return this.http.get('https://localhost:44380/api/GetProfileImageCustomer/' + this.CEmail, { responseType: 'blob' });
+    return this.http.get('https://localhost:44380/api/GetProfileImageCustomer/' + this.CEmail2, { responseType: 'blob' });
   }
   getImageFromService() {
     this.isImageLoading = true;
@@ -208,6 +198,7 @@ export class UserProfileComponent implements OnInit {
     this.http.get('https://localhost:44380/api/UpdateCustomerInfo/' + this.CustomerID + '/' + this.CFirstName + '/' + this.CLastName + '/' + this.CPhoneNumber + '/' + this.CEmail ).subscribe(
       (response2 : headers[]) => {
         this.newdata = response2
+        this.CEmail2 = this.CEmail;
         console.log(this.newdata);
       }, (error) => {console.log('error message ' + error)}
       
@@ -297,6 +288,7 @@ export class UserProfileComponent implements OnInit {
     this.http.get('https://localhost:44380/api/UpdateDeveloperInfo/' + this.DeveloperID + '/' + this.DFirstName + '/' + this.DLastName + '/' + this.DPhoneNumber + '/' 
     + this.DEmail + '/' + this.DTitle + '/' + this.DSkills + '/' +  this.DPLanguages + '/' + this.DEducation + '/' + this.DCertificates + '/' + this.DDescription ).subscribe(
       (response2 : headers[]) => {
+        this.DEmail2 = this.DEmail;
         this.newdata = response2;
         console.log(this.newdata);
       }, (error) => {console.log('error message ' + error)}
@@ -324,7 +316,7 @@ export class UserProfileComponent implements OnInit {
     for (let file of files)
       formData.append(file.name, file);
 
-    const uploadReq = new HttpRequest('POST', 'https://localhost:44380/api/upload/'+ this.DEmail + '/' + this.DRoleDesc , formData, {
+    const uploadReq = new HttpRequest('POST', 'https://localhost:44380/api/upload/'+ this.DEmail2 + '/' + this.DRoleDesc , formData, {
       reportProgress: true,
     });
     this.http.request(uploadReq).subscribe(event => {
@@ -349,7 +341,7 @@ export class UserProfileComponent implements OnInit {
     }
  }
   DgetImage(): Observable<Blob> {
-    return this.http.get('https://localhost:44380/api/GetProfileImageDeveloper/' + this.DEmail, { responseType: 'blob' });
+    return this.http.get('https://localhost:44380/api/GetProfileImageDeveloper/' + this.DEmail2, { responseType: 'blob' });
   }
   DgetImageFromService() {
     this.isImageLoading = true;
@@ -361,79 +353,63 @@ export class UserProfileComponent implements OnInit {
       console.log(error);
     });
 }
-// onThumbnailButtonClick() {
-//   this.showThumbnails = !this.showThumbnails;
-// }
 
-// toggleFullScreen() {
-//   if (this.fullscreen) {
-//       this.closePreviewFullScreen();
-//   }
-//   else {
-//       this.openPreviewFullScreen();
-//   }
-// }
 
-// openPreviewFullScreen() {
-//   let elem = this.galleria.element.nativeElement.querySelector(".ui-galleria");
-//   if (elem.requestFullscreen) {
-//       elem.requestFullscreen();
-//   }
-//   else if (elem['mozRequestFullScreen']) { /* Firefox */
-//       elem['mozRequestFullScreen']();
-//   }
-//   else if (elem['webkitRequestFullscreen']) { /* Chrome, Safari & Opera */
-//       elem['webkitRequestFullscreen']();
-//   }
-//   else if (elem['msRequestFullscreen']) { /* IE/Edge */
-//       elem['msRequestFullscreen']();
-//   }
-// }
+DUploadImage(files) {
+ 
+  if (!this.PDescription || !this.PTitle){
+    this.toastr.clear();
+    this.errormessage = '*Please Fill Out All Fields Before Uploading Project.';
+    this.showNotification('top', 'center' , this.errormessage);
+    return;
+  }
+  if (files.length === 0){
+    this.toastr.clear();
+    this.errormessage = '*No Image Chosen, Upload Project Failed.';
+    this.showNotification('top', 'center' , this.errormessage);
+    return;
+  }
+  this.toastr.clear();
+  const formData = new FormData();
 
-// onFullScreenChange() {
-//   this.fullscreen = !this.fullscreen;
-// }
+  for (let file of files)
+    formData.append(file.name, file);
 
-// closePreviewFullScreen() {
-//   if (document.exitFullscreen) {
-//       document.exitFullscreen();
-//   }
-//   else if (document['mozCancelFullScreen']) {
-//       document['mozCancelFullScreen']();
-//   }
-//   else if (document['webkitExitFullscreen']) {
-//       document['webkitExitFullscreen']();
-//   }
-//   else if (document['msExitFullscreen']) {
-//       document['msExitFullscreen']();
-//   }
-// }
+  const uploadReq = new HttpRequest('POST', 'https://localhost:44380/api/UploadDevGallery/'+ this.DEmail2 + '/' + this.PDescription + '/' + this.PTitle , formData, {
+    reportProgress: true,
+  });
+  this.http.request(uploadReq).subscribe(event => {
+    if (event.type === HttpEventType.UploadProgress)
+      this.progress = Math.round(100 * event.loaded / event.total);
+    else if (event.type === HttpEventType.Response)
+      this.message = event.body.toString();
+  });
+  this.PTitle = undefined;
+  this.PDescription = undefined; 
+  this.filename = undefined ;
+  this.photoService.getImages(this.DeveloperID).then(images => this.images = images);
+} 
+ShowGalleryDialog(){
+  this.http.get('https://localhost:44380/api/getDevGalleryTable/' + this.DeveloperID).subscribe(
+    (response : headers[]) => {
+      this.GData = response;
+      if(this.GData.length == 0){
+        this.display = false;
+        this.toastr.clear();
+        this.errormessage = '*No Data Found for Gallery.';
+        this.showNotification('top', 'center' , this.errormessage);
+      }
+      this.GHeader = [];
+      for (this.i = 0; this.i < this.GData.length; this.i++){
+        for (var key in this.GData[this.i]){
+          if(this.GHeader.indexOf(key) === -1){
+            this.GHeader.push(key);
+          }
+        }
+      }
+      this.display = true;
+    }, (error) => {console.log('Error Happened' + error)}, () => {console.log('the subscription is completed')}
+    )
+}
 
-// bindDocumentListeners() {
-//   this.onFullScreenListener = this.onFullScreenChange.bind(this);
-//   document.addEventListener("fullscreenchange", this.onFullScreenListener);
-//   document.addEventListener("mozfullscreenchange", this.onFullScreenListener);
-//   document.addEventListener("webkitfullscreenchange", this.onFullScreenListener);
-//   document.addEventListener("msfullscreenchange", this.onFullScreenListener);
-// }
-
-// unbindDocumentListeners() {
-//   document.removeEventListener("fullscreenchange", this.onFullScreenListener);
-//   document.removeEventListener("mozfullscreenchange", this.onFullScreenListener);
-//   document.removeEventListener("webkitfullscreenchange", this.onFullScreenListener);
-//   document.removeEventListener("msfullscreenchange", this.onFullScreenListener);
-//   this.onFullScreenListener = null;
-// }
-
-// ngOnDestroy() {
-//   this.unbindDocumentListeners();
-// }
-
-// galleriaClass() {
-//   return `custom-galleria ${this.fullscreen ? 'fullscreen' : ''}`;
-// }
-
-// fullScreenIcon() {
-//   return `pi ${this.fullscreen ? 'pi-window-minimize' : 'pi-window-maximize'}`;
-// }
 }

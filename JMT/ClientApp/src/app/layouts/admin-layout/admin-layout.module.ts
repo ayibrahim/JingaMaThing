@@ -13,15 +13,23 @@ import { NotificationsComponent } from "../../pages/notifications/notifications.
 import { TablesComponent } from "../../pages/tables/tables.component";
 import { TypographyComponent } from "../../pages/typography/typography.component";
 // import { RtlComponent } from "../../pages/rtl/rtl.component";
-
+import {DialogModule} from 'primeng/dialog';
+import {TableModule} from 'primeng/table';
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
-
+import {SharedModule} from 'primeng';
+import {CalendarModule} from 'primeng/calendar';
+import {GalleriaModule} from 'primeng/galleria';
 @NgModule({
   imports: [
     CommonModule,
     RouterModule.forChild(AdminLayoutRoutes),
     FormsModule,
     HttpClientModule,
+    SharedModule,
+    GalleriaModule,
+    CalendarModule,
+    DialogModule,
+    TableModule,
     NgbModule,
   ],
   declarations: [

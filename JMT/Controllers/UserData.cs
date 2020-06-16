@@ -271,7 +271,7 @@ namespace JMT.Controllers
 
         [HttpGet]
         [Route("api/UpdateDeveloperInfo/{DeveloperID}/{FirstName}/{LastName}/{PhoneNumber}/{Email}/{Title}/{Skills}/{PLanguages}/{Education}/{Certificates}/{Description}")]
-        public string UpdateCustomerInfo(string DeveloperID = "", string FirstName = "", string LastName = "", string PhoneNumber = "", string Email = "" , string Title = "" , string Skills = "" , string PLanguages = "" , string Education = "",
+        public string UpdateDevInfo(string DeveloperID = "", string FirstName = "", string LastName = "", string PhoneNumber = "", string Email = "" , string Title = "" , string Skills = "" , string PLanguages = "" , string Education = "",
             string Certificates = "" , string Description = "")
         {
             string response = "positive";
@@ -298,6 +298,60 @@ namespace JMT.Controllers
 
             }
             return response;
+        }
+
+        [HttpGet]
+        [Route("api/getDevGalleryInfo/{DeveloperID}")]
+        public List<DevGalleryInfo> GetDevGalleyInfo(string DeveloperID = "")
+        {
+            string con2 = "Server=DESKTOP-62GK3U2;Database=JMT;Trusted_Connection=True;";
+            List<DevGalleryInfo> customer = new List<DevGalleryInfo>();
+            using (SqlConnection con = new SqlConnection(con2))
+            {
+                SqlCommand cmd = new SqlCommand("GetDevGalleryInfo", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@DeveloperID", DeveloperID);
+                con.Open();
+                SqlDataReader rdr = cmd.ExecuteReader();
+                while (rdr.Read())
+                {
+                    DevGalleryInfo finalcustomer = new DevGalleryInfo();
+                    finalcustomer.DeveloperID = (Convert.ToInt32(rdr["DeveloperID"]));
+                    finalcustomer.PreviewImageSrc = (rdr["PreviewImageSrc"].ToString());
+                    finalcustomer.ThumbnailImageSrc = (rdr["ThumbnailImageSrc"].ToString());
+                    finalcustomer.Alt = (rdr["Alt"].ToString());
+                    finalcustomer.Title = (rdr["Title"].ToString());
+                    customer.Add(finalcustomer);
+                }
+
+            }
+            return customer;
+        }
+
+        [HttpGet]
+        [Route("api/getDevGalleryTable/{DeveloperID}")]
+        public List<DevGalleryTable> GetDevGalleyTable(string DeveloperID = "")
+        {
+            string con2 = "Server=DESKTOP-62GK3U2;Database=JMT;Trusted_Connection=True;";
+            List<DevGalleryTable> customer = new List<DevGalleryTable>();
+            using (SqlConnection con = new SqlConnection(con2))
+            {
+                SqlCommand cmd = new SqlCommand("GetDevGalleryTable", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@DeveloperID", DeveloperID);
+                con.Open();
+                SqlDataReader rdr = cmd.ExecuteReader();
+                while (rdr.Read())
+                {
+                    DevGalleryTable finalcustomer = new DevGalleryTable();
+                    finalcustomer.ImageID = (Convert.ToInt32(rdr["ImageID"]));
+                    finalcustomer.Alt = (rdr["Alt"].ToString());
+                    finalcustomer.Title = (rdr["Title"].ToString());
+                    customer.Add(finalcustomer);
+                }
+
+            }
+            return customer;
         }
     }
    

@@ -121,6 +121,58 @@ namespace JMT.Controllers
             Byte[] b = System.IO.File.ReadAllBytes(@"C:\Users\aibrahi\Desktop\JMT\JMT\ClientApp\src\assets\" + code);   // You can use your own method over here.         
             return File(b, "image/jpeg");
         }
+
+
+        [HttpPost, DisableRequestSizeLimit]
+        [Route("api/UploadDevGallery/{Email}/{Description}/{Title}")]
+        public ActionResult UploadFile(string Email = "" , string Description = "" , string Title = "")
+        {
+            try
+            {
+                string test = "";
+                var file = Request.Form.Files[0];
+                string folderName = "Profile";
+                string AssetsFolderPath = @"C:\Users\aibrahi\Desktop\JMT\JMT\ClientApp\src\assets";
+                string newPath = Path.Combine(AssetsFolderPath, folderName);
+                string newPath2 = newPath + @"\" + Email;
+                if (!Directory.Exists(newPath))
+                {
+                    Directory.CreateDirectory(newPath);
+                }
+                if (!Directory.Exists(newPath2))
+                {
+                    Directory.CreateDirectory(newPath2);
+                }
+                if (file.Length > 0)
+                {
+                    string fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+                    string fullPath = Path.Combine(newPath2, fileName);
+                    test = fullPath;
+                    using (var stream = new FileStream(fullPath, FileMode.Create))
+                    {
+                        file.CopyTo(stream);
+                    }
+                    string con2 = "Server=DESKTOP-62GK3U2;Database=JMT;Trusted_Connection=True;";
+                    SqlConnection con = new SqlConnection(con2);
+                    SqlCommand cmd = new SqlCommand("InsertDevGalleryPhoto", con);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@Email", Email);
+                    cmd.Parameters.AddWithValue("@NewPhoto", "assets/Profile/" + Email + "/" + fileName);
+                    cmd.Parameters.AddWithValue("@Description", Description);
+                    cmd.Parameters.AddWithValue("@Title", Title);
+                    con.Open();
+                    int i = cmd.ExecuteNonQuery();
+                    con.Close();
+                }
+
+                return Json(test);
+            }
+            catch (System.Exception ex)
+            {
+                return Json("Upload Failed: " + ex.Message);
+            }
+        }
+
     }
 
 }

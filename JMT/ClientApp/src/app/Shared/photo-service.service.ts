@@ -7,10 +7,10 @@ export interface Image{}
 export class PhotoServiceService {
 
   constructor(private http : HttpClient) { }
-  getImages() {
-    return this.http.get<any>('assets/showcase/data/photos.json')
+  getImages(devid : number) {
+    return this.http.get<any>('https://localhost:44380/api/getDevGalleryInfo/'+ devid)
       .toPromise()
-      .then(res => <Image[]>res.data)
+      .then(res => <Image[]>res)
       .then(data => { return data; });
     }
 }
