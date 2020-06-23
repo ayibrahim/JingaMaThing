@@ -1,4 +1,4 @@
-<div class=" content">
+<div class=" content" id="myDiv">
   <div *ngIf="iscustomer" class=" row">
     <div class=" col-md-8">
       <div class=" card">
@@ -241,13 +241,13 @@
         </div>
         <div class=" card-body">
           <form>
-            <p-galleria [(value)]="images" [responsiveOptions]="responsiveOptions" [numVisible]="3">
+            <p-galleria *ngIf="gallerdisplay" [(value)]="images" [showItemNavigators]="true" [showItemNavigatorsOnHover]="true" [responsiveOptions]="responsiveOptions" [circular]="true" [autoPlay]="true" [numVisible]="3">
               <ng-template pTemplate="item" let-item>
-                <img [src]="item.previewImageSrc" style="width: 100%; " />
+                <img [src]="item.previewImageSrc" style="width: 100%; height: 433.77px;" />
               </ng-template>
               <ng-template pTemplate="thumbnail" let-item>
                 <div class="p-grid p-nogutter p-justify-center">
-                  <img [src]="item.thumbnailImageSrc" />
+                  <img [src]="item.thumbnailImageSrc" style="width: 100%; height: 122.36px;" />
                 </div>
               </ng-template>
               <ng-template pTemplate="caption" let-item>
@@ -256,39 +256,58 @@
               </ng-template>
             </p-galleria>
             <br>
-            <button class="btn btn-primary animation-on-hover btn-round" (click)="ShowGalleryDialog()">Edit
-              Gallery</button>
-            <p-dialog header="Edit Gallery" [(visible)]="display" [modal]="true" [style]="{width: '800px'}"
-              [baseZIndex]="10000" [draggable]="true" >
-              <p-table #GT class="tables" id="GTable" [columns]="GHeader" [value]="GData" datakey="developerProjectID"
-                selectionMode="single" [(selection)]="selecteddata" [rows]="10" [rowsPerPageOptions]="[10,25,50]"
-                [paginator]="true" styleClass="my" [reorderableColumns]="true" [resizableColumns]="true"
-                >
-                <ng-template pTemplate="header" let-columns>
-                  <tr>
-                    <th *ngFor="let cols of GHeader" style="text-transform: capitalize;" [pSortableColumn]="cols" pReorderableColumn pResizableColumn>
-                      {{cols}}
-                      <p-sortIcon [field]="cols"></p-sortIcon>
-                    </th>
-                  </tr>
-                  <tr>
-                    <th id="search" *ngFor="let cols of GHeader" [ngSwitch]="cols">
-                      <input type="text" pInputText
-                        (input)="GT.filter($event.target.value, cols, 'contains', cols.filterMatchMode)"
-                        [value]="GT.filters[cols] ? GT.filters[cols].value : ''">
-                    </th>
-                  </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-GData let-columns="GHeader">
-                  <tr [pSelectableRow]="GData">
-                    <td *ngFor="let cols of GHeader" >
-                      {{GData[cols]}}
-                    </td>
-                  </tr>
-                </ng-template>
-              </p-table>
+            <button class="btn btn-primary animation-on-hover btn-round" (click)="ShowGalleryDialog()">Show
+              Gallery DataTable</button>
+
+            <p-table *ngIf="display" #GT class="tables" id="GTable" [columns]="GHeader" [value]="GData"
+              datakey="imageID" selectionMode="single" [(selection)]="selecteddata" [rows]="10"
+              [rowsPerPageOptions]="[10,25,50]" [paginator]="true"  [reorderableColumns]="true"
+              (onRowSelect)="OnRowSelect($event)">
+              <ng-template pTemplate="header" let-columns>
+                <tr>
+                  <th *ngFor="let cols of GHeader" style="text-transform: capitalize;" [pSortableColumn]="cols"
+                    pReorderableColumn pResizableColumn>
+                    {{cols}}
+                    <p-sortIcon [field]="cols"></p-sortIcon>
+                  </th>
+                </tr>
+                <tr>
+                  <th id="search" *ngFor="let cols of GHeader" [ngSwitch]="cols">
+                    <input type="text" pInputText
+                      (input)="GT.filter($event.target.value, cols, 'contains', cols.filterMatchMode)"
+                      [value]="GT.filters[cols] ? GT.filters[cols].value : ''">
+                  </th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-GData let-columns="GHeader">
+                <tr [pSelectableRow]="GData">
+                  <td *ngFor="let cols of GHeader">
+                    {{GData[cols]}}
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+            <p-dialog header="Image Details" [(visible)]="displaynewdialog" [focusOnShow]="false" [responsive]="true"
+              showEffect="fade" [modal]="true" [style]="{width: '500px'}">
+              <div class="p-grid ui-fluid" >
+                  <label class="inputdialog">ImageID</label>
+                <div class="p-col-8">
+                  <input pInputText id="ImageID" name="DGID"  [(ngModel)]="DGID" [disabled]="disabled" autofocus />
+                </div>
+                  <label class="inputdialog">Description</label>
+                <div class="p-col-8">
+                  <input pInputText id="Description" name="DGDescription"  [(ngModel)]="DGDescription" />
+                </div>
+                  <label class="inputdialog">Title</label>
+                <div class="p-col-8">
+                  <input pInputText id="Title" name="DGTitle" [(ngModel)]="DGTitle" />
+                </div>
+              </div>
               <p-footer>
-                <strong>*Click Row to Edit or Delete</strong>
+                <div class="ui-dialog-buttonpane ui-helper-clearfix">
+                  <button type="button" pButton icon="pi pi-times" (click)="DeleteDevGallery()" label="Delete"></button>
+                  <button type="button" pButton icon="pi pi-check" (click)="UpdateDevGallery()" label="Save"></button>
+                </div>
               </p-footer>
             </p-dialog>
           </form>

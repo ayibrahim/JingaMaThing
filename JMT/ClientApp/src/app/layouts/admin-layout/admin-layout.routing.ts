@@ -8,6 +8,7 @@ import { TablesComponent } from "../../pages/tables/tables.component";
 import { TypographyComponent } from "../../pages/typography/typography.component";
 import { HomeComponent } from 'src/app/pages/home/home.component';
 import { UserProfileComponent } from 'src/app/pages/user-profile/user-profile.component';
+import { EmailComponent } from 'src/app/pages/email/email.component';
 // import { RtlComponent } from "../../pages/rtl/rtl.component";
 
 export const AdminLayoutRoutes: Routes = [
@@ -20,5 +21,6 @@ export const AdminLayoutRoutes: Routes = [
   { path: "user-profile", component: UserProfileComponent },
   { path: "tables", component: TablesComponent },
   { path: "typography", component: TypographyComponent },
+  { path: "email" , component : EmailComponent},
   // { path: "rtl", component: RtlComponent }
 ];

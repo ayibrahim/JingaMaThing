@@ -19,6 +19,8 @@ import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import {SharedModule} from 'primeng';
 import {CalendarModule} from 'primeng/calendar';
 import {GalleriaModule} from 'primeng/galleria';
+import {InputTextModule} from 'primeng/inputtext';
+import {PaginatorModule} from 'primeng/paginator';
 @NgModule({
   imports: [
     CommonModule,
@@ -28,7 +30,9 @@ import {GalleriaModule} from 'primeng/galleria';
     SharedModule,
     GalleriaModule,
     CalendarModule,
+    PaginatorModule,
     DialogModule,
+    InputTextModule,
     TableModule,
     NgbModule,
   ],

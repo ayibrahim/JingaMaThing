@@ -134,13 +134,7 @@ namespace JMT.Controllers
             }
             return customer;
         }
-        [HttpGet]
-        [Route("api/getPhoto")]
-        public IActionResult Get()
-        {
-            Byte[] b = System.IO.File.ReadAllBytes(@"C:\\Image2.png");   // You can use your own method over here.         
-            return File(b, "image/png");
-        }
+       
 
         [HttpGet]
         [Route("api/getDeveloperInfo/{Email}/{Password}")]
@@ -345,13 +339,49 @@ namespace JMT.Controllers
                 {
                     DevGalleryTable finalcustomer = new DevGalleryTable();
                     finalcustomer.ImageID = (Convert.ToInt32(rdr["ImageID"]));
-                    finalcustomer.Alt = (rdr["Alt"].ToString());
+                    finalcustomer.Description = (rdr["Description"].ToString());
                     finalcustomer.Title = (rdr["Title"].ToString());
                     customer.Add(finalcustomer);
                 }
 
             }
             return customer;
+        }
+        [HttpGet]
+        [Route("api/UpdateDevGallery/{DeveloperProjectID}/{Description}/{Title}")]
+        public string UpdateDevGallery(string DeveloperProjectID = "", string Description = "", string Title = "")
+        {
+            string response = "positive";
+            string con2 = "Server=DESKTOP-62GK3U2;Database=JMT;Trusted_Connection=True;";
+            using (SqlConnection con = new SqlConnection(con2))
+            {
+                SqlCommand cmd = new SqlCommand("UpdateDevGalleryPhoto", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@DeveloperProjectID", DeveloperProjectID);
+                cmd.Parameters.AddWithValue("@Description", Description);
+                cmd.Parameters.AddWithValue("@Title", Title);
+                con.Open();
+                cmd.ExecuteNonQuery();
+            }
+            return response;
+        }
+
+        [HttpGet]
+        [Route("api/DeleteDevGallery/{DeveloperProjectID}")]
+        public string DeleteDevGallery(string DeveloperProjectID = "")
+        {
+            string response = "positive";
+            string con2 = "Server=DESKTOP-62GK3U2;Database=JMT;Trusted_Connection=True;";
+            using (SqlConnection con = new SqlConnection(con2))
+            {
+                SqlCommand cmd = new SqlCommand("DeleteDevGalleryPhoto", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@DeveloperProjectID", DeveloperProjectID);
+
+                con.Open();
+                cmd.ExecuteNonQuery();
+            }
+            return response;
         }
     }
    

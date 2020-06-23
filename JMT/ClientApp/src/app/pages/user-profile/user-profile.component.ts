@@ -12,6 +12,7 @@ export interface customer{
 export interface Developer{
   developerID : number; email : string; firstName : string; lastName : string; password : string; phoneNumber : string; description : string; pLanguages : string; skills : string; education : string; certification : string; title : string; roleDesc : string; photo : string;
 }
+export interface Image{}
 @Component({
   selector: 'app-user-profile',
   templateUrl: './user-profile.component.html',
@@ -30,10 +31,14 @@ export class UserProfileComponent implements OnInit {
   iscustomer : boolean  = false;
   isdeveloper : boolean = false;
   CFirstName : string; CLastName : string; CEmail : string;  CustomerID : number; CPhoneNumber : string;  CPassword: string; CRoleDesc : string; CPhoto : any; CEmail2: string;
-  DFirstName : string; DLastName : string; DEmail : string; DPassword: string; DeveloperID : number; DPhoneNumber : string; DPhoto : string; DEmail2 : string;
+  DFirstName : string; DLastName : string; DEmail : string; DPassword: string; DeveloperID : number; DPhoneNumber : string; DPhoto : any; DEmail2 : string;
   DDescription: string; DPLanguages: string; DSkills: string; DEducation: string; DCertificates: string; DTitle: string; DRoleDesc : string;
   public progress: number; public message: string; isImageLoading : boolean; 
   PDescription : string ; PTitle : string ;
+  displaynewdialog : boolean = false;
+  DGTitle : any; DGDescription : any; DGID : any;
+  disabled: boolean = true;
+  gallerdisplay : boolean = false;
   regexp = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
   constructor(private route: ActivatedRoute , private router : Router , private http: HttpClient , private toastr: ToastrService , private photoService : PhotoServiceService) { }
   images: any[];
@@ -115,12 +120,22 @@ export class UserProfileComponent implements OnInit {
                         this.DTitle = this.developerlogin[0].title;
                         this.DRoleDesc = this.developerlogin[0].roleDesc;
                         this.DPhoto = this.developerlogin[0].photo;
-                        this.photoService.getImages(this.DeveloperID).then(images => this.images = images);
+                        this.gallerdisplay = true;
+                        this.getImages(this.DeveloperID).then(images => this.images = images);
                     }, (error) => {console.log('error message ' + error)}
                     )
+        
+                    
+                    
     }
     
   }
+  getImages(devid : number) {
+    return this.http.get<any>('https://localhost:44380/api/getDevGalleryInfo/'+ devid)
+     .toPromise()
+     .then(res => <Image[]>res)
+     .then(data => { return data; });
+   }
   onFileChange(event){
     this.filename = event.target.files[0].name;
   }
@@ -149,28 +164,12 @@ export class UserProfileComponent implements OnInit {
     setTimeout(()=>{    //<<<---    using ()=> syntax
       this.getImageFromService();
  }, 1000);
-    
-  } 
-    createImageFromBlob(image: Blob) {
-    let reader = new FileReader();
-    reader.addEventListener("load", () => {
-       this.CPhoto = reader.result;
-    }, false);
- 
-    if (image) {
-       reader.readAsDataURL(image);
-    }
- }
-  getImage(): Observable<Blob> {
-    return this.http.get('https://localhost:44380/api/GetProfileImageCustomer/' + this.CEmail2, { responseType: 'blob' });
   }
+
   getImageFromService() {
-    this.isImageLoading = true;
-    this.getImage().subscribe(data => {
-      this.createImageFromBlob(data);
-      this.isImageLoading = false;
+    this.http.get('https://localhost:44380/api/GetProfileImageCustomer/' + this.CEmail2).subscribe(data => {
+        this.CPhoto = data;
     }, error => {
-      this.isImageLoading = false;
       console.log(error);
     });
 }
@@ -328,32 +327,15 @@ export class UserProfileComponent implements OnInit {
     setTimeout(()=>{    //<<<---    using ()=> syntax
       this.DgetImageFromService();
  }, 1000);
-    
-  } 
-    DcreateImageFromBlob(image: Blob) {
-    let reader = new FileReader();
-    reader.addEventListener("load", () => {
-       this.CPhoto = reader.result;
-    }, false);
- 
-    if (image) {
-       reader.readAsDataURL(image);
-    }
- }
-  DgetImage(): Observable<Blob> {
-    return this.http.get('https://localhost:44380/api/GetProfileImageDeveloper/' + this.DEmail2, { responseType: 'blob' });
   }
+  
   DgetImageFromService() {
-    this.isImageLoading = true;
-    this.DgetImage().subscribe(data => {
-      this.DcreateImageFromBlob(data);
-      this.isImageLoading = false;
+    this.http.get('https://localhost:44380/api/GetProfileImageDeveloper/' + this.DEmail2).subscribe(data => {
+        this.DPhoto = data;
     }, error => {
-      this.isImageLoading = false;
       console.log(error);
     });
 }
-
 
 DUploadImage(files) {
  
@@ -387,7 +369,24 @@ DUploadImage(files) {
   this.PTitle = undefined;
   this.PDescription = undefined; 
   this.filename = undefined ;
-  this.photoService.getImages(this.DeveloperID).then(images => this.images = images);
+  this.displaynewdialog = false;
+    this.toastr.clear();
+    this.errormessage = '*Deleted Item From Gallery.';
+    this.showNotification('top', 'center' , this.errormessage);
+    this.display = false;
+    setTimeout(()=>{    //<<<---    using ()=> syntax
+      this.photoService.getImages(this.DeveloperID).then(images => this.images = images);
+    }, 1000);
+    setTimeout(()=>{    //<<<---    using ()=> syntax
+      this.ShowGalleryDialog();
+    }, 1000);
+    this.gallerdisplay = false;
+    setTimeout(()=>{    //<<<---    using ()=> syntax
+      this.gallerdisplay = true;
+    }, 1000);
+    setTimeout(()=>{    //<<<---    using ()=> syntax
+      this.toastr.clear();
+    }, 5000);
 } 
 ShowGalleryDialog(){
   this.http.get('https://localhost:44380/api/getDevGalleryTable/' + this.DeveloperID).subscribe(
@@ -407,9 +406,73 @@ ShowGalleryDialog(){
           }
         }
       }
-      this.display = true;
+      if(this.display == true){
+        this.display = false;
+      } else {
+        this.display = true;
+      }
+      
     }, (error) => {console.log('Error Happened' + error)}, () => {console.log('the subscription is completed')}
     )
 }
+  OnRowSelect(event){
+    this.DGID = event.data.imageID;
+    this.DGDescription = event.data.description;
+    this.DGTitle = event.data.title;
+    this.displaynewdialog = true;
+  }
+  UpdateDevGallery(){
+    this.http.get('https://localhost:44380/api/UpdateDevGallery/' + this.DGID + '/' + this.DGDescription + '/' + this.DGTitle).subscribe(data => {
+        console.log("Updated");
+    }, error => {
+      console.log(error);
+    });
+    this.displaynewdialog = false;
+    this.toastr.clear();
+    this.errormessage = '*Updated Item In Gallery.';
+    this.showNotification('top', 'center' , this.errormessage);
+    this.display = false;
+    setTimeout(()=>{    //<<<---    using ()=> syntax
+      this.photoService.getImages(this.DeveloperID).then(images => this.images = images);
+    }, 1000);
+    setTimeout(()=>{    //<<<---    using ()=> syntax
+      this.ShowGalleryDialog();
+    }, 1000);
+    this.gallerdisplay = false;
+    setTimeout(()=>{    //<<<---    using ()=> syntax
+      this.gallerdisplay = true;
+    }, 1000);
+    setTimeout(()=>{    //<<<---    using ()=> syntax
+      this.toastr.clear();
+    }, 5000);
 
+    
+  }
+  DeleteDevGallery(){
+    this.http.get('https://localhost:44380/api/DeleteDevGallery/' + this.DGID).subscribe(data => {
+        console.log("Deleted");
+    }, error => {
+      console.log(error);
+    });
+    this.displaynewdialog = false;
+    this.toastr.clear();
+    this.errormessage = '*Deleted Item From Gallery.';
+    this.showNotification('top', 'center' , this.errormessage);
+    this.display = false;
+    setTimeout(()=>{    //<<<---    using ()=> syntax
+      this.photoService.getImages(this.DeveloperID).then(images => this.images = images);
+    }, 1000);
+    setTimeout(()=>{    //<<<---    using ()=> syntax
+      this.ShowGalleryDialog();
+    }, 1000);
+    this.gallerdisplay = false;
+    setTimeout(()=>{    //<<<---    using ()=> syntax
+      this.gallerdisplay = true;
+    }, 1000);
+    setTimeout(()=>{    //<<<---    using ()=> syntax
+      this.toastr.clear();
+    }, 5000);
+
+
+  }
 }

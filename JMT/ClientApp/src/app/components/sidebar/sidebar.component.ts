@@ -61,8 +61,8 @@ export class SidebarComponent implements OnInit {
           icon: "icon-bag-16",
           class: "" },
         {
-          path: "/notifications",
-          title: "Chat",
+          path: "/email",
+          title: "Messages",
           icon: "icon-chat-33",
           class: ""
         },
@@ -101,8 +101,8 @@ export class SidebarComponent implements OnInit {
         icon: "icon-bag-16",
         class: "" },
       {
-        path: "/notifications",
-        title: "Chat",
+        path: "/email",
+        title: "Messages",
         icon: "icon-chat-33",
         class: ""
       },

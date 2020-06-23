@@ -1,0 +1,9 @@
+
+#search{
+    overflow: hidden;
+    word-wrap : break-word;
+}
+p-table  tr {
+    overflow: hidden;
+    width: 0%;
+}

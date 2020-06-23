@@ -90,7 +90,6 @@ export class AdminLayoutComponent implements OnInit {
      if(this.newvar == 'TablesComponent'){
       this.router.navigate(['./home']);
      }
-     
     if(this.newvar == 'UserProfileComponent'){
       if(this.historytype == 'customer'){
       this.router.navigate(['./user-profile'],{
@@ -99,6 +98,18 @@ export class AdminLayoutComponent implements OnInit {
       }
       if(this.historytype == 'developer'){
         this.router.navigate(['./user-profile'],{
+          queryParams : {data : this.devfull.DeveloperID , data2 : this.devfull.RoleDesc}
+        })
+      }
+    }
+    if(this.newvar == 'EmailComponent'){
+      if(this.historytype == 'customer'){
+      this.router.navigate(['./email'],{
+        queryParams : {data : this.custfull.CustomerID , data2 : this.custfull.RoleDesc}
+      })
+      }
+      if(this.historytype == 'developer'){
+        this.router.navigate(['./email'],{
           queryParams : {data : this.devfull.DeveloperID , data2 : this.devfull.RoleDesc}
         })
       }

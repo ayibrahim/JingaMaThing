@@ -24,26 +24,36 @@ import {CalendarModule} from 'primeng/calendar';
 import {GalleriaModule} from 'primeng/galleria';
 import {DialogModule} from 'primeng/dialog';
 import {TableModule} from 'primeng/table';
+import {InputTextModule} from 'primeng/inputtext';
+import {PaginatorModule} from 'primeng/paginator';
+import { EmailComponent } from './pages/email/email.component';
+import {TabMenuModule} from 'primeng/tabmenu';
+import {DropdownModule} from 'primeng/dropdown';
+
 @NgModule({
   imports: [
     BrowserAnimationsModule,
     FormsModule,
     HttpClientModule,
     ComponentsModule,
+    TabMenuModule,
     NgbModule,
     RouterModule,
     AngularTiltModule,
     AppRoutingModule,
     BrowserModule,
     SharedModule,
+    DropdownModule,
     CalendarModule,
     TableModule,
+    PaginatorModule,
     DialogModule,
+    InputTextModule,
     GalleriaModule,
     ToastrModule.forRoot(),
 
   ],
-  declarations: [AppComponent, AdminLayoutComponent, AuthLayoutComponent, HomeComponent, SignInComponent, SignUpComponent, UserProfileComponent ],
+  declarations: [AppComponent, AdminLayoutComponent, AuthLayoutComponent, HomeComponent, SignInComponent, SignUpComponent, UserProfileComponent, EmailComponent ],
   providers: [Globals],
   bootstrap: [AppComponent]
 })

@@ -26,8 +26,7 @@
 }
 hr{ 
     height: 1px;
-    color: #007bff;
-    background-color: #007bff;
+    background-color: #E14ECA;
     border: none;
   }
 #footergall{
@@ -45,4 +44,27 @@ hr{
 }
 #GTable .col1{
 	 display: none; 
+}
+
+.tables {
+    table-layout: fixed;
+}
+.tables th,td{
+    overflow: visible;
+    word-wrap : break-word;
+}
+.tables th{
+    text-align: center;
+}
+.inputdialog{
+    width: 100px;
+	font-weight: bold;
+	float: left;
+	padding-top: 8px;
+    padding-right: 5px;
+    color: black;
+}
+#search{
+    overflow: hidden;
+    word-wrap : break-word;
 }
