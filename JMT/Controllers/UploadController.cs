@@ -13,12 +13,13 @@ using Microsoft.Data.SqlClient;
 
 namespace JMT.Controllers
 {
-  
-        [Produces("application/json")]
+	
+	[Produces("application/json")]
         
         public class UploadController : Controller
         {
-            private IHostingEnvironment _hostingEnvironment;
+		string con2 = "Data Source = itd2.cincinnatistate.edu; Initial Catalog=CPDM-IbrahimA;User id=cpdm-ayibrahim;Password=0654407;";
+		private IHostingEnvironment _hostingEnvironment;
 
             public UploadController(IHostingEnvironment hostingEnvironment)
             {
@@ -55,7 +56,7 @@ namespace JMT.Controllers
                             file.CopyTo(stream);
                         }
                     string newval = "https://localhost:44380/MyStaticFiles/Images/" + Email + "/" + fileName;
-                    string con2 = "Server=DESKTOP-62GK3U2;Database=JMT;Trusted_Connection=True;";
+                    
                     SqlConnection con = new SqlConnection(con2);
                     SqlCommand cmd = new SqlCommand("UpdatePhoto", con);
                     cmd.CommandType = CommandType.StoredProcedure;
@@ -81,7 +82,7 @@ namespace JMT.Controllers
         {
             object result = "";
             string finalresult = "";
-            string con2 = "Server=DESKTOP-62GK3U2;Database=JMT;Trusted_Connection=True;";
+            
             SqlConnection con = new SqlConnection(con2);
             SqlCommand cmd = new SqlCommand("SELECT Photo From TCustomers Where Email = '"+Email+"'", con);
             con.Open();
@@ -97,7 +98,7 @@ namespace JMT.Controllers
         {
             object result = "";
             string finalresult = "";
-            string con2 = "Server=DESKTOP-62GK3U2;Database=JMT;Trusted_Connection=True;";
+            
             SqlConnection con = new SqlConnection(con2);
             SqlCommand cmd = new SqlCommand("SELECT Photo From TDevelopers Where Email = '" + Email + "'", con);
             con.Open();
@@ -137,7 +138,7 @@ namespace JMT.Controllers
                     {
                         file.CopyTo(stream);
                     }
-                    string con2 = "Server=DESKTOP-62GK3U2;Database=JMT;Trusted_Connection=True;";
+                    
                     SqlConnection con = new SqlConnection(con2);
                     SqlCommand cmd = new SqlCommand("InsertDevGalleryPhoto", con);
                     cmd.CommandType = CommandType.StoredProcedure;

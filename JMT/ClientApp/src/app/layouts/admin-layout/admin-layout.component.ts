@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from "@angular/core";
 import { Router } from '@angular/router';
 import { Globals } from '../../Shared/globals'
+import { ToastrService } from 'ngx-toastr';
 export class customer{
   FirstName : string ; LastName : string; Email : string; Password: string; CustomerID : number; PhoneNumber : string; RoleDesc : string; Photo : string;
 }
@@ -25,7 +26,7 @@ export class AdminLayoutComponent implements OnInit {
   istesting : boolean = true;
   newvar:any;
   historytype : string;
-  constructor(private router: Router , public globals: Globals) {}
+  constructor(private router: Router , public globals: Globals , private toastr: ToastrService) {}
   changeSidebarColor(color){
     var sidebar = document.getElementsByClassName('sidebar')[0];
     var mainPanel = document.getElementsByClassName('main-panel')[0];
@@ -87,7 +88,9 @@ export class AdminLayoutComponent implements OnInit {
   public onRouterOutletActivate(event : any) {
     console.log(event.__proto__.constructor.name);
      this.newvar = event.__proto__.constructor.name;
+     this.toastr.clear();
      if(this.newvar == 'TablesComponent'){
+      
       this.router.navigate(['./home']);
      }
     if(this.newvar == 'UserProfileComponent'){

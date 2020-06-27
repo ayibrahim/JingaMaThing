@@ -16,17 +16,16 @@ namespace JMT.Controllers
 {
     public class UserData : ControllerBase
     {
-        //db dbop = new db();
-        [HttpGet]
+		string con2 = "Data Source = itd2.cincinnatistate.edu; Initial Catalog=CPDM-IbrahimA;User id=cpdm-ayibrahim;Password=0654407;";
+		//db dbop = new db();
+		[HttpGet]
         [Route("api/userInfo")]
         public List<UserInfo> GetUser()
         {
-            string con2 = "Server=DESKTOP-62GK3U2;Database=JMT;Trusted_Connection=True;";
             List<UserInfo> user = new List<UserInfo>();
             using (SqlConnection con = new SqlConnection(con2)) 
             {
                 SqlCommand cmd = new SqlCommand("SELECT * FROM TUsers", con);
-
                 con.Open();
                 SqlDataReader rdr = cmd.ExecuteReader();
                 while (rdr.Read()) 
@@ -49,7 +48,6 @@ namespace JMT.Controllers
             Response finalresult = new Response();
             List<Response> Customer = new List<Response>();
             string result = "Successful ";
-            string con2 = "Server=DESKTOP-62GK3U2;Database=JMT;Trusted_Connection=True;";
             //SqlConnection con = new SqlConnection("Data Source=NiluNilesh;Integrated Security=True");  
             SqlConnection con = new SqlConnection(con2);
             SqlCommand cmd = new SqlCommand("InsertNewCustomer", con);
@@ -76,7 +74,6 @@ namespace JMT.Controllers
             Response finalresult = new Response();
             List<Response> Developer = new List<Response>();
             string result = "Successful ";
-            string con2 = "Server=DESKTOP-62GK3U2;Database=JMT;Trusted_Connection=True;";
             //SqlConnection con = new SqlConnection("Data Source=NiluNilesh;Integrated Security=True");  
             SqlConnection con = new SqlConnection(con2);
             SqlCommand cmd = new SqlCommand("InsertNewDeveloper", con);
@@ -107,7 +104,6 @@ namespace JMT.Controllers
         [Route("api/getCustomerInfo/{Email}/{Password}")]
         public List<CustomerInfo> GetCustomerInfo( string Email = "" , string Password = "")
         {
-            string con2 = "Server=DESKTOP-62GK3U2;Database=JMT;Trusted_Connection=True;";
             List<CustomerInfo> customer = new List<CustomerInfo>();
             using (SqlConnection con = new SqlConnection(con2))
             {
@@ -140,7 +136,6 @@ namespace JMT.Controllers
         [Route("api/getDeveloperInfo/{Email}/{Password}")]
         public List<DeveloperInfo> GetDeveloperInfo(string Email = "", string Password = "")
         {
-            string con2 = "Server=DESKTOP-62GK3U2;Database=JMT;Trusted_Connection=True;";
             List<DeveloperInfo> customer = new List<DeveloperInfo>();
             using (SqlConnection con = new SqlConnection(con2))
             {
@@ -177,7 +172,6 @@ namespace JMT.Controllers
         [Route("api/getCustomerInfoByID/{ID}")]
         public List<CustomerInfo> GetCustomerInfobyID(string ID = "")
         {
-            string con2 = "Server=DESKTOP-62GK3U2;Database=JMT;Trusted_Connection=True;";
             List<CustomerInfo> customer = new List<CustomerInfo>();
             using (SqlConnection con = new SqlConnection(con2))
             {
@@ -207,7 +201,6 @@ namespace JMT.Controllers
         [Route("api/getDeveloperInfoByID/{ID}")]
         public List<DeveloperInfo> GetDeveloperInfobyID(string ID = "")
         {
-            string con2 = "Server=DESKTOP-62GK3U2;Database=JMT;Trusted_Connection=True;";
             List<DeveloperInfo> customer = new List<DeveloperInfo>();
             using (SqlConnection con = new SqlConnection(con2))
             {
@@ -245,7 +238,6 @@ namespace JMT.Controllers
         public string UpdateCustomerInfo(string CustomerID = "" , string FirstName = "" , string LastName = "" , string PhoneNumber = "" , string Email = "")
         {
             string response = "positive";
-            string con2 = "Server=DESKTOP-62GK3U2;Database=JMT;Trusted_Connection=True;";
             using (SqlConnection con = new SqlConnection(con2))
             {
                 SqlCommand cmd = new SqlCommand("UpdateCustomerInfo", con);
@@ -269,7 +261,6 @@ namespace JMT.Controllers
             string Certificates = "" , string Description = "")
         {
             string response = "positive";
-            string con2 = "Server=DESKTOP-62GK3U2;Database=JMT;Trusted_Connection=True;";
             using (SqlConnection con = new SqlConnection(con2))
             {
                 SqlCommand cmd = new SqlCommand("UpdateDeveloperInfo", con);
@@ -298,7 +289,6 @@ namespace JMT.Controllers
         [Route("api/getDevGalleryInfo/{DeveloperID}")]
         public List<DevGalleryInfo> GetDevGalleyInfo(string DeveloperID = "")
         {
-            string con2 = "Server=DESKTOP-62GK3U2;Database=JMT;Trusted_Connection=True;";
             List<DevGalleryInfo> customer = new List<DevGalleryInfo>();
             using (SqlConnection con = new SqlConnection(con2))
             {
@@ -326,7 +316,6 @@ namespace JMT.Controllers
         [Route("api/getDevGalleryTable/{DeveloperID}")]
         public List<DevGalleryTable> GetDevGalleyTable(string DeveloperID = "")
         {
-            string con2 = "Server=DESKTOP-62GK3U2;Database=JMT;Trusted_Connection=True;";
             List<DevGalleryTable> customer = new List<DevGalleryTable>();
             using (SqlConnection con = new SqlConnection(con2))
             {
@@ -339,9 +328,10 @@ namespace JMT.Controllers
                 {
                     DevGalleryTable finalcustomer = new DevGalleryTable();
                     finalcustomer.ImageID = (Convert.ToInt32(rdr["ImageID"]));
-                    finalcustomer.Description = (rdr["Description"].ToString());
-                    finalcustomer.Title = (rdr["Title"].ToString());
-                    customer.Add(finalcustomer);
+					finalcustomer.Title = (rdr["Title"].ToString());
+					finalcustomer.Description = (rdr["Description"].ToString());
+					finalcustomer.imagesrc = (rdr["imagesrc"].ToString());
+					customer.Add(finalcustomer);
                 }
 
             }
@@ -352,7 +342,6 @@ namespace JMT.Controllers
         public string UpdateDevGallery(string DeveloperProjectID = "", string Description = "", string Title = "")
         {
             string response = "positive";
-            string con2 = "Server=DESKTOP-62GK3U2;Database=JMT;Trusted_Connection=True;";
             using (SqlConnection con = new SqlConnection(con2))
             {
                 SqlCommand cmd = new SqlCommand("UpdateDevGalleryPhoto", con);
@@ -371,7 +360,6 @@ namespace JMT.Controllers
         public string DeleteDevGallery(string DeveloperProjectID = "")
         {
             string response = "positive";
-            string con2 = "Server=DESKTOP-62GK3U2;Database=JMT;Trusted_Connection=True;";
             using (SqlConnection con = new SqlConnection(con2))
             {
                 SqlCommand cmd = new SqlCommand("DeleteDevGalleryPhoto", con);

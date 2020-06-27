@@ -399,13 +399,9 @@ ShowGalleryDialog(){
         this.showNotification('top', 'center' , this.errormessage);
       }
       this.GHeader = [];
-      for (this.i = 0; this.i < this.GData.length; this.i++){
-        for (var key in this.GData[this.i]){
-          if(this.GHeader.indexOf(key) === -1){
-            this.GHeader.push(key);
-          }
-        }
-      }
+      this.GHeader.push('title');
+      this.GHeader.push('description');
+      
       if(this.display == true){
         this.display = false;
       } else {
@@ -432,15 +428,15 @@ ShowGalleryDialog(){
     this.errormessage = '*Updated Item In Gallery.';
     this.showNotification('top', 'center' , this.errormessage);
     this.display = false;
+    this.gallerdisplay = false;
+    setTimeout(()=>{    //<<<---    using ()=> syntax
+      this.gallerdisplay = true;
+    }, 1000);
     setTimeout(()=>{    //<<<---    using ()=> syntax
       this.photoService.getImages(this.DeveloperID).then(images => this.images = images);
     }, 1000);
     setTimeout(()=>{    //<<<---    using ()=> syntax
       this.ShowGalleryDialog();
-    }, 1000);
-    this.gallerdisplay = false;
-    setTimeout(()=>{    //<<<---    using ()=> syntax
-      this.gallerdisplay = true;
     }, 1000);
     setTimeout(()=>{    //<<<---    using ()=> syntax
       this.toastr.clear();
@@ -450,29 +446,28 @@ ShowGalleryDialog(){
   }
   DeleteDevGallery(){
     this.http.get('https://localhost:44380/api/DeleteDevGallery/' + this.DGID).subscribe(data => {
-        console.log("Deleted");
-    }, error => {
+     
+    }, error => { 
       console.log(error);
     });
     this.displaynewdialog = false;
     this.toastr.clear();
     this.errormessage = '*Deleted Item From Gallery.';
     this.showNotification('top', 'center' , this.errormessage);
+    console.log("Deleted");
     this.display = false;
+    this.gallerdisplay = false;
+    setTimeout(()=>{    //<<<---    using ()=> syntax
+      this.gallerdisplay = true;
+    }, 1000);
     setTimeout(()=>{    //<<<---    using ()=> syntax
       this.photoService.getImages(this.DeveloperID).then(images => this.images = images);
     }, 1000);
     setTimeout(()=>{    //<<<---    using ()=> syntax
       this.ShowGalleryDialog();
     }, 1000);
-    this.gallerdisplay = false;
-    setTimeout(()=>{    //<<<---    using ()=> syntax
-      this.gallerdisplay = true;
-    }, 1000);
     setTimeout(()=>{    //<<<---    using ()=> syntax
       this.toastr.clear();
     }, 5000);
-
-
   }
 }

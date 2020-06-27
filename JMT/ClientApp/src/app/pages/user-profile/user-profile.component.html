@@ -273,7 +273,7 @@
                 </tr>
                 <tr>
                   <th id="search" *ngFor="let cols of GHeader" [ngSwitch]="cols">
-                    <input type="text" pInputText
+                    <input placeholder="Filter..." type="text" pInputText
                       (input)="GT.filter($event.target.value, cols, 'contains', cols.filterMatchMode)"
                       [value]="GT.filters[cols] ? GT.filters[cols].value : ''">
                   </th>
@@ -281,8 +281,12 @@
               </ng-template>
               <ng-template pTemplate="body" let-GData let-columns="GHeader">
                 <tr [pSelectableRow]="GData">
-                  <td *ngFor="let cols of GHeader">
-                    {{GData[cols]}}
+                <td > 
+                <img [alt]="GData.imageID" src={{GData.imagesrc}} width="32" />
+                    {{GData.title}} 
+                </td>
+                  <td > 
+                        {{GData.description}}
                   </td>
                 </tr>
               </ng-template>

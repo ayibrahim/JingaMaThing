@@ -34,7 +34,7 @@ export interface DevRMList{
 })
 export class EmailComponent implements OnInit {
   //Menu Items
-  items: MenuItem[]; MenuLabelChosen : any; errormessage : String; nodata: boolean = false;
+  items: MenuItem[]; MenuLabelChosen : any; errormessage : String; nodata: boolean = false;nodata2: boolean = false;
   // Entering Component - Routing Params
   retrievedID : string; retrievedRole : string;customerId : string;developerId : string; selectedDevRM : DevRMList; NMTitle : string; NMDescription : string;
   developerlogin : Developer[]; loginresponse : customer[]; DevRMListbox : DevRMList[]; insertresponse : any;
@@ -42,9 +42,9 @@ export class EmailComponent implements OnInit {
   CFirstName : string; CLastName : string; CEmail : string;  CustomerID : number; CPhoneNumber : string;  CPassword: string; CRoleDesc : string; CPhoto : any; CEmail2: string;
   DFirstName : string; DLastName : string; DEmail : string; DPassword: string; DeveloperID : number; DPhoneNumber : string; DPhoto : any; DEmail2 : string;
   DDescription: string; DPLanguages: string; DSkills: string; DEducation: string; DCertificates: string; DTitle: string; DRoleDesc : string;
-  selecteddata1 : any;
-  display1 : boolean = false; display2 : boolean = false; MSData : any[]; MSHeader : any[]; i : number; 
-  
+  selecteddata1 : any; SenderEmail : string;
+  display1 : boolean = false; display2 : boolean = false; MSData : any[]; MSHeader : any[]; i : number;
+  SMData : any[]; SMHeader : any[];  selecteddata2 : any;
   constructor(private route: ActivatedRoute , private router : Router ,private http: HttpClient , private toastr: ToastrService) { }
 
   ngOnInit() {
@@ -74,6 +74,8 @@ export class EmailComponent implements OnInit {
             this.CRoleDesc = this.loginresponse[0].roleDesc;
             this.CPhoto = this.loginresponse[0].photo;
             this.display2 = true;
+            this.LoadDevRMList();
+            this.CSentMessages();
             this.CInbox();
           }, (error) => {console.log('error message ' + error)}
           )
@@ -101,6 +103,8 @@ export class EmailComponent implements OnInit {
                         this.DPhoto = this.developerlogin[0].photo;
                         this.display1 = true;
                         this.DInbox();
+                        this.LoadDevRMCustomerList();
+                        this.DSentMessages();
                     }, (error) => {console.log('error message ' + error)}
                     )
         
@@ -115,6 +119,7 @@ export class EmailComponent implements OnInit {
   }
   test(event){
     this.MenuLabelChosen = event.toElement.parentNode.innerText;
+    this.toastr.clear();
     if(this.MenuLabelChosen == "Messages"){
       this.isSentMessages = false;
       this.isNewMessage = false;
@@ -133,6 +138,12 @@ export class EmailComponent implements OnInit {
       this.display2 = false;
       this.nodata = false;
       this.isSentMessages = true;
+      if(this.retrievedRole == 'Customer'){
+        this.CSentMessages();
+      }
+      if(this.retrievedRole == 'Developer'){
+        this.DSentMessages();
+      }
     }
     if(this.MenuLabelChosen == "New Message"){
       this.isSentMessages = false;
@@ -141,7 +152,12 @@ export class EmailComponent implements OnInit {
       this.display2 = false;
       this.nodata = false;
       this.isNewMessage = true;
-      this.LoadDevRMList();
+      if(this.retrievedRole == 'Customer'){
+        this.LoadDevRMList();
+      }
+      if(this.retrievedRole == 'Developer'){
+        this.LoadDevRMCustomerList();
+      }
     }
   }
   
@@ -149,6 +165,7 @@ export class EmailComponent implements OnInit {
     this.http.get('https://localhost:44380/api/GetDeveloperInbox/' + this.DeveloperID).subscribe(
     (response : headers[]) => {
       this.MSData = response;
+      console.log(this.MSData);
       if(this.MSData.length == 0){
         this.display1 = false;
         this.nodata = true;
@@ -163,17 +180,26 @@ export class EmailComponent implements OnInit {
       for (this.i = 0; this.i < this.MSData.length; this.i++){
         for (var key in this.MSData[this.i]){
           if(this.MSHeader.indexOf(key) === -1){
-            this.MSHeader.push(key);
+            if(key == 'id'){
+
+            }else {
+              this.MSHeader.push(key);
+            }
+            
           }
         }
       }   
-    }, (error) => {console.log('Error Happened' + error)}, () => {console.log('the subscription is completed')}
+    }, (error) => {this.nodata = true;this.toastr.clear();
+      this.errormessage = 'Error Happened When Loading Inbox Try Again or Contact Support';
+      this.showNotification('top', 'center' , this.errormessage);
+      console.log('error message ' + error)}
     )
   }
   CInbox(){
     this.http.get('https://localhost:44380/api/GetCustomerInbox/' + this.CustomerID).subscribe(
     (response : headers[]) => {
       this.MSData = response;
+      console.log(this.MSData);
       if(this.MSData.length == 0){
         this.display2 = false;
         this.nodata = true;
@@ -188,11 +214,18 @@ export class EmailComponent implements OnInit {
       for (this.i = 0; this.i < this.MSData.length; this.i++){
         for (var key in this.MSData[this.i]){
           if(this.MSHeader.indexOf(key) === -1){
-            this.MSHeader.push(key);
+            if(key == 'id'){
+
+            }else {
+              this.MSHeader.push(key);
+            }
           }
         }
       }   
-    }, (error) => {console.log('Error Happened' + error)}, () => {console.log('the subscription is completed')}
+    }, (error) => {this.nodata = true;this.toastr.clear();
+      this.errormessage = 'Error Happened When Loading Inbox Try Again or Contact Support';
+      this.showNotification('top', 'center' , this.errormessage);
+      console.log('error message ' + error)}
     )
   }
   LoadDevRMList(){
@@ -205,10 +238,29 @@ export class EmailComponent implements OnInit {
         this.errormessage = '*No Developers or Resource Managers Exist';
         this.showNotification('top', 'center' , this.errormessage);
       }
-    }, (error) => {console.log('Error Happened' + error)}, () => {console.log('the subscription is completed')}
+    }, (error) => {this.toastr.clear();
+      this.errormessage = 'Error Happened When Loading To ListBox , Refresh and Try Again!';
+      this.showNotification('top', 'center' , this.errormessage);
+      console.log('error message ' + error)}
     )
   }
-  ListBoxClick(){
+  LoadDevRMCustomerList(){
+    this.http.get('https://localhost:44380/api/GetDevRMCustomerList').subscribe(
+    (response : DevRMList[]) => {
+      this.DevRMListbox = response;
+      console.log(this.DevRMListbox);
+      if(this.DevRMListbox.length == 0){
+        this.toastr.clear();
+        this.errormessage = '*No Developers , Resource Managers or Customers Exist';
+        this.showNotification('top', 'center' , this.errormessage);
+      }
+    }, (error) => {this.toastr.clear();
+      this.errormessage = 'Error Happened When Loading To ListBox , Refresh and Try Again!';
+      this.showNotification('top', 'center' , this.errormessage);
+      console.log('error message ' + error)}
+    )
+  }
+  SendMessage(){
     if(this.selectedDevRM == null || this.selectedDevRM == undefined){
         this.toastr.clear();
         this.errormessage = '*No Send To Person Selected';
@@ -227,22 +279,98 @@ export class EmailComponent implements OnInit {
       this.showNotification('top', 'center' , this.errormessage);
       return;
   }
-
+  if(this.iscustomer == true){
+    this.SenderEmail = this.CEmail2;
+  }
+  if(this.isdeveloper == true){
+    this.SenderEmail = this.DEmail2;
+  }
   //api/SendCustomerMessage/{RoleDesc}/{Email}/{Title}/{Description}/{EmailTo}
-  this.http.get('https://localhost:44380/api/SendCustomerMessage/' + this.selectedDevRM.role + '/' + this.CEmail2 + '/' + this.NMTitle + '/' + this.NMDescription + '/'
+  this.http.get('https://localhost:44380/api/SendMessage/' + this.selectedDevRM.role + '/' + this.SenderEmail + '/' + this.NMTitle + '/' + this.NMDescription + '/'
   + this.selectedDevRM.email).subscribe(
     (response2 : headers[]) => {
       this.insertresponse = response2
+      this.toastr.clear();
+      this.errormessage = 'Message Sent';
+      this.showNotification('top', 'center' , this.errormessage);
       console.log(this.insertresponse);
-    }, (error) => {console.log('error message ' + error)}
+    }, (error) => { this.toastr.clear();
+      this.errormessage = 'Error Happened When Sending Message Try Again or Contact Support';
+      this.showNotification('top', 'center' , this.errormessage);
+      console.log('error message ' + error)}
     
   )
-  this.toastr.clear();
-  this.errormessage = 'Message Sent';
-  this.showNotification('top', 'center' , this.errormessage);
+  
   this.NMDescription = undefined;
   this.NMTitle = undefined;
   this.selectedDevRM = undefined;
+  }
+  DSentMessages(){
+    this.http.get('https://localhost:44380/api/GetDeveloperInboxSent/' + this.DeveloperID).subscribe(
+    (response : headers[]) => {
+      this.SMData = response;
+      console.log(this.SMData);
+      if(this.SMData.length == 0){
+        this.display1 = false;
+        this.nodata2 = true;
+        this.toastr.clear();
+        this.errormessage = '*No Sent Messges Found.';
+        this.showNotification('top', 'center' , this.errormessage);
+      } else {
+        this.display1 = true;
+        this.nodata2 = false;
+      }
+      this.SMHeader = [];
+      for (this.i = 0; this.i < this.SMData.length; this.i++){
+        for (var key in this.SMData[this.i]){
+          if(this.SMHeader.indexOf(key) === -1){
+            if(key == 'id'){
+
+            }else {
+              this.SMHeader.push(key);
+            }
+            
+          }
+        }
+      }   
+    }, (error) => {this.nodata2 = true;this.toastr.clear();
+      this.errormessage = 'Error Happened When Loading Sent Messages, Refresh and Try Again!';
+      this.showNotification('top', 'center' , this.errormessage);
+      console.log('error message ' + error)}
+    )
+  }
+  CSentMessages(){
+    this.http.get('https://localhost:44380/api/GetCustomerInboxSent/' + this.CustomerID).subscribe(
+    (response : headers[]) => {
+      this.SMData = response;
+      console.log(this.SMData);
+      if(this.SMData.length == 0){
+        this.display2 = false;
+        this.nodata2 = true;
+        this.toastr.clear();
+        this.errormessage = '*No Sent Messges Found.';
+        this.showNotification('top', 'center' , this.errormessage);
+      } else {
+        this.display2 = true;
+        this.nodata2 = false;
+      }
+      this.SMHeader = [];
+      for (this.i = 0; this.i < this.SMData.length; this.i++){
+        for (var key in this.SMData[this.i]){
+          if(this.SMHeader.indexOf(key) === -1){
+            if(key == 'id'){
+
+            }else {
+              this.SMHeader.push(key);
+            }
+          }
+        }
+      }   
+    }, (error) => {this.nodata2 = true;this.toastr.clear();
+      this.errormessage = 'Error Happened When Loading Sent Messages, Refresh and Try Again!';
+      this.showNotification('top', 'center' , this.errormessage);
+      console.log('error message ' + error)}
+    )
   }
   showNotification(from, align , message){
 

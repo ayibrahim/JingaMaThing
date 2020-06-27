@@ -7,6 +7,7 @@ namespace JMT.Model
 {
     public class Inbox
     {
+		public int ID { get; set; }
         public string Name { get; set; }
         public string Message { get; set; }
         public string RecievedDate { get; set; }
@@ -15,4 +16,12 @@ namespace JMT.Model
 
 		public string Title { get; set; }
     }
+
+	public class InboxSent {
+		public string ID { get; set; }
+		public string Name { get; set; }
+		public string Message { get; set; }
+		public string SentDate { get; set; }
+		public string Title { get; set; }
+	}
 }

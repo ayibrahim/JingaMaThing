@@ -9,19 +9,8 @@ using System.Threading.Tasks;
 
 namespace JMT
 {
-    public partial class db : DbContext
+    public class db 
     {
-        //SqlConnection con;
-        //public db()
-        //{
-        //    var configuration = GetConfiguration();
-        //    con = new SqlConnection(configuration.GetSection("Data").GetSection("ConnectionString").Value);
-        //}
-        //public IConfigurationRoot GetConfiguration()
-        //{
-        //    var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
-        //    return builder.Build();
-        //}
 
-    }
+	}
 }
