@@ -1,11 +1,10 @@
 <div class=" content">
-  <div class=" col-md-12">
+
 
     <p-tabMenu [model]="items" [activeItem]="items[0]" (click)="test($event)"></p-tabMenu>
     <br>
     <div *ngIf="isMessages">
       <div *ngIf="display1 || display2;">
-        <div class=" col-md-12">
           <div class=" card">
             <div class=" card-header">
               <h5 class=" title">My Messages</h5>
@@ -65,7 +64,7 @@
           </div>
         </div>
       </div>
-    </div>
+
     <div *ngIf="nodata">
       <div class=" typography-line">
         <span> </span>
@@ -75,7 +74,6 @@
       </div>
     </div>
     <div *ngIf="isSentMessages">
-      <div class=" col-md-12">
         <div class=" card">
           <div class=" card-header">
             <h5 class=" title">My Sent Messages</h5>
@@ -132,8 +130,6 @@
             </p-table>
           </div>
         </div>
-      </div>
-
   <div *ngIf="nodata2">
     <div class=" typography-line">
       <span> </span>
@@ -144,7 +140,7 @@
   </div>
 </div>
 <div *ngIf="isNewMessage">
-  <div class=" col-md-12">
+
     <div class=" card">
       <div class=" card-header">
         <h5 class=" title">To</h5>
@@ -165,7 +161,7 @@
           <div class=" row">
             <div class=" col-md-6">
               <div class=" form-group">
-                <label> Title </label>
+                <label> Subject </label>
                 <input class=" form-control" type="text" [(ngModel)]="NMTitle" name="NMTitle" autofocus />
               </div>
             </div>
@@ -184,7 +180,7 @@
       </div>
     </div>
   </div>
-</div>
-</div>
+
+
 
 </div>

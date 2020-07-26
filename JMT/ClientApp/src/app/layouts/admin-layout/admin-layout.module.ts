@@ -21,6 +21,8 @@ import {CalendarModule} from 'primeng/calendar';
 import {GalleriaModule} from 'primeng/galleria';
 import {InputTextModule} from 'primeng/inputtext';
 import {PaginatorModule} from 'primeng/paginator';
+import {CardModule} from 'primeng/card';
+import {OverlayPanelModule} from 'primeng/overlaypanel';
 @NgModule({
   imports: [
     CommonModule,
@@ -29,8 +31,10 @@ import {PaginatorModule} from 'primeng/paginator';
     HttpClientModule,
     SharedModule,
     GalleriaModule,
+    OverlayPanelModule,
     CalendarModule,
     PaginatorModule,
+    CardModule,
     DialogModule,
     InputTextModule,
     TableModule,

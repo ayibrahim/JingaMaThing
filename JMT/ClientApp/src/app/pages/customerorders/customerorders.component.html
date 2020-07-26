@@ -1,0 +1,210 @@
+<div class="content">
+  <div class=" col-md-12">
+    <p-tabMenu [model]="items" [activeItem]="items[0]" (click)="menuswitch($event)"></p-tabMenu>
+  </div>
+  <br>
+
+  <div *ngIf="isOpenOrder">
+    Open Order
+  </div>
+
+  <div *ngIf="isPendingOrder">
+    <!-- First Card -->
+    <div class=" col-md-12">
+      <div class=" card">
+        <div class=" card-header">
+          <h5 class=" title">Pending Your Reply - Developer Order Offer </h5>
+        </div>
+        <div class=" card-body">
+          <form autocomplete="off">
+            <!-- No Data -->
+            <div *ngIf="nopendingdata2">
+              <div class=" typography-line">
+                <span> </span>
+                <p class=" text-info">
+                  <strong>You have no orders pending approval.</strong>
+                </p>
+              </div>
+            </div>
+            <!-- End of No Data -->
+            <div *ngIf="nopendingdata2 === false">
+              <p-card *ngFor="let item of CustomerPendingList" class="secondcont" header={{item.name}}
+                styleClass="ui-card-shadow">
+                <div><strong>Order Description:</strong><br>
+                  {{item.orderDesc}}</div><br>
+                <div><strong>Developer Price Requested:</strong><br>
+                  ${{item.priceOffered}} </div><br>
+                <div><strong>Order Completed By:</strong><br>
+                  {{item.dateOffered}}</div><br>
+                <div><strong>Order Requirements:</strong><br>
+                  <button pButton style="margin-top: 0.5em" type="button" label="View Requirements"
+                    class="ui-button-rounded ui-button-info" (click)="showBasicDialog(item.requirements)"></button>
+                </div>
+                <br>
+                <p-footer>
+                  <button pButton type="button" label="Accept" icon="pi pi-check" style="margin-right: 0.5em"
+                   (click)="AcceptCustomerOrder(item.customerPendingID , item.customerID , item.developerID , item.priceOffered , item.dateOffered , item.orderDesc , item.requirements)" class="ui-button-success" ></button>
+                  <button pButton type="button" label="Decline" icon="pi pi-times" class="ui-button-danger"
+                    (click)="DeclineCustomerOrder(item.customerPendingID)"></button>
+                </p-footer>
+                <p-dialog header="Order Requirements:" [modal]="true" [(visible)]="displayBasic"
+                  [style]="{width: '50vw'}" [baseZIndex]="10000">
+                  {{dialogrequirment}}
+                  <p-footer>
+                    <button type="button" pButton icon="pi pi-times" (click)="displayBasic=false" label="Close"
+                      class="ui-button-secondary"></button>
+                  </p-footer>
+                </p-dialog>
+              </p-card>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <!-- Second Card -->
+    <div class=" col-md-12">
+      <div class=" card">
+        <div class=" card-header">
+          <h5 class=" title">Orders Submitted - Waiting Dev Response</h5>
+        </div>
+        <div class=" card-body">
+          <form autocomplete="off">
+            <!-- No Data -->
+            <div *ngIf="nopendingdata1">
+              <div class=" typography-line">
+                <span> </span>
+                <p class=" text-info">
+                  <strong>You have no orders pending developer response.</strong>
+                </p>
+              </div>
+            </div>
+            <!-- End of No Data -->
+
+            <div *ngIf="nopendingdata1 === false">
+              <p class=" text-info">
+                <strong>*Expand For Requirements</strong>
+              </p>
+              <br>
+              <p-table #CP class="tables" id="CPTable" [columns]="CustomerPendingHeader"
+                [value]="CustomerPendingResponse" [(selection)]="selecteddata1" [rows]="10"
+                [rowsPerPageOptions]="[10,25,50]" [paginator]="true" [reorderableColumns]="true"
+                dataKey="developerPendingID">
+                <ng-template pTemplate="header" let-columns>
+                  <tr>
+                    <th style="width: 3em"></th>
+                    <th *ngFor="let cols of CustomerPendingHeader" style="text-transform: capitalize;"
+                      [pSortableColumn]="cols" pReorderableColumn pResizableColumn>
+                      {{cols}}
+                      <p-sortIcon [field]="cols"></p-sortIcon>
+                    </th>
+                  </tr>
+                  <tr>
+                    <th style="width: 3em"></th>
+                    <th id="search" *ngFor="let cols of CustomerPendingHeader" [ngSwitch]="cols">
+                      <input placeholder="Filter...." type="text" pInputText
+                        (input)="CP.filter($event.target.value, cols, 'contains', cols.filterMatchMode)"
+                        [value]="CP.filters[cols] ? CP.filters[cols].value : ''">
+                    </th>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-CustomerPendingResponse let-expanded="expanded"
+                  let-columns="CustomerPendingHeader">
+                  <tr [pSelectableRow]="CustomerPendingResponse">
+                    <td>
+                      <a href="#" [pRowToggler]="CustomerPendingResponse">
+                        <i [ngClass]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></i>
+                      </a>
+                    </td>
+                    <td *ngFor="let cols of CustomerPendingHeader"
+                      style="height: 10px; max-height: 10px; overflow:hidden">
+                      <div *ngIf="cols == 'budget'">
+                        ${{CustomerPendingResponse[cols]}}
+                      </div>
+                      <div *ngIf="cols != 'budget'">
+                        {{CustomerPendingResponse[cols]}}
+                      </div>
+
+                    </td>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="rowexpansion" let-CustomerPendingResponse let-columns="columns">
+                  <tr>
+                    <td [attr.colspan]="columns.length + 1">
+                      <div class="p-grid -fluid" style="font-size:16px;padding:20px">
+                        <div class="p-col-12 p-md-9">
+                          <div class="p-grid">
+                            <div class="p-col-12">
+                              <b>{{CustomerPendingResponse.requirements}}</b>
+                            </div>
+
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                </ng-template>
+              </p-table>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Third Card -->
+    <div class=" col-md-12">
+      <div class=" card">
+        <div class=" card-header">
+          <h5 class=" title">Orders Declined</h5>
+        </div>
+        <div class=" card-body">
+          <form autocomplete="off">
+            <!-- No Data -->
+            <div *ngIf="nopendingdatadeclined">
+              <div class=" typography-line">
+                <span> </span>
+                <p class=" text-info">
+                  <strong>You have no Orders Declined</strong>
+                </p>
+              </div>
+            </div>
+            <!-- End of No Data -->
+
+            <div *ngIf="nopendingdatadeclined === false">
+              <p-table #CPD class="tables" id="CPDTable" [columns]="CPDHeader" [value]="CPDData"
+                [(selection)]="selecteddata1" [rows]="10" [rowsPerPageOptions]="[10,25,50]" [paginator]="true"
+                [reorderableColumns]="true" dataKey="developerDeclinedID">
+                <ng-template pTemplate="header" let-columns>
+                  <tr>
+                    <th *ngFor="let cols of CPDHeader" style="text-transform: capitalize;" [pSortableColumn]="cols"
+                      pReorderableColumn pResizableColumn>
+                      {{cols}}
+                      <p-sortIcon [field]="cols"></p-sortIcon>
+                    </th>
+                  </tr>
+                  <tr>
+                    <th id="search" *ngFor="let cols of CPDHeader" [ngSwitch]="cols">
+                      <input placeholder="Filter...." type="text" pInputText
+                        (input)="CPD.filter($event.target.value, cols, 'contains', cols.filterMatchMode)"
+                        [value]="CPD.filters[cols] ? CPD.filters[cols].value : ''">
+                    </th>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-CPDData let-expanded="expanded" let-columns="CPDHeader">
+                  <tr [pSelectableRow]="CPDData">
+                    <td *ngFor="let cols of CPDHeader" style="height: 10px; max-height: 10px; overflow:hidden">
+                      {{CPDData[cols]}}
+                    </td>
+                  </tr>
+                </ng-template>
+              </p-table>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="isOrderHistory">
+    Order History
+  </div>
+</div>

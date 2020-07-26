@@ -35,12 +35,14 @@ namespace JMT.Controllers {
 					finalcustomer.ID = (Convert.ToInt32(rdr["ID"]));
 					finalcustomer.Name = (rdr["Name"].ToString());
 					finalcustomer.Email = (rdr["Email"].ToString());
-					finalcustomer.Title = (rdr["Title"].ToString());
+					finalcustomer.Subject = (rdr["Subject"].ToString());
 					finalcustomer.Message = (rdr["Message"].ToString());
 					finalcustomer.RecievedDate = (rdr["RecievedDate"].ToString());
 					customer.Add(finalcustomer);
 				}
+				con.Close();
 			}
+			
 			return customer;
 		}
 		[HttpGet]
@@ -59,11 +61,12 @@ namespace JMT.Controllers {
 					finalcustomer.ID = (Convert.ToInt32(rdr["ID"]));
 					finalcustomer.Name = (rdr["Name"].ToString());
 					finalcustomer.Email = (rdr["Email"].ToString());
-					finalcustomer.Title = (rdr["Title"].ToString());
+					finalcustomer.Subject = (rdr["Subject"].ToString());
 					finalcustomer.Message = (rdr["Message"].ToString());
 					finalcustomer.RecievedDate = (rdr["RecievedDate"].ToString());
 					customer.Add(finalcustomer);
 				}
+				con.Close();
 			}
 			return customer;
 		}
@@ -83,11 +86,12 @@ namespace JMT.Controllers {
 					finalcustomer.ID = (Convert.ToInt32(rdr["ID"]));
 					finalcustomer.Name = (rdr["Name"].ToString());
 					finalcustomer.Email = (rdr["Email"].ToString());
-					finalcustomer.Title = (rdr["Title"].ToString());
+					finalcustomer.Subject = (rdr["Subject"].ToString());
 					finalcustomer.Message = (rdr["Message"].ToString());
 					finalcustomer.RecievedDate = (rdr["RecievedDate"].ToString());
 					customer.Add(finalcustomer);
 				}
+				con.Close();
 			}
 			return customer;
 		}
@@ -219,7 +223,7 @@ namespace JMT.Controllers {
 					InboxSent finalcustomer = new InboxSent();
 					finalcustomer.ID = (rdr["ID"].ToString());
 					finalcustomer.Name = (rdr["Name"].ToString());
-					finalcustomer.Title = (rdr["Title"].ToString());
+					finalcustomer.Subject = (rdr["Subject"].ToString());
 					finalcustomer.Message = (rdr["Message"].ToString());
 					finalcustomer.SentDate = (rdr["SentDate"].ToString());
 					customer.Add(finalcustomer);
@@ -237,7 +241,7 @@ namespace JMT.Controllers {
 					InboxSent finalcustomer = new InboxSent();
 					finalcustomer.ID = (rdr["ID"].ToString());
 					finalcustomer.Name = (rdr["Name"].ToString());
-					finalcustomer.Title = (rdr["Title"].ToString());
+					finalcustomer.Subject = (rdr["Subject"].ToString());
 					finalcustomer.Message = (rdr["Message"].ToString());
 					finalcustomer.SentDate = (rdr["SentDate"].ToString());
 					customer.Add(finalcustomer);
@@ -263,7 +267,7 @@ namespace JMT.Controllers {
 					InboxSent finalcustomer = new InboxSent();
 					finalcustomer.ID = (rdr["ID"].ToString());
 					finalcustomer.Name = (rdr["Name"].ToString());
-					finalcustomer.Title = (rdr["Title"].ToString());
+					finalcustomer.Subject = (rdr["Subject"].ToString());
 					finalcustomer.Message = (rdr["Message"].ToString());
 					finalcustomer.SentDate = (rdr["SentDate"].ToString());
 					customer.Add(finalcustomer);
@@ -281,7 +285,7 @@ namespace JMT.Controllers {
 					InboxSent finalcustomer = new InboxSent();
 					finalcustomer.ID = (rdr["ID"].ToString());
 					finalcustomer.Name = (rdr["Name"].ToString());
-					finalcustomer.Title = (rdr["Title"].ToString());
+					finalcustomer.Subject = (rdr["Subject"].ToString());
 					finalcustomer.Message = (rdr["Message"].ToString());
 					finalcustomer.SentDate = (rdr["SentDate"].ToString());
 					customer.Add(finalcustomer);
@@ -299,7 +303,7 @@ namespace JMT.Controllers {
 					InboxSent finalcustomer = new InboxSent();
 					finalcustomer.ID = (rdr["ID"].ToString());
 					finalcustomer.Name = (rdr["Name"].ToString());
-					finalcustomer.Title = (rdr["Title"].ToString());
+					finalcustomer.Subject = (rdr["Subject"].ToString());
 					finalcustomer.Message = (rdr["Message"].ToString());
 					finalcustomer.SentDate = (rdr["SentDate"].ToString());
 					customer.Add(finalcustomer);

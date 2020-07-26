@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 export interface headers{}
+export interface test{ response : any;}
 export interface customer{
   customerID : number;
   email : string;
@@ -38,7 +39,7 @@ export interface Developer{
   styleUrls: ['./sign-up.component.css']
 })
 export class SignUpComponent implements OnInit {
-  errormessage: string;
+  errormessage: string; CheckEmail : test[];
   newdata : any[];
   error : string;
   isCustomer: boolean = false;
@@ -90,16 +91,32 @@ export class SignUpComponent implements OnInit {
       this.showNotification('top', 'center' , this.errormessage);
       return;
     }
-     this.http.get('https://localhost:44380/api/InserNewCustomer/' + this.CFirstName + '/' + this.CLastName + '/' + this.CPhoneNumber + '/' + this.CEmail + '/' + this.CPassword) .subscribe(
+    this.http.get('https://localhost:44380/api/CheckUserEmail/'+ this.CEmail).subscribe(
+      (response2 : test[]) => {
+        this.CheckEmail = response2;
+      }, (error) => {console.log('error message ' + error)} 
+    )
+    setTimeout(()=>{
+      if(this.CheckEmail[0].response == 'Found'){
+          this.toastr.clear();
+           this.errormessage = '*Email Already Exists , Try Signing up with a differnt email address.';
+           this.showNotification('top', 'center' , this.errormessage);
+           return;
+      } else {
+        this.http.get('https://localhost:44380/api/InserNewCustomer/' + this.CFirstName + '/' + this.CLastName + '/' + this.CPhoneNumber + '/' + this.CEmail + '/' + this.CPassword) .subscribe(
        (response2 : headers[]) => {
-         this.newdata = response2
+         this.newdata = response2;
          console.log(this.newdata);
-       }, (error) => {console.log('error message ' + error)}
-       
+       }, (error) => {console.log('error message ' + error)} 
      )
+
      setTimeout(()=>{    //<<<---    using ()=> syntax
       this.getCusotmerInfo();
- }, 1000);
+      }, 1000);
+      }
+    }, 1000);
+   
+     
     
   }
   getCusotmerInfo(){
@@ -242,11 +259,25 @@ export class SignUpComponent implements OnInit {
         this.showNotification('top', 'center' , this.errormessage);
         return;
       }
-    this.isStart = false;
-    this.isDeveloper = false;
-    this.isCustomer = false;
-    this.isDeveloper2 = true;
-    this.isDeveloper3 = false;
+      this.http.get('https://localhost:44380/api/CheckUserEmail/'+ this.DEmail).subscribe(
+        (response2 : test[]) => {
+          this.CheckEmail = response2;
+        }, (error) => {console.log('error message ' + error)} 
+      )
+      setTimeout(()=>{
+        if(this.CheckEmail[0].response == 'Found'){
+            this.toastr.clear();
+             this.errormessage = '*Email Already Exists , Try Signing up with a differnt email address.';
+             this.showNotification('top', 'center' , this.errormessage);
+             return;
+        } else {
+          this.isStart = false;
+          this.isDeveloper = false;
+          this.isCustomer = false;
+          this.isDeveloper2 = true;
+          this.isDeveloper3 = false;
+        }
+      }, 1000);    
   }
   ThirdPageDev(){
     if(!this.DDescription|| !this.DPLanguages|| !this.DSkills){

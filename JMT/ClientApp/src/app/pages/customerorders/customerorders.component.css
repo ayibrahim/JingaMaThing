@@ -1,0 +1,29 @@
+p-table  tr {
+    overflow: hidden;
+    width: 0%;
+}
+#search{
+    overflow: hidden;
+    word-wrap : break-word;
+}
+::ng-deep body .ui-card-body{
+    width: 340px;
+    height: 450px;
+    min-width: 340px;
+    min-height: 450px;
+    max-width: 340px;
+    max-height: 600px;
+} 
+::ng-deep body .ui-card-footer{
+    position: absolute;
+    bottom: 0;
+    padding-bottom: 10px;
+}
+
+.secondcont{
+	float: left;
+    overflow: hidden;
+	margin-right: 2em;
+	margin-bottom: 2em;
+	position: relative;
+}

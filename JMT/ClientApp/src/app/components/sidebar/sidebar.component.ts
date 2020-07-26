@@ -50,23 +50,27 @@ export class SidebarComponent implements OnInit {
           class: ""
         },
         {
-          path: "/icons",
+          path: "/devorders",
           title: "Orders",
           icon: "icon-cart",
           class: ""
         },
-        {
-          path: "/maps",
-          title: "New Order",
-          icon: "icon-bag-16",
-          class: "" },
         {
           path: "/email",
           title: "Messages",
           icon: "icon-chat-33",
           class: ""
         },
-      
+        {
+          path: "/maps",
+          title: "Notes",
+          icon: "icon-notes",
+          class: "" },
+          {
+            path: "/maps",
+            title: "Links",
+            icon: "icon-world",
+            class: "" },
         {
           path: "/user-profile",
           title: "Profile",
@@ -90,13 +94,13 @@ export class SidebarComponent implements OnInit {
         class: ""
       },
       {
-        path: "/icons",
+        path: "/customerorders",
         title: "Orders",
         icon: "icon-cart",
         class: ""
       },
       {
-        path: "/maps",
+        path: "/new-order",
         title: "New Order",
         icon: "icon-bag-16",
         class: "" },

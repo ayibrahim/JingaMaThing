@@ -22,7 +22,8 @@ export class HomeComponent implements OnInit {
   imageToShow: any;
   constructor(private router: Router , private http : HttpClient) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
+    this.onSignIn();
   }
   onSignIn(){
     this.isnotLoggedIn = false;

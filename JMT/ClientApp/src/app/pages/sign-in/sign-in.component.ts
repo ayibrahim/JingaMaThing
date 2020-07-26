@@ -44,9 +44,13 @@ export class SignInComponent implements OnInit {
   CnotD : string ; 
   regexp = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
   ngOnInit() {
-    this.Email = 'ayibrahi@hotmail.com';
-    this.Password = 'testing332211'
-    this.Login();
+    //Developer
+    //  this.Email = 'ayibrahi@hotmail.com';
+    // this.Password = 'testing332211'
+    //Customer
+    this.Email = 'ryibrahim@something.com';
+    this.Password = 'testingtesting'
+     this.Login();
   }
   Login(){
     if(!this.Email || !this.Password){

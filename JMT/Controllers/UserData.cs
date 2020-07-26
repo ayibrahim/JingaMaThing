@@ -36,8 +36,8 @@ namespace JMT.Controllers
                     finaluser.LastName = (rdr["LastName"].ToString());
                     user.Add(finaluser);
                 }
-                
-            }
+				con.Close();
+			}
             return user;
         }
 
@@ -126,8 +126,8 @@ namespace JMT.Controllers
                     finalcustomer.Photo = (rdr["Photo"].ToString());
                     customer.Add(finalcustomer);
                 }
-
-            }
+				con.Close();
+			}
             return customer;
         }
        
@@ -164,8 +164,8 @@ namespace JMT.Controllers
                     finalcustomer.Photo = (rdr["Photo"].ToString());
                     customer.Add(finalcustomer);
                 }
-
-            }
+				con.Close();
+			}
             return customer;
         }
         [HttpGet]
@@ -193,8 +193,8 @@ namespace JMT.Controllers
                     finalcustomer.Photo = (rdr["Photo"].ToString());
                     customer.Add(finalcustomer);
                 }
-
-            }
+				con.Close();
+			}
             return customer;
         }
         [HttpGet]
@@ -228,8 +228,8 @@ namespace JMT.Controllers
                     finalcustomer.Photo = (rdr["Photo"].ToString());
                     customer.Add(finalcustomer);
                 }
-
-            }
+				con.Close();
+			}
             return customer;
         }
 
@@ -249,9 +249,9 @@ namespace JMT.Controllers
                 cmd.Parameters.AddWithValue("@Email", Email);
                 con.Open();
                 cmd.ExecuteNonQuery();
-                
 
-            }
+				con.Close();
+			}
             return response;
         }
 
@@ -280,8 +280,8 @@ namespace JMT.Controllers
                 con.Open();
                 cmd.ExecuteNonQuery();
 
-
-            }
+				con.Close();
+			}
             return response;
         }
 
@@ -307,8 +307,8 @@ namespace JMT.Controllers
                     finalcustomer.Title = (rdr["Title"].ToString());
                     customer.Add(finalcustomer);
                 }
-
-            }
+				con.Close();
+			}
             return customer;
         }
 
@@ -333,8 +333,8 @@ namespace JMT.Controllers
 					finalcustomer.imagesrc = (rdr["imagesrc"].ToString());
 					customer.Add(finalcustomer);
                 }
-
-            }
+				con.Close();
+			}
             return customer;
         }
         [HttpGet]
@@ -351,7 +351,8 @@ namespace JMT.Controllers
                 cmd.Parameters.AddWithValue("@Title", Title);
                 con.Open();
                 cmd.ExecuteNonQuery();
-            }
+				con.Close();
+			}
             return response;
         }
 
@@ -368,9 +369,38 @@ namespace JMT.Controllers
 
                 con.Open();
                 cmd.ExecuteNonQuery();
-            }
+				con.Close();
+			}
             return response;
         }
-    }
+
+		[HttpGet]
+		[Route("api/CheckUserEmail/{Email}")]
+		public List<Response> CheckEmailExist(string Email = "") {
+			Response finalresult = new Response();
+			List<Response> Customer = new List<Response>();
+			string result = "Found";
+			string result2 = "NotFound";
+			//SqlConnection con = new SqlConnection("Data Source=NiluNilesh;Integrated Security=True");  
+			SqlConnection con = new SqlConnection(con2);
+			SqlCommand cmd = new SqlCommand("CheckEmailExist", con);
+			cmd.CommandType = CommandType.StoredProcedure;
+			cmd.Parameters.AddWithValue("@Email", Email);
+			con.Open();
+			object i = cmd.ExecuteScalar();
+			con.Close();
+			int i2 = Convert.ToInt32(i);
+			if (i2 == 1) {
+				finalresult.response = result.ToString();
+				Customer.Add(finalresult);
+			}
+			else {
+				finalresult.response = result2.ToString();
+				Customer.Add(finalresult);
+			}
+			return Customer;
+		}
+		
+	}
    
 }

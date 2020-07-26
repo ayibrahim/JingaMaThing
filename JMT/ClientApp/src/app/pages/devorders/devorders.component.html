@@ -1,0 +1,109 @@
+<div class="content">
+  <div class=" col-md-12">
+    <p-tabMenu [model]="items" [activeItem]="items[0]" (click)="menuswitch($event)"></p-tabMenu>
+  </div>
+  <br>
+
+  <div *ngIf="isOpenOrder">
+    Open Order
+  </div>
+  <div *ngIf="isPendingOrder">
+    <div class=" col-md-12">
+      <div class=" card">
+        <div class=" card-header">
+          <h5 class=" title">Accept/Decline Orders</h5>
+        </div>
+        <div class=" card-body">
+          <form autocomplete="off">
+            <!-- No Data -->
+            <div *ngIf="nopendingdata1">
+              <div class=" typography-line">
+                <span> </span>
+                <p class=" text-info">
+                  <strong>You have no Orders to Accept or Decline.</strong>
+                </p>
+              </div>
+            </div>
+            <!-- End of No Data -->
+
+            <div *ngIf="nopendingdata1 === false">
+              <p-card *ngFor="let item of DevPendingList" class="secondcont" header={{item.name}}
+                styleClass="ui-card-shadow">
+                <div><strong>Order Description:</strong><br>
+                  {{item.orderDesc}}</div><br>
+                <div><strong>Customer Budget:</strong><br>
+                  ${{item.budget}} </div><br>
+                <div><strong>Customer Requested Date:</strong><br>
+                  {{item.dateRequested}}</div><br>
+                <div><strong>Order Requirements:</strong><br>
+                  <button pButton style="margin-top: 0.5em" type="button" label="View Requirements"
+                    class="ui-button-rounded ui-button-info" (click)="showBasicDialog(item.requirements)"></button>
+                </div>
+                <br>
+                <p-footer>
+                  <button pButton type="button" label="Edit&Accept" icon="pi pi-check" style="margin-right: 0.5em"
+                    class="ui-button-success" (click)="ShowEditDialog(item.developerPendingID)"></button>
+                  <button pButton type="button" label="Decline" icon="pi pi-times" class="ui-button-danger"
+                    (click)="DeclineDialogShow(item.developerPendingID)"></button>
+                </p-footer>
+              </p-card>
+              <p-dialog header="Order Requirements:" [modal]="true" [(visible)]="displayBasic" [style]="{width: '50vw'}"
+                [baseZIndex]="10000">
+                {{dialogrequirment}}
+                <p-footer>
+                  <button type="button" pButton icon="pi pi-times" (click)="displayBasic=false" label="Close"
+                    class="ui-button-secondary"></button>
+                </p-footer>
+              </p-dialog>
+              <p-dialog header="Edit Order"  [(visible)]="displayEditDialog" [modal]="true" [style]="{width: '50vw'}"
+                [baseZIndex]="10000">
+                <div class="p-grid ui-fluid">
+                  <label class="inputdialog"> New Price* </label> <br>
+                  <div class="p-col-8">
+                    <p-inputNumber id="BudgetInput" placeholder="$0.00" [(ngModel)]="ONewPrice" name="ONewPrice" mode="currency"
+                      currency="USD" locale="en-US">
+                    </p-inputNumber>
+                  </div>
+                  <br>
+                  <label class="inputdialog"> New Completion Date* </label> <br>
+                  <div class="p-col-8">
+                    <p-calendar id="CalenderInput" [touchUI]="true" (onSelect)="onDate(OCompleteDate)"
+                      [(ngModel)]="OCompleteDate" name="OCompleteDate" placeholder="Choose a Date" [showIcon]="true"
+                      showButtonBar="true" dateFormat="yy-mm-dd"></p-calendar>
+                  </div>
+                  <br>
+                </div>
+                <p-footer>
+                  <button pButton type="button" label="Accept Order" icon="pi pi-check" style="margin-right: 0.5em"
+                    class="ui-button-success"
+                    (click)="AcceptOrder()"></button>
+                  <button type="button" pButton icon="pi pi-times" (click)="displayEditDialog=false" label="Close"
+                    class="ui-button-secondary"></button>
+                </p-footer>
+              </p-dialog>
+              <p-dialog header="Decline Order" [modal]="true" [(visible)]="displaydecline" [style]="{width: '50vw'}"
+                [baseZIndex]="10000">
+                <strong>Are you sure you want to decline this order ?</strong> <br><br>
+                <label class="inputdialog"> Please Type in a reason for declining order: </label> <br><br>
+                <div class="p-col-8">
+                  <input style="width: 100%;" type="text" pInputText id="BudgetInput" [(ngModel)]="ODeclineReason" name="ODeclineReason">
+                </div>
+                <br>
+                <p-footer>
+                    <button pButton type="button" label="Decline" icon="pi pi-times" style="margin-right: 0.5em" class="ui-button-danger"
+                    (click)="DeclineOrder()"></button>
+                  <button type="button" pButton icon="pi pi-times" (click)="displaydecline=false" label="Close"
+                    class="ui-button-secondary"></button>
+                </p-footer>
+              </p-dialog>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div *ngIf="isOrderHistory">
+    Order History
+  </div>
+</div>

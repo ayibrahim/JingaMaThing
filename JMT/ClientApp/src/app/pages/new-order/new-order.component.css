@@ -1,0 +1,6 @@
+::ng-deep body #BudgetInput .ui-widget{
+    width: 300px;
+}
+::ng-deep body #CalenderInput .ui-inputtext {
+    width: 264px;
+}

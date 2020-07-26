@@ -1,0 +1,64 @@
+<div class="content">
+    <div class=" col-md-12">
+    <div class=" card">
+      <div class=" card-header">
+        <h5 class=" title">Product Order</h5>
+      </div>
+      <div class=" card-body">
+        <form autocomplete="off">
+          <div class=" row">
+            <div class=" col-md-8">
+              <div class=" form-group">
+                <p-dropdown #stateDropdown [options]="ODevList" placeholder="Choose a Developer*" name="selectedDev"
+                  [style]="{'width':'300px'}" [(ngModel)]="selectedDev" optionLabel="name" [showClear]="true"
+                  filter="true"></p-dropdown>
+              </div>
+            </div>
+          </div>
+          <br>
+          <div class=" row">
+          <div class=" col-md-6">
+              <div class=" form-group">
+                <label> Budget* </label> <br>
+                 <p-inputNumber id="BudgetInput"  [(ngModel)]="OBudget" name="OBudget" mode="currency" currency="USD" locale="en-US">
+                </p-inputNumber>
+              </div>
+            </div>
+          </div>
+          <br>
+          <div class=" row">
+          <div class=" col-md-6">
+              <div class=" form-group">
+                <label> Desired Completion Date </label> <br>
+                 <p-calendar id="CalenderInput" (onSelect)="onDate(ODateBy)" [(ngModel)]="ODateBy" name="ODateBy"  placeholder="Choose a Date" [showIcon]="true" showButtonBar="true" dateFormat="yy-mm-dd"></p-calendar>
+              </div>
+            </div>
+            </div>
+          <br>
+          <div class=" row">
+          <div class=" col-md-12">
+            <div class=" form-group">
+              <label>  Description* </label>
+              <textarea class=" form-control" cols="80" placeholder="Here can be your description"
+                [(ngModel)]="ODescription" name="ODescription"></textarea>
+            </div>
+          </div>
+          </div>
+          <br>
+          <div class=" row">
+          <div class=" col-md-12">
+            <div class=" form-group">
+              <label>  Requirments* </label>
+              <textarea class=" form-control" cols="80" placeholder="Here can be your Requirments"
+                [(ngModel)]="ORequirments" name="ORequirments"></textarea>
+            </div>
+          </div>
+          </div>
+        </form>
+      </div>
+      <div class=" card-footer">
+        <button class="btn btn-primary animation-on-hover btn-round" type="submit" (click)="SendOrder()">Submit</button>
+      </div>
+    </div>
+  </div>
+</div>

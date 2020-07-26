@@ -88,8 +88,8 @@ namespace JMT.Controllers
             con.Open();
             result = cmd.ExecuteScalar();
             finalresult = result.ToString();
-
-            return finalresult;
+			con.Close();
+			return finalresult;
         }
 
         [HttpGet]
@@ -104,8 +104,8 @@ namespace JMT.Controllers
             con.Open();
             result = cmd.ExecuteScalar();
             finalresult = result.ToString();
-      
-            return finalresult;
+			con.Close();
+			return finalresult;
         }
 
 

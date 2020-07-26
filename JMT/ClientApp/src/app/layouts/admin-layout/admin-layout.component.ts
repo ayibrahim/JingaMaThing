@@ -90,7 +90,6 @@ export class AdminLayoutComponent implements OnInit {
      this.newvar = event.__proto__.constructor.name;
      this.toastr.clear();
      if(this.newvar == 'TablesComponent'){
-      
       this.router.navigate(['./home']);
      }
     if(this.newvar == 'UserProfileComponent'){
@@ -105,6 +104,18 @@ export class AdminLayoutComponent implements OnInit {
         })
       }
     }
+    if(this.newvar == 'NewOrderComponent'){
+      if(this.historytype == 'customer'){
+      this.router.navigate(['./new-order'],{
+        queryParams : {data : this.custfull.CustomerID , data2 : this.custfull.RoleDesc}
+      })
+      }
+      if(this.historytype == 'developer'){
+        this.router.navigate(['./new-order'],{
+          queryParams : {data : this.devfull.DeveloperID , data2 : this.devfull.RoleDesc}
+        })
+      }
+    }
     if(this.newvar == 'EmailComponent'){
       if(this.historytype == 'customer'){
       this.router.navigate(['./email'],{
@@ -113,6 +124,30 @@ export class AdminLayoutComponent implements OnInit {
       }
       if(this.historytype == 'developer'){
         this.router.navigate(['./email'],{
+          queryParams : {data : this.devfull.DeveloperID , data2 : this.devfull.RoleDesc}
+        })
+      }
+    }
+    if(this.newvar == 'CustomerordersComponent'){
+      if(this.historytype == 'customer'){
+      this.router.navigate(['./customerorders'],{
+        queryParams : {data : this.custfull.CustomerID , data2 : this.custfull.RoleDesc}
+      })
+      }
+      if(this.historytype == 'developer'){
+        this.router.navigate(['./customerorders'],{
+          queryParams : {data : this.devfull.DeveloperID , data2 : this.devfull.RoleDesc}
+        })
+      }
+    }
+    if(this.newvar == 'DevordersComponent'){
+      if(this.historytype == 'customer'){
+      this.router.navigate(['./devorders'],{
+        queryParams : {data : this.custfull.CustomerID , data2 : this.custfull.RoleDesc}
+      })
+      }
+      if(this.historytype == 'developer'){
+        this.router.navigate(['./devorders'],{
           queryParams : {data : this.devfull.DeveloperID , data2 : this.devfull.RoleDesc}
         })
       }

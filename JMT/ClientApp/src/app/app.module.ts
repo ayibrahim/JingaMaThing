@@ -29,7 +29,13 @@ import {PaginatorModule} from 'primeng/paginator';
 import { EmailComponent } from './pages/email/email.component';
 import {TabMenuModule} from 'primeng/tabmenu';
 import {DropdownModule} from 'primeng/dropdown';
-
+import { NewOrderComponent } from './pages/new-order/new-order.component';
+import {InputNumberModule} from 'primeng/inputnumber';
+import { DevordersComponent } from './pages/devorders/devorders.component';
+import {CardModule} from 'primeng/card';
+import {OverlayPanelModule} from 'primeng/overlaypanel';
+import {ToggleButtonModule} from 'primeng/togglebutton';
+import { CustomerordersComponent } from './pages/customerorders/customerorders.component';
 @NgModule({
   imports: [
     BrowserAnimationsModule,
@@ -37,13 +43,17 @@ import {DropdownModule} from 'primeng/dropdown';
     HttpClientModule,
     ComponentsModule,
     TabMenuModule,
+    ToggleButtonModule,
     NgbModule,
     RouterModule,
     AngularTiltModule,
     AppRoutingModule,
+    InputNumberModule,
+    OverlayPanelModule,
     BrowserModule,
     SharedModule,
     DropdownModule,
+    CardModule,
     CalendarModule,
     TableModule,
     PaginatorModule,
@@ -53,7 +63,7 @@ import {DropdownModule} from 'primeng/dropdown';
     ToastrModule.forRoot(),
 
   ],
-  declarations: [AppComponent, AdminLayoutComponent, AuthLayoutComponent, HomeComponent, SignInComponent, SignUpComponent, UserProfileComponent, EmailComponent ],
+  declarations: [AppComponent, AdminLayoutComponent, AuthLayoutComponent, HomeComponent, SignInComponent, SignUpComponent, UserProfileComponent, EmailComponent , NewOrderComponent, DevordersComponent, CustomerordersComponent ],
   providers: [Globals],
   bootstrap: [AppComponent]
 })
