@@ -1,15 +1,32 @@
-import { Component, OnInit, ElementRef, OnDestroy } from "@angular/core";
+import { Component, OnInit, ElementRef, OnDestroy, Input } from "@angular/core";
 import { ROUTES } from "../sidebar/sidebar.component";
 import { Location } from "@angular/common";
-import { Router } from "@angular/router";
+import { Router, ActivatedRoute } from "@angular/router";
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
-
+import { HttpClient } from '@angular/common/http';
+export class UserInfo {
+  ID : number ; RoleDesc : string;
+}
+export interface customer{ 
+  customerID : number; email : string; firstName : string; lastName : string; password : string; phoneNumber : string; roleDesc : string; photo : string;
+}
+export interface Developer{
+  developerID : number; email : string; firstName : string; lastName : string; password : string; phoneNumber : string; description : string; pLanguages : string; skills : string; education : string; certification : string; title : string; roleDesc : string; photo : string;
+}
 @Component({
   selector: "app-navbar",
   templateUrl: "./navbar.component.html",
   styleUrls: ["./navbar.component.css"]
 })
+
 export class NavbarComponent implements OnInit, OnDestroy {
+  @Input()
+  NewUser : UserInfo = new UserInfo();
+  CFirstName : string; CLastName : string; CEmail : string;  CustomerID : number; CPhoneNumber : string;  CPassword: string; CRoleDesc : string; CPhoto : any; CEmail2: string;
+  DFirstName : string; DLastName : string; DEmail : string; DPassword: string; DeveloperID : number; DPhoneNumber : string; DPhoto : any; DEmail2 : string;
+  DDescription: string; DPLanguages: string; DSkills: string; DEducation: string; DCertificates: string; DTitle: string; DRoleDesc : string;
+  developerlogin : Developer[]; loginresponse : customer[];
+  UserPhoto : string;
   private listTitles: any[];
   location: Location;
   mobile_menu_visible: any = 0;
@@ -24,7 +41,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
     location: Location,
     private element: ElementRef,
     private router: Router,
-    private modalService: NgbModal
+    private modalService: NgbModal , 
+    private route: ActivatedRoute ,
+    private http : HttpClient
   ) {
     this.location = location;
     this.sidebarVisible = false;
@@ -41,6 +60,49 @@ export class NavbarComponent implements OnInit, OnDestroy {
      }
    };
   ngOnInit() {
+    console.log(this.NewUser);
+    if(this.NewUser.RoleDesc == 'Developer'){
+      this.http.get('https://localhost:44380/api/getDeveloperInfoByID/' + this.NewUser.ID)
+            .subscribe(
+                    (response2 : Developer[] ) => { 
+                      this.developerlogin = response2;
+                        this.DFirstName = this.developerlogin[0].firstName;
+                        this.DLastName = this.developerlogin[0].lastName;
+                        this.DEmail = this.developerlogin[0].email;
+                        this.DEmail2 = this.developerlogin[0].email;
+                        this.DPassword = this.developerlogin[0].password;
+                        this.DeveloperID = this.developerlogin[0].developerID;
+                        this.DPhoneNumber = this.developerlogin[0].phoneNumber;
+                        this.DDescription = this.developerlogin[0].description;
+                        this.DPLanguages = this.developerlogin[0].pLanguages;
+                        this.DSkills = this.developerlogin[0].skills;
+                        this.DEducation = this.developerlogin[0].education;
+                        this.DCertificates = this.developerlogin[0].certification;
+                        this.DTitle = this.developerlogin[0].title;
+                        this.DRoleDesc = this.developerlogin[0].roleDesc;
+                        this.DPhoto = this.developerlogin[0].photo;
+                        this.UserPhoto = this.DPhoto;
+                    }, (error) => {console.log('error message ' + error)}
+                    )
+    }
+    if(this.NewUser.RoleDesc == 'Customer'){
+      this.http.get('https://localhost:44380/api/getCustomerInfoByID/' + this.NewUser.ID)
+      .subscribe(
+          (response : customer[] ) => {
+           this.loginresponse = response;
+           this.CFirstName = this.loginresponse[0].firstName;
+            this.CLastName = this.loginresponse[0].lastName;
+            this.CEmail = this.loginresponse[0].email;
+            this.CEmail2 = this.loginresponse[0].email;
+            this.CPassword = this.loginresponse[0].password;
+            this.CustomerID = this.loginresponse[0].customerID;
+            this.CPhoneNumber = this.loginresponse[0].phoneNumber;
+            this.CRoleDesc = this.loginresponse[0].roleDesc;
+            this.CPhoto = this.loginresponse[0].photo;
+            this.UserPhoto = this.CPhoto;
+          }, (error) => {console.log('error message ' + error)}
+          )
+    }
     window.addEventListener("resize", this.updateColor);
     this.listTitles = ROUTES.filter(listTitle => listTitle);
     const navbar: HTMLElement = this.element.nativeElement;
@@ -160,16 +222,49 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   getTitle() {
-    var titlee = this.location.prepareExternalUrl(this.location.path());
-    if (titlee.charAt(0) === "#") {
-      titlee = titlee.slice(1);
-    }
+    
+    // var titlee = this.location.prepareExternalUrl(this.location.path());
+    // if (titlee.charAt(0) === "#") {
+    //   titlee = titlee.slice(1);
+    // }
 
-    for (var item = 0; item < this.listTitles.length; item++) {
-      if (this.listTitles[item].path === titlee) {
-        return this.listTitles[item].title;
-      }
+    // for (var item = 0; item < this.listTitles.length; item++) {
+    //   if (this.listTitles[item].path === titlee) {
+    //     return this.listTitles[item].title;
+    //   }
+    // }
+    if(this.location.prepareExternalUrl(this.location.path()).includes("email")){
+      return "Messages";
     }
+    if(this.location.prepareExternalUrl(this.location.path()).includes("devorders"))
+    {
+      return "Orders";
+    }
+    if(this.location.prepareExternalUrl(this.location.path()).includes("user-profile"))
+    {
+      return "Profile";
+    }
+    if(this.location.prepareExternalUrl(this.location.path()).includes("notes"))
+    {
+      return "Notes";
+    }
+    if(this.location.prepareExternalUrl(this.location.path()).includes("links"))
+    {
+      return "Links";
+    }
+    if(this.location.prepareExternalUrl(this.location.path()).includes("customerdashboard"))
+    {
+      return "Dashboard";
+    }
+    if(this.location.prepareExternalUrl(this.location.path()).includes("customerorders"))
+    {
+      return "Orders";
+    }
+    if(this.location.prepareExternalUrl(this.location.path()).includes("new-order"))
+    {
+      return "New-Order";
+    }
+    
     return "Dashboard";
   }
 

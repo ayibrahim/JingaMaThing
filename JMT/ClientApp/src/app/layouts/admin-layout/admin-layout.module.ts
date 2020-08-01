@@ -6,13 +6,7 @@ import { FormsModule } from "@angular/forms";
 
 import { AdminLayoutRoutes } from "./admin-layout.routing";
 import { DashboardComponent } from "../../pages/dashboard/dashboard.component";
-import { IconsComponent } from "../../pages/icons/icons.component";
-import { MapComponent } from "../../pages/map/map.component";
-import { NotificationsComponent } from "../../pages/notifications/notifications.component";
 
-import { TablesComponent } from "../../pages/tables/tables.component";
-import { TypographyComponent } from "../../pages/typography/typography.component";
-// import { RtlComponent } from "../../pages/rtl/rtl.component";
 import {DialogModule} from 'primeng/dialog';
 import {TableModule} from 'primeng/table';
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
@@ -23,6 +17,7 @@ import {InputTextModule} from 'primeng/inputtext';
 import {PaginatorModule} from 'primeng/paginator';
 import {CardModule} from 'primeng/card';
 import {OverlayPanelModule} from 'primeng/overlaypanel';
+import {OrderListModule} from 'primeng/orderlist';
 @NgModule({
   imports: [
     CommonModule,
@@ -31,6 +26,7 @@ import {OverlayPanelModule} from 'primeng/overlaypanel';
     HttpClientModule,
     SharedModule,
     GalleriaModule,
+    OrderListModule,
     OverlayPanelModule,
     CalendarModule,
     PaginatorModule,
@@ -42,11 +38,7 @@ import {OverlayPanelModule} from 'primeng/overlaypanel';
   ],
   declarations: [
     DashboardComponent,
-    TablesComponent,
-    IconsComponent,
-    TypographyComponent,
-    NotificationsComponent,
-    MapComponent,
+
     // RtlComponent
   ]
 })

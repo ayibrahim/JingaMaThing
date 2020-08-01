@@ -29,7 +29,10 @@ namespace JMT
                 options.AddPolicy(name: MyAllowSpecificOrigins,
                                   builder =>
                                   {
-                                      builder.WithOrigins("http://localhost:4200");
+									  builder.AllowAnyHeader();
+									  builder.AllowAnyOrigin();
+									  builder.AllowAnyMethod();
+                                      
                                   });
             });
             services.AddControllersWithViews();

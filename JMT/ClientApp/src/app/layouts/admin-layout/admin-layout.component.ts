@@ -9,7 +9,9 @@ export class Dev{
   FirstName : string; LastName : string; Email : string; Password: string; DeveloperID : number; PhoneNumber : string;  RoleDesc : string; Description : string; PLanguages : string;
   Skills : string; Education : string; Certification : string; Title : string; Photo: string;
 }
-
+export class UserInfo {
+  ID : number ; RoleDesc : string;
+}
 @Component({
   selector: "app-admin-layout",
   templateUrl: "./admin-layout.component.html",
@@ -26,6 +28,7 @@ export class AdminLayoutComponent implements OnInit {
   istesting : boolean = true;
   newvar:any;
   historytype : string;
+  newuser : UserInfo = new UserInfo();
   constructor(private router: Router , public globals: Globals , private toastr: ToastrService) {}
   changeSidebarColor(color){
     var sidebar = document.getElementsByClassName('sidebar')[0];
@@ -54,6 +57,8 @@ export class AdminLayoutComponent implements OnInit {
       this.router.navigate(['./home']);
     }
     if(history.state.type == 'customer'){
+      this.newuser.RoleDesc = history.state.RoleDesc;
+      this.newuser.ID = history.state.CustomerID;
       this.historytype = history.state.type;
       this.custfull.FirstName = history.state.FirstName;
       this.custfull.LastName = history.state.LastName;
@@ -66,6 +71,8 @@ export class AdminLayoutComponent implements OnInit {
       this.iscustomer = true;
     }
     if(history.state.type == 'developer'){
+      this.newuser.RoleDesc = history.state.RoleDesc;
+      this.newuser.ID = history.state.DeveloperID;
       this.historytype = history.state.type;
       this.devfull.FirstName = history.state.FirstName;
       this.devfull.LastName = history.state.LastName;
@@ -142,12 +149,49 @@ export class AdminLayoutComponent implements OnInit {
     }
     if(this.newvar == 'DevordersComponent'){
       if(this.historytype == 'customer'){
+        
       this.router.navigate(['./devorders'],{
         queryParams : {data : this.custfull.CustomerID , data2 : this.custfull.RoleDesc}
       })
       }
       if(this.historytype == 'developer'){
         this.router.navigate(['./devorders'],{
+          queryParams : {data : this.devfull.DeveloperID , data2 : this.devfull.RoleDesc}
+        })
+      }
+    }
+    if(this.newvar == 'CustomerDashboardComponent'){
+      if(this.historytype == 'customer'){
+      this.router.navigate(['./customerdashboard'],{
+        queryParams : {data : this.custfull.CustomerID , data2 : this.custfull.RoleDesc}
+      })
+      }
+      if(this.historytype == 'developer'){
+        this.router.navigate(['./customerdashboard'],{
+          queryParams : {data : this.devfull.DeveloperID , data2 : this.devfull.RoleDesc}
+        })
+      }
+    }
+    if(this.newvar == 'LinksComponent'){
+      if(this.historytype == 'customer'){
+      this.router.navigate(['./links'],{
+        queryParams : {data : this.custfull.CustomerID , data2 : this.custfull.RoleDesc}
+      })
+      }
+      if(this.historytype == 'developer'){
+        this.router.navigate(['./links'],{
+          queryParams : {data : this.devfull.DeveloperID , data2 : this.devfull.RoleDesc}
+        })
+      }
+    }
+    if(this.newvar == 'NotesComponent'){
+      if(this.historytype == 'customer'){
+      this.router.navigate(['./notes'],{
+        queryParams : {data : this.custfull.CustomerID , data2 : this.custfull.RoleDesc}
+      })
+      }
+      if(this.historytype == 'developer'){
+        this.router.navigate(['./notes'],{
           queryParams : {data : this.devfull.DeveloperID , data2 : this.devfull.RoleDesc}
         })
       }

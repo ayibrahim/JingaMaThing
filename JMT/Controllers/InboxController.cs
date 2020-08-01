@@ -110,6 +110,7 @@ namespace JMT.Controllers {
 					finalcustomer.Name = (rdr["Name"].ToString());
 					finalcustomer.Role = (rdr["Role"].ToString());
 					finalcustomer.Email = (rdr["Email"].ToString());
+					finalcustomer.Photo = (rdr["Photo"].ToString());
 					customer.Add(finalcustomer);
 				}
 				con.Close();
@@ -124,6 +125,7 @@ namespace JMT.Controllers {
 					finalcustomer.Name = (rdr["Name"].ToString());
 					finalcustomer.Role = (rdr["Role"].ToString());
 					finalcustomer.Email = (rdr["Email"].ToString());
+					finalcustomer.Photo = (rdr["Photo"].ToString());
 					customer.Add(finalcustomer);
 				}
 				con.Close();
@@ -171,6 +173,7 @@ namespace JMT.Controllers {
 					finalcustomer.Name = (rdr["Name"].ToString());
 					finalcustomer.Role = (rdr["Role"].ToString());
 					finalcustomer.Email = (rdr["Email"].ToString());
+					finalcustomer.Photo = (rdr["Photo"].ToString());
 					customer.Add(finalcustomer);
 				}
 				con.Close();
@@ -185,6 +188,7 @@ namespace JMT.Controllers {
 					finalcustomer.Name = (rdr["Name"].ToString());
 					finalcustomer.Role = (rdr["Role"].ToString());
 					finalcustomer.Email = (rdr["Email"].ToString());
+					finalcustomer.Photo = (rdr["Photo"].ToString());
 					customer.Add(finalcustomer);
 				}
 				con.Close();
@@ -199,6 +203,7 @@ namespace JMT.Controllers {
 					finalcustomer.Name = (rdr["Name"].ToString());
 					finalcustomer.Role = (rdr["Role"].ToString());
 					finalcustomer.Email = (rdr["Email"].ToString());
+					finalcustomer.Photo = (rdr["Photo"].ToString());
 					customer.Add(finalcustomer);
 				}
 				con.Close();

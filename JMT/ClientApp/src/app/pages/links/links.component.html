@@ -1,0 +1,27 @@
+<div class=" content">
+  <div class=" col-md-12">
+    <div class=" card">
+      <div class=" card-header">
+        <h5 class=" title">My Links List</h5>
+      </div>
+      <div class=" card-body">
+        <form autocomplete="off">
+          <!-- No Data -->
+          <div *ngIf="nodevlinks">
+            <div class=" typography-line">
+              <span> </span>
+              <p class=" text-info">
+                <strong>You have no links.</strong>
+              </p>
+            </div>
+          </div>
+          <!-- End of No Data -->
+          <div *ngIf="nodevlinks === false">
+            test
+          </div>
+          </form>
+      </div>
+      </div>
+      </div>
+ 
+</div>

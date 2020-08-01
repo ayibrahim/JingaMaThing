@@ -8,7 +8,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { AppComponent } from "./app.component";
 import { AdminLayoutComponent } from "./layouts/admin-layout/admin-layout.component";
 import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';
-
+import {DataViewModule} from 'primeng/dataview';
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import { AppRoutingModule } from "./app-routing.module";
 import { ComponentsModule } from "./components/components.module";
@@ -36,6 +36,12 @@ import {CardModule} from 'primeng/card';
 import {OverlayPanelModule} from 'primeng/overlaypanel';
 import {ToggleButtonModule} from 'primeng/togglebutton';
 import { CustomerordersComponent } from './pages/customerorders/customerorders.component';
+import { CustomerDashboardComponent } from './pages/customer-dashboard/customer-dashboard.component';
+import {OrderListModule} from 'primeng/orderlist';
+import { NotesComponent } from './pages/notes/notes.component';
+import { LinksComponent } from './pages/links/links.component';
+import {SelectButtonModule} from 'primeng/selectbutton';
+
 @NgModule({
   imports: [
     BrowserAnimationsModule,
@@ -46,11 +52,14 @@ import { CustomerordersComponent } from './pages/customerorders/customerorders.c
     ToggleButtonModule,
     NgbModule,
     RouterModule,
+    SelectButtonModule,
     AngularTiltModule,
     AppRoutingModule,
     InputNumberModule,
+    OrderListModule,
     OverlayPanelModule,
     BrowserModule,
+    DataViewModule,
     SharedModule,
     DropdownModule,
     CardModule,
@@ -63,7 +72,7 @@ import { CustomerordersComponent } from './pages/customerorders/customerorders.c
     ToastrModule.forRoot(),
 
   ],
-  declarations: [AppComponent, AdminLayoutComponent, AuthLayoutComponent, HomeComponent, SignInComponent, SignUpComponent, UserProfileComponent, EmailComponent , NewOrderComponent, DevordersComponent, CustomerordersComponent ],
+  declarations: [AppComponent, AdminLayoutComponent, AuthLayoutComponent, HomeComponent, SignInComponent, SignUpComponent, UserProfileComponent, EmailComponent , NewOrderComponent, DevordersComponent, CustomerordersComponent, CustomerDashboardComponent, NotesComponent, LinksComponent ],
   providers: [Globals],
   bootstrap: [AppComponent]
 })

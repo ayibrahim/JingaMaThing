@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
 import { Router, ActivatedRoute } from '@angular/router';
-import { MenuItem } from 'primeng';
+import { MenuItem, SelectItem } from 'primeng';
 import {OverlayPanel} from 'primeng/overlaypanel';
 import { formatDate } from '@angular/common';
+import { Message } from '@angular/compiler/src/i18n/i18n_ast';
 export interface headers{}
 export interface customer{ 
   customerID : number; email : string; firstName : string; lastName : string; password : string; phoneNumber : string; roleDesc : string; photo : string;
@@ -18,6 +19,17 @@ export interface DevList{
 export interface DevPendingOrders {
   developerProjectID : number; customerID : number ; developerID : number; orderDesc : string ; dateRequested : string ; Budget : string ; Requirements : string ; Name : string;
 }
+export interface NewTask{
+  OrderID : string; DeveloperID : string; Description : string; Title : string; Notes : string;
+}
+export interface TaskTable {
+  developerTaskID : number; orderNumber : number; title : string; description : string; notes : string; status : string;
+}
+export interface UpdateTask {
+  DeveloperTaskID : string; Title : string; Description : string; Status : string; Notes : string;
+}
+interface UpdateTasks extends Array<UpdateTask>{}
+interface NewTasks extends Array<NewTask>{}
 @Component({
   selector: 'app-devorders',
   templateUrl: './devorders.component.html',
@@ -34,7 +46,12 @@ export class DevordersComponent implements OnInit {
   developerlogin : Developer[]; loginresponse : customer[];
   items: MenuItem[]; MenuLabelChosen : any; displayBasic: boolean;  displayEditDialog: boolean ; displaydecline : boolean ;
   nopendingdata1 : boolean = true; DevPendingList : DevPendingOrders[]; dialogrequirment : string; OCompleteDate : string; ONewPrice : number = 0.00; expanddialog: boolean = false;
-  ODeclineReason : any; DeclineID : any; ONewID : any; currentdate : string; 
+  ODeclineReason : any; DeclineID : any; ONewID : any; currentdate : string; DevOpenOrders : any[]; DevOpenHeaders : any[]; i : number; noopenorders : boolean = true; selecteddata1 : any;
+  notasks : boolean = true; TasksHeaders : any[]; TasksData : TaskTable[]; selecteddata2 : any; OrderSelectedLoadTask : boolean = false;
+  OrderIDSelected : any; newtaskdialog : boolean = false;
+  NTTitle : string; NTDescription : string; NTNotes : string; disabled: boolean = true; editing : boolean = false;
+  Statuses: SelectItem[]; deletedialog : boolean = false; TaskDeleteID : number; TaskDeletOrderID : number;
+  custpendingdata : boolean = false; CustApprovPendingHeader : any[]; CustApprovPendingData : any[]; selecteddata3 : any;
   constructor(private route: ActivatedRoute , private router : Router ,private http: HttpClient , private toastr: ToastrService) { }
 
   ngOnInit() {
@@ -48,6 +65,14 @@ export class DevordersComponent implements OnInit {
         this.developerId = this.retrievedID;
       }
     }))
+    if(this.retrievedRole == undefined){
+      if(history.state.type == 'customer'){
+        this.customerId = history.state.CustomerID;
+      }
+      if(history.state.type == 'developer'){
+        this.developerId = history.state.DeveloperID;
+      }
+    }
     if(this.customerId != undefined){
       this.iscustomer = true;
       this.http.get('https://localhost:44380/api/getCustomerInfoByID/' + this.customerId)
@@ -87,7 +112,9 @@ export class DevordersComponent implements OnInit {
                         this.DTitle = this.developerlogin[0].title;
                         this.DRoleDesc = this.developerlogin[0].roleDesc;
                         this.DPhoto = this.developerlogin[0].photo;
+                        this.GetDevOpenOrders();
                         this.GetDevOrders();
+                        this.GetDevPendingCustomerOrders();
                     }, (error) => {console.log('error message ' + error)}
                     )
        
@@ -96,7 +123,11 @@ export class DevordersComponent implements OnInit {
       {label: 'Open Orders', icon: 'pi pi-fw pi-th-large' , styleClass: "testingstyle"},
       {label: 'Pending Orders', icon: 'pi pi-fw pi-eye'},
       {label: 'Order History', icon: 'pi pi-fw pi-search'}
-  ];
+    ];
+    this.Statuses = [
+      {label: 'In Progress', value: 'In Progress'},
+      {label: 'Complete', value: 'Complete'}
+    ]
   this.currentdate = formatDate(new Date(), 'yyyy-MM-dd', 'en_US');
   }
   DeclineOrder(){
@@ -126,6 +157,107 @@ export class DevordersComponent implements OnInit {
       this.toastr.clear();
     }, 4000);
       
+  }
+  GetDevPendingCustomerOrders(){
+    this.http.get('https://localhost:44380/api/GetDevPendingCustomerOrders/' + this.DeveloperID).subscribe(
+    (response : headers[]) => {
+      this.CustApprovPendingData = response;
+      if (this.CustApprovPendingData.length == 0){
+        this.custpendingdata = true;
+      } else {
+        this.custpendingdata = false;
+      }
+      this.CustApprovPendingHeader = [];
+      for (this.i = 0; this.i < this.CustApprovPendingData.length; this.i++){
+        for (var key in this.CustApprovPendingData[this.i]){
+          if(this.CustApprovPendingHeader.indexOf(key) === -1){
+            if(key == 'requirements' || key == 'customerPendingID'){
+
+            }else {
+              this.CustApprovPendingHeader.push(key);
+            }
+            
+          }
+        }
+      }   
+    }, (error) => {this.custpendingdata = true;this.toastr.clear();
+      this.errormessage = 'Error Happened When Loading Pending Orders Try Again or Contact Support';
+      this.showNotification('top', 'center' , this.errormessage);
+      console.log('error message ' + error)}
+    )
+   
+  }
+  MarkAsComplete(order){
+    this.http.get('https://localhost:44380/api/UpdateDevOrder/' + order.orderNumber) .subscribe(
+      (response2 : headers[]) => {
+        this.newdata = response2;
+        this.toastr.clear();
+        this.errormessage = 'Order Updated to Completed Succesfully';
+       this.showNotification('top', 'center' , this.errormessage);
+      }, (error) => {this.toastr.clear();
+       this.errormessage = 'Error Happened When Completing Order , Refresh and Try Again!';
+       this.showNotification('top', 'center' , this.errormessage);
+       console.log('error message ' + error)}
+     )
+    setTimeout(()=>{  
+      this.GetDevOpenOrders(); 
+    }, 1000);
+    setTimeout(()=>{  
+      this.toastr.clear();
+    }, 3000);
+  }
+  onRowEditInit(task: TaskTable) {
+    
+  }
+  onRowEditSave(task: TaskTable) {
+    this.TaskDeletOrderID = task.orderNumber;
+    var result2 : UpdateTasks = [
+      {  DeveloperTaskID : task.developerTaskID.toString() , Title : task.title.toString() , Description : task.description.toString() , Status : task.status.toString() , Notes : task.notes.toString() }
+      ];
+      const httpOptions = {
+        headers: new HttpHeaders({'Content-Type': 'application/json'})
+      }    
+     this.http.post('https://localhost:44380/api/UpdateTask' , result2[0] , httpOptions).subscribe(data => {
+      this.toastr.clear();
+      this.errormessage = 'Task Updated Succesfully';
+      this.showNotification('top', 'center' , this.errormessage);
+        }, error => {
+          this.toastr.clear();
+          this.errormessage = 'Error Happened When Updating Task , Refresh and Try Again!';
+          this.showNotification('top', 'center' , this.errormessage);
+          setTimeout(()=>  this.toastr.clear() , 2000);
+          console.log('error message ' + error)
+     });
+     setTimeout(()=> this.GetOrderTasks(this.TaskDeletOrderID) , 2000);
+     setTimeout(()=>  this.toastr.clear() , 2000);
+  }
+  onRowEditCancel(task: TaskTable, index: number) {
+    this.deletedialog = true;
+    this.TaskDeletOrderID = task.orderNumber;
+    this.TaskDeleteID = task.developerTaskID;
+  }
+  ConfirmDeleteTask(){
+    this.http.get('https://localhost:44380/api/DeleteTask/' + this.TaskDeleteID ) .subscribe(
+       (response2 : headers[]) => {
+         this.newdata = response2;
+         this.toastr.clear();
+         this.errormessage = 'Task Deleted Succesfully';
+        this.showNotification('top', 'center' , this.errormessage);
+        this.displayEditDialog = false;
+       }, (error) => {this.toastr.clear();
+        this.errormessage = 'Error Happened When Deleting Task , Refresh and Try Again!';
+        this.showNotification('top', 'center' , this.errormessage);
+        setTimeout(()=>  this.toastr.clear() , 2000);
+        console.log('error message ' + error)}
+      )
+    this.deletedialog = false;
+    this.TaskDeleteID = undefined;
+    setTimeout(()=> this.GetOrderTasks(this.TaskDeletOrderID) , 2000);
+    setTimeout(()=>  this.toastr.clear() , 2000);
+  }
+  CloseDeletTaskDialog(){
+    this.deletedialog = false;
+    this.TaskDeleteID = undefined;
   }
   DeclineDialogShow(ID : any){
     this.toastr.clear();  
@@ -198,18 +330,127 @@ export class DevordersComponent implements OnInit {
       this.isOrderHistory = false;
       this.isPendingOrder = false;
       this.isOpenOrder = true;
+      this.GetDevOpenOrders();
     }
     if(this.MenuLabelChosen == "Pending Orders"){
       this.isOrderHistory = false;
       this.isOpenOrder = false;
       this.isPendingOrder = true;
       this.GetDevOrders();
+      this.GetDevPendingCustomerOrders();
     }
     if(this.MenuLabelChosen == "Order History"){
       this.isPendingOrder = false;
       this.isOpenOrder = false;
       this.isOrderHistory = true;
     }
+  }
+  GetDevOpenOrders()
+  {
+    this.http.get('https://localhost:44380/api/GetDevOpenOrders/' + this.DeveloperID).subscribe(
+    (response : headers[]) => {
+      this.DevOpenOrders = response;
+      console.log(this.DevOpenOrders);
+      if(this.DevOpenOrders.length == 0){
+        this.noopenorders = true;
+        this.toastr.clear();
+        this.errormessage = '*No Open Orders Found.';
+        this.showNotification('top', 'center' , this.errormessage);
+      } else {
+        this.noopenorders = false;
+      }
+      this.DevOpenHeaders = [];
+      for (this.i = 0; this.i < this.DevOpenOrders.length; this.i++){
+        for (var key in this.DevOpenOrders[this.i]){
+          if(this.DevOpenHeaders.indexOf(key) === -1){
+            if(key == 'developerID' || key == 'requirements'){
+
+            }else {
+              this.DevOpenHeaders.push(key);
+            }
+          }
+        }
+      }   
+    }, (error) => {this.noopenorders = true;this.toastr.clear();
+      this.errormessage = 'Error Happened When Loading Open Orders Try Again or Contact Support';
+      this.showNotification('top', 'center' , this.errormessage);
+      console.log('error message ' + error)}
+    )
+   
+  }
+  GetOrderTasks(ID : any)
+  {
+    this.http.get('https://localhost:44380/api/GetOrderTasks/' + ID).subscribe(
+    (response : TaskTable[]) => {
+      this.TasksData = response;
+      console.log(this.TasksData);
+      if(this.TasksData.length == 0){
+        this.notasks = true;
+        this.toastr.clear();
+        this.errormessage = '*No Tasks Found.';
+        setTimeout(()=> this.toastr.clear(),3000);
+        this.showNotification('top', 'center' , this.errormessage);
+      } else {
+        this.notasks = false;
+      }
+      this.TasksHeaders = [];
+      for (this.i = 0; this.i < this.TasksData.length; this.i++){
+        for (var key in this.TasksData[this.i]){
+          if(this.TasksHeaders.indexOf(key) === -1){
+            if(key == 'developerTaskID'){
+
+            }else {
+              this.TasksHeaders.push(key);
+            }
+          }
+        }
+      }   
+    }, (error) => {this.notasks = true;this.toastr.clear();
+      this.errormessage = 'Error Happened When Loading Tasks for Order Try Again or Contact Support';
+      this.showNotification('top', 'center' , this.errormessage);
+      setTimeout(()=> this.toastr.clear(),3000);
+      console.log('error message ' + error)}
+    )
+   
+  }
+  ShowNewTaskDialog(){
+    this.NTTitle = undefined; this.NTDescription = undefined; this.NTNotes = undefined;
+    this.NTTitle = null; this.NTDescription = null; this.NTNotes = null;
+    this.newtaskdialog = true;
+  }
+  CreateNewTask()
+  { 
+    if(!this.NTTitle|| !this.NTDescription|| !this.NTNotes){
+      this.toastr.clear();
+      this.errormessage = '*Please Fill Out All Fields for new Task';
+      this.showNotification('top', 'center' , this.errormessage);
+      setTimeout(()=> this.toastr.clear(),3000);
+      return;
+     }
+    
+    var result: NewTasks = [
+      {  OrderID : this.OrderIDSelected.toString() , DeveloperID : this.DeveloperID.toString() , Description : this.NTDescription.toString() , Title : this.NTTitle.toString() , Notes : this.NTNotes.toString()  }
+      ];
+      const httpOptions = {
+        headers: new HttpHeaders({'Content-Type': 'application/json'})
+      }    
+     this.http.post('https://localhost:44380/api/InsertNewTask' , result[0] , httpOptions).subscribe(data => {
+         console.log(data)
+        }, error => {
+       console.log(error)
+     });
+     this.HideNewTaskDialog();
+     setTimeout(()=>  this.GetOrderTasks(this.OrderIDSelected) , 1000);
+    ;
+  }
+  HideNewTaskDialog(){
+    
+    this.newtaskdialog = false;
+  }
+  OnOrderOpenSelect(event){
+    this.OrderSelectedLoadTask = true;
+    this.OrderIDSelected = event.data.orderNumber;
+    this.GetOrderTasks(this.OrderIDSelected);
   }
   GetDevOrders(){
     this.http.get('https://localhost:44380/api/GetDevPendingOrders/' + this.DeveloperID)

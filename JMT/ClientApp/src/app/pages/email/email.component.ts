@@ -180,7 +180,7 @@ export class EmailComponent implements OnInit {
       for (this.i = 0; this.i < this.MSData.length; this.i++){
         for (var key in this.MSData[this.i]){
           if(this.MSHeader.indexOf(key) === -1){
-            if(key == 'id'){
+            if(key == 'id' || key =='message'){
 
             }else {
               this.MSHeader.push(key);
@@ -214,7 +214,7 @@ export class EmailComponent implements OnInit {
       for (this.i = 0; this.i < this.MSData.length; this.i++){
         for (var key in this.MSData[this.i]){
           if(this.MSHeader.indexOf(key) === -1){
-            if(key == 'id'){
+            if(key == 'id' || key =='message'){
 
             }else {
               this.MSHeader.push(key);
@@ -324,7 +324,7 @@ export class EmailComponent implements OnInit {
       for (this.i = 0; this.i < this.SMData.length; this.i++){
         for (var key in this.SMData[this.i]){
           if(this.SMHeader.indexOf(key) === -1){
-            if(key == 'id'){
+            if(key == 'id' || key =='message'){
 
             }else {
               this.SMHeader.push(key);
@@ -358,7 +358,7 @@ export class EmailComponent implements OnInit {
       for (this.i = 0; this.i < this.SMData.length; this.i++){
         for (var key in this.SMData[this.i]){
           if(this.SMHeader.indexOf(key) === -1){
-            if(key == 'id'){
+            if(key == 'id' || key =='message'){
 
             }else {
               this.SMHeader.push(key);
@@ -371,6 +371,9 @@ export class EmailComponent implements OnInit {
       this.showNotification('top', 'center' , this.errormessage);
       console.log('error message ' + error)}
     )
+  }
+  onDropdownChange(name : any){
+    console.log(name);
   }
   showNotification(from, align , message){
 

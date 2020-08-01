@@ -101,7 +101,7 @@
                   <tr>
                     <th style="width: 3em"></th>
                     <th id="search" *ngFor="let cols of CustomerPendingHeader" [ngSwitch]="cols">
-                      <input placeholder="Filter...." type="text" pInputText
+                      <input placeholder="Filter...." type="text" pInputText [style]="{'width':'100%'}"
                         (input)="CP.filter($event.target.value, cols, 'contains', cols.filterMatchMode)"
                         [value]="CP.filters[cols] ? CP.filters[cols].value : ''">
                     </th>
@@ -183,7 +183,7 @@
                   </tr>
                   <tr>
                     <th id="search" *ngFor="let cols of CPDHeader" [ngSwitch]="cols">
-                      <input placeholder="Filter...." type="text" pInputText
+                      <input placeholder="Filter...." type="text" pInputText [style]="{'width':'100%'}"
                         (input)="CPD.filter($event.target.value, cols, 'contains', cols.filterMatchMode)"
                         [value]="CPD.filters[cols] ? CPD.filters[cols].value : ''">
                     </th>

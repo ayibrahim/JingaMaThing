@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { ThrowStmt } from '@angular/compiler';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { JsonPipe } from '@angular/common';
 export interface headers{}
 export interface test{ response : any;}
 export interface customer{
@@ -33,6 +34,10 @@ export interface Developer{
   roleDesc : string;
   photo : string;
 }
+export interface DeveloperInfo{
+  DFirstName: string; DLastName: string; DPhoneNumber: string; DEmail: string; DPassword: string; DDescription: string; DPLanguages: string; DSkills: string; DEducation: string; DCertificates: string; DTitle: string; 
+}
+interface DeveloperInfos extends Array<DeveloperInfo>{}
 @Component({
   selector: 'app-sign-up',
   templateUrl: './sign-up.component.html',
@@ -51,6 +56,7 @@ export class SignUpComponent implements OnInit {
   DFirstName: string; DLastName: string; DPhoneNumber: string; DEmail: string; DPassword: string; DConfirmPassword: string; DeveloperID : number; DRoleDesc : string; DPhoto : string;
   DDescription: string; DPLanguages: string; DSkills: string; DEducation: string; DCertificates: string; DTitle: string; 
   loginresponse: customer[]; developerlogin : Developer[];
+  DeveloperObject: DeveloperInfos[];
   regexp = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
   CnotD : string;
   constructor(private toastr: ToastrService , private http : HttpClient , private router : Router) { }
@@ -156,19 +162,23 @@ export class SignUpComponent implements OnInit {
     this.showNotification('top', 'center' , this.errormessage);
     return;
    }
-   this.http.get('https://localhost:44380/api/InsertNewDeveloper/' + this.DFirstName + '/' + this.DLastName + '/' + this.DPhoneNumber + '/' + this.DEmail + '/' + this.DPassword
-    + '/' + this.DDescription + '/' + this.DPLanguages + '/' + this.DSkills + '/' + this.DEducation + '/' + this.DCertificates + '/' + this.DTitle).subscribe(
-      (response2 : headers[]) => {
-        this.newdata = response2
-        console.log(this.newdata);
-      }, (error) => {console.log('error message ' + error)}
-      
-    )
-    setTimeout(()=>{    //<<<---    using ()=> syntax
-      this.getDeveloperInfo();
- }, 1000);
- 
+   var result: DeveloperInfos = [
+    {  DFirstName: this.DFirstName, DLastName : this.DLastName , DPhoneNumber : this.DPhoneNumber.toString() , DEmail : this.DEmail , DPassword : this.DPassword, DDescription : this.DDescription, 
+       DPLanguages : this.DPLanguages , DSkills : this.DSkills , DEducation : this.DEducation , DCertificates : this.DCertificates , DTitle : this.DTitle  }
+    ];
+    const httpOptions = {
+      headers: new HttpHeaders({'Content-Type': 'application/json'})
+    }    
     
+   this.http.post('https://localhost:44380/api/InsertNewDeveloper' , result[0] , httpOptions).subscribe(data => {
+       console.log(data)
+      }, error => {
+     console.log(error)
+   });
+   
+  setTimeout(()=>{   
+    this.getDeveloperInfo();
+  }, 1000);
   }
 
   getDeveloperInfo(){

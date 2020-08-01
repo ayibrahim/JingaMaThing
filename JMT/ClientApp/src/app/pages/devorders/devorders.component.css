@@ -7,7 +7,12 @@ p-table  tr {
     overflow: hidden;
     width: 0%;
 }
+::ng-deep body .ui-table .ui-table-caption {
 
+    background: #27293d;
+    color: white;
+    border: none;
+}
 
  ::ng-deep body .ui-card-body{
     width: 340px;

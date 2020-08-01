@@ -45,11 +45,11 @@ export class SignInComponent implements OnInit {
   regexp = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
   ngOnInit() {
     //Developer
-    //  this.Email = 'ayibrahi@hotmail.com';
-    // this.Password = 'testing332211'
+     this.Email = 'ayibrahi@hotmail.com';
+    this.Password = 'testing332211'
     //Customer
-    this.Email = 'ryibrahim@something.com';
-    this.Password = 'testingtesting'
+    // this.Email = 'ryibrahim@something.com';
+    // this.Password = 'testingtesting'
      this.Login();
   }
   Login(){
@@ -97,7 +97,7 @@ export class SignInComponent implements OnInit {
                         this.DRoleDesc = this.developerlogin[0].roleDesc;
                         this.DPhoto = this.developerlogin[0].photo
                         this.CnotD = 'developer';
-                        this.router.navigate(['./dashboard'], 
+                        this.router.navigate(['./devorders'], 
                         {state: {type: this.CnotD, FirstName: this.DFirstName , LastName: this.DLastName, PhoneNumber : this.DPhoneNumber , Email : this.DEmail2, Password : this.DPassword2
                         , Description : this.DDescription , PLanguages : this.DPLanguages , Skills : this.DSkills, Education : this.DEducation , Certification : this.DCertificates,
                           Title : this.DTitle , DeveloperID : this.DeveloperID , RoleDesc : this.DRoleDesc , Photo : this.DPhoto }});
@@ -114,7 +114,7 @@ export class SignInComponent implements OnInit {
             this.CRoleDesc = this.loginresponse[0].roleDesc;
             this.CPhoto = this.loginresponse[0].photo
             this.CnotD = 'customer';
-            this.router.navigate(['./dashboard'], {state: {type: this.CnotD, FirstName: this.CFirstName , LastName: this.CLastName, PhoneNumber : this.CPhoneNumber , Email : this.CEmail2, Password : this.CPassword2 
+            this.router.navigate(['./customerdashboard'], {state: {type: this.CnotD, FirstName: this.CFirstName , LastName: this.CLastName, PhoneNumber : this.CPhoneNumber , Email : this.CEmail2, Password : this.CPassword2 
               ,CustomerID : this.CustomerID ,RoleDesc : this.CRoleDesc , Photo : this.CPhoto}});
           }
           this.toastr.clear();

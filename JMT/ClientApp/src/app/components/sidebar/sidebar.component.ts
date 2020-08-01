@@ -43,12 +43,7 @@ export class SidebarComponent implements OnInit {
     }
     if(this.isdeveloper == true){
       ROUTES = [
-        {
-          path: "/dashboard",
-          title: "Dashboard",
-          icon: "icon-chart-pie-36",
-          class: ""
-        },
+        
         {
           path: "/devorders",
           title: "Orders",
@@ -62,12 +57,12 @@ export class SidebarComponent implements OnInit {
           class: ""
         },
         {
-          path: "/maps",
+          path: "/notes",
           title: "Notes",
           icon: "icon-notes",
           class: "" },
           {
-            path: "/maps",
+            path: "/links",
             title: "Links",
             icon: "icon-world",
             class: "" },
@@ -88,7 +83,7 @@ export class SidebarComponent implements OnInit {
   if(this.iscustomer == true){
     ROUTES = [
       {
-        path: "/dashboard",
+        path: "/customerdashboard",
         title: "Dashboard",
         icon: "icon-chart-pie-36",
         class: ""

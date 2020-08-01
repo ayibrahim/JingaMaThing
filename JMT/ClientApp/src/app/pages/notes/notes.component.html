@@ -1,0 +1,57 @@
+<div class=" content">
+  <div class=" col-md-12">
+    <div class=" card">
+      <div class=" card-header">
+        <h5 class=" title">My Notes List</h5>
+      </div>
+      <div class=" card-body">
+
+        <!-- No Data -->
+        <div *ngIf="nodevnotes">
+          <div class=" typography-line">
+            <span> </span>
+            <p class=" text-info">
+              <strong>You have no notes.</strong>
+            </p>
+          </div>
+        </div>
+        <!-- End of No Data -->
+        <div *ngIf="nodevnotes === false">
+          test
+        </div>
+        <br>
+
+      </div>
+    </div>
+  </div>
+  <br>
+  <div class=" col-md-12">
+    <div class=" card">
+      <div class=" card-header">
+        <h5 class=" title">Create New Note</h5>
+      </div>
+      <div class=" card-body">
+        <div class=" row">
+          <div class=" col-md-6">
+            <div class=" form-group">
+              <label for="exampleInputTitle1"> Note Title </label>
+              <input class=" form-control" type="text" placeholder="Here can be your Note's Title" [(ngModel)]="NTitle"
+                name="NTitle" autocomplete="doNotAutoComplete">
+            </div>
+          </div>
+          <div class=" col-md-6">
+            <div class=" form-group">
+              <label for="exampleInputTitle1"> Display Type </label><br>
+              <p-selectButton [options]="NotesTypes" [(ngModel)]="NType"></p-selectButton>
+            </div>
+          </div>
+        </div>
+
+        <br>
+        <button class="btn btn-primary animation-on-hover btn-round" (click)="CreateNewNote()">Create New
+          Note</button>
+        <br>
+      </div>
+    </div>
+  </div>
+</div>

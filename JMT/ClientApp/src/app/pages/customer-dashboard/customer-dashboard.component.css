@@ -1,0 +1,82 @@
+::ng-deep body .ui-orderlist .ui-orderlist-controls {
+    
+    display: none;
+}
+::ng-deep body .ui-orderlist-list-container {
+    width: 100%;
+    height: 700px;
+}
+::ng-deep body .ui-orderlist-list{
+    height: 100% !important;
+}
+
+.inputfile {
+	width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+}
+.inputfile + label {
+    font-size: 1.25em;
+    font-weight: 700;
+    color: white;
+    display: inline-block;
+}
+
+
+.inputfile + label {
+	cursor: pointer; /* "hand" cursor */
+}
+.inputfile:focus + label {
+	outline: 1px dotted #000;
+	outline: -webkit-focus-ring-color auto 5px;
+}
+.inputfile + label * {
+	pointer-events: none;
+}
+hr{ 
+    height: 1px;
+    background-color: #E14ECA;
+    border: none;
+  }
+#footergall{
+	width: 700px;
+	max-width: 700px;
+}
+.mydialog {
+    width: 50vw;
+}
+
+@media screen and (max-width: 40em) {
+    .mydialog {
+        width: 75vw;
+    }
+}
+#GTable .col1{
+	 display: none; 
+}
+
+.tables {
+    table-layout: fixed;
+}
+.tables th,td{
+    overflow: visible;
+    word-wrap : break-word;
+}
+.tables th{
+    text-align: center;
+}
+.inputdialog{
+    width: 100px;
+	font-weight: bold;
+	float: left;
+	padding-top: 8px;
+    padding-right: 5px;
+    color: black;
+}
+#search{
+    overflow: hidden;
+    word-wrap : break-word;
+}

@@ -53,9 +53,7 @@ hr{
     overflow: visible;
     word-wrap : break-word;
 }
-.tables th{
-    text-align: center;
-}
+
 .inputdialog{
     width: 100px;
 	font-weight: bold;

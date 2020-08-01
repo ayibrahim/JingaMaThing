@@ -147,6 +147,33 @@ namespace JMT.Controllers {
 		}
 
 		[HttpGet]
+		[Route("api/GetDevPendingCustomerOrders/{DeveloperID}")]
+		public List<DevPendingCustomerApproval> GetDevPendingCustomerOrders(string DeveloperID = "") {
+
+			List<DevPendingCustomerApproval> devlist = new List<DevPendingCustomerApproval>();
+			using (SqlConnection con = new SqlConnection(con2)) {
+				SqlCommand cmd = new SqlCommand("GetDevPendingCustomerOrders", con);
+				cmd.CommandType = CommandType.StoredProcedure;
+				cmd.Parameters.AddWithValue("@DeveloperID", DeveloperID);
+				con.Open();
+				SqlDataReader rdr = cmd.ExecuteReader();
+				while (rdr.Read()) {
+					DevPendingCustomerApproval finalcustomer = new DevPendingCustomerApproval();
+					finalcustomer.CustomerPendingID = Convert.ToInt32(rdr["CustomerPendingID"]);
+					finalcustomer.Name = (rdr["Name"].ToString());
+					finalcustomer.Description = (rdr["Description"].ToString());
+					finalcustomer.PriceOffered = (rdr["PriceOffered"].ToString());
+					finalcustomer.Requirements = (rdr["Requirements"].ToString());
+					finalcustomer.DateOffered = (rdr["DateOffered"].ToString());
+					finalcustomer.DateAccepted = (rdr["DateAccepted"].ToString());
+					devlist.Add(finalcustomer);
+				}
+				con.Close();
+			}
+			return devlist;
+		}
+
+		[HttpGet]
 		[Route("api/UpdateDevOrder/{DeveloperPendingID}/{DeclineReason}")]
 		public List<Response> InsertOrder(string DeveloperPendingID = "", string DeclineReason = "") {
 			Response finalresult = new Response();

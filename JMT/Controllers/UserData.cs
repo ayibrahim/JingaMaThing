@@ -12,6 +12,8 @@ using JMT.Model;
 using System.Data;
 using Microsoft.AspNetCore.Hosting;
 using System.Net.Http.Headers;
+using Microsoft.AspNetCore.Authorization;
+
 namespace JMT.Controllers
 {
     public class UserData : ControllerBase
@@ -66,38 +68,7 @@ namespace JMT.Controllers
             return Customer;
         }
 
-        [HttpGet]
-        [Route("api/InsertNewDeveloper/{FirstName}/{LastName}/{PhoneNumber}/{Email}/{Password}/{Description}/{PLanguages}/{Skills}/{Education}/{Certifications}/{DesiredTitle}")]
-        public List<Response> InsertDeveloper(string FirstName = "", string LastName = "", string PhoneNumber = "", string Email = "", string Password = "" , string Description = "" , string PLanguages = "" , string Skills = "" , string Education = "" , string Certifications = ""
-            , string DesiredTitle = "")
-        {
-            Response finalresult = new Response();
-            List<Response> Developer = new List<Response>();
-            string result = "Successful ";
-            //SqlConnection con = new SqlConnection("Data Source=NiluNilesh;Integrated Security=True");  
-            SqlConnection con = new SqlConnection(con2);
-            SqlCommand cmd = new SqlCommand("InsertNewDeveloper", con);
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.AddWithValue("@FirstName", FirstName);
-            cmd.Parameters.AddWithValue("@LastName", LastName);
-            cmd.Parameters.AddWithValue("@PhoneNumber", PhoneNumber);
-            cmd.Parameters.AddWithValue("@Email", Email);
-            cmd.Parameters.AddWithValue("@Password", Password);
-            cmd.Parameters.AddWithValue("@Description", Description);
-            cmd.Parameters.AddWithValue("@PLanguages", PLanguages);
-            cmd.Parameters.AddWithValue("@Skills", Skills);
-            cmd.Parameters.AddWithValue("@Education", Education);
-            cmd.Parameters.AddWithValue("@Certifications", Certifications);
-            cmd.Parameters.AddWithValue("@DesiredTitle", DesiredTitle);
-
-            con.Open();
-            int i = cmd.ExecuteNonQuery();
-
-            con.Close();
-            finalresult.response = result.ToString();
-            Developer.Add(finalresult);
-            return Developer;
-        }
+       
 
 
         [HttpGet]
