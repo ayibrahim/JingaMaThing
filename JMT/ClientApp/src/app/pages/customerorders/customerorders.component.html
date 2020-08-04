@@ -5,8 +5,209 @@
   <br>
 
   <div *ngIf="isOpenOrder">
-    Open Order
+  <!-- First Card -->
+      <div class=" card">
+        <div class=" card-header">
+          <h5 class=" title">Orders Developed - Pending your Completion and Review. </h5>
+        </div>
+        <div class=" card-body">
+            <!-- No Data -->
+            <div *ngIf="noopendevpending">
+              <div class=" typography-line">
+                <span> </span>
+                <p class=" text-info">
+                  <strong>You have no orders developed and pending your completion and review</strong>
+                </p>
+              </div>
+            </div>
+            <!-- End of No Data -->
+            <div *ngIf="noopendevpending === false">
+              <p-card *ngFor="let item of CustOpenOrdersDeveloped" class="secondcont" header={{item.developerName}}
+                styleClass="ui-card-shadow">
+                <div><strong>Order Number:</strong><br>
+                  #{{item.orderNumber}} </div><br>
+                <div><strong>Order Description:</strong><br>
+                  {{item.description}}</div><br>
+                <div><strong>Completion Date:</strong><br>
+                  {{item.completionDate}}</div><br>
+                <div><strong>Order Requirements:</strong><br>
+                  <button pButton style="margin-top: 0.5em" type="button" label="View Requirements" style="margin-bottom: 2.5em;"
+                    class="ui-button-rounded ui-button-info" (click)="showcustorderdevelopeddialog(item.requirements)"></button>
+                </div>
+                <div><strong>Your Review:</strong><br>
+                <textarea [rows]="5" [cols]="35" pInputTextarea autoResize="autoResize" [(ngModel)]="item.myreview" style="margin-bottom: 2.5em;"></textarea>
+                </div>
+                <div style="margin-bottom: 3.5em;"><strong>Your Rating:</strong><br>
+                <p-rating [(ngModel)]="item.myrating"></p-rating>
+                </div>
+                <br>
+                <p-footer>
+                  <button pButton type="button" label="Mark Complete" icon="pi pi-check" style="margin-right: 0.5em" class="ui-button-success"
+                   (click)="CustomerMarkDevelopedOrder(item.myreview , item.myrating , item.orderNumber)"></button>
+                </p-footer>
+                <p-dialog header="Order Requirements:" [modal]="true" [(visible)]="displaycustopenorderdeveloped"
+                  [style]="{width: '50vw'}" [baseZIndex]="10000">
+                  {{orderdevelopedrequirement}}
+                  <p-footer>
+                    <button type="button" pButton icon="pi pi-times" (click)="displaycustopenorderdeveloped=false" label="Close"
+                      class="ui-button-secondary"></button>
+                  </p-footer>
+                </p-dialog>
+              </p-card>
+            </div>
+        </div>
+      </div>
+    <!-- Second Card -->
+    <div class=" card">
+      <div class=" card-header">
+        <h5 class=" title">Open Orders </h5>
+      </div>
+      <div class=" card-body">
+        <!-- No Data -->
+        <div *ngIf="noopenorders">
+          <div class=" typography-line">
+            <span> </span>
+            <p class=" text-info">
+              <strong>You have no open orders.</strong>
+            </p>
+          </div>
+        </div>
+        <!-- End of No Data -->
+        <div *ngIf="noopenorders === false">
+          <p class=" text-info">
+            <strong>*Expand For Requirements</strong>
+          </p>
+          <br>
+          <p-table #COT class="tables" id="COTTable" [columns]="CustomerOpenHeaders" [value]="CustomerOpenOrder"
+            selectionMode="single" [(selection)]="selecteddata1" [rows]="10" [rowsPerPageOptions]="[10,25,50]"
+            [paginator]="true" [reorderableColumns]="true" dataKey="orderNumber"
+            (onRowSelect)="OnOrderOpenSelect($event)">
+            <ng-template pTemplate="caption">
+              Orders - Click on order to load its tasks
+            </ng-template>
+            <ng-template pTemplate="header" let-columns>
+              <tr>
+                <th style="width: 3em"></th>
+                <th *ngFor="let cols of CustomerOpenHeaders" style="text-transform: capitalize;" [pSortableColumn]="cols"
+                  pReorderableColumn pResizableColumn>
+                  {{cols}}
+                  <p-sortIcon [field]="cols"></p-sortIcon>
+                </th>
+              </tr>
+              <tr>
+                <th style="width: 3em"></th>
+                <th id="search" *ngFor="let cols of CustomerOpenHeaders" [ngSwitch]="cols">
+                  <input placeholder="Filter...." type="text" pInputText [style]="{'width':'100%'}"
+                    (input)="COT.filter($event.target.value, cols, 'contains', cols.filterMatchMode)"
+                    [value]="COT.filters[cols] ? COT.filters[cols].value : ''">
+                </th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-CustomerOpenOrder let-expanded="expanded" let-columns="CustomerOpenHeaders">
+              <tr [pSelectableRow]="CustomerOpenOrder">
+                <td>
+                  <a href="#" [pRowToggler]="CustomerOpenOrder">
+                    <i [ngClass]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></i>
+                  </a>
+                </td>
+                <td *ngFor="let cols of CustomerOpenHeaders" style="height: 10px; max-height: 10px; overflow:hidden">
+                  {{CustomerOpenOrder[cols]}}
+                </td>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="rowexpansion" let-CustomerOpenOrder let-columns="columns">
+              <tr>
+                <td [attr.colspan]="columns.length + 1">
+                  <div class="p-grid -fluid" style="font-size:16px;padding:20px">
+                    <div class="p-col-12 p-md-9">
+                      <div class="p-grid">
+                        <div class="p-col-12">
+                          <b>{{CustomerOpenOrder.requirements}}</b>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+      </div>
+    </div>
+    <!-- Third Card -->
+    <div class=" card" *ngIf="OrderSelectedLoadTask">
+      <div class=" card-header">
+        <h5 class=" title">Tasks</h5>
+      </div>
+      <div class=" card-body">
+        <!-- No Data -->
+        <div *ngIf="notasks">
+          <div class=" typography-line">
+            <span> </span>
+            <p class=" text-info">
+              <strong>There are no Tasks for Selected Order.</strong>
+            </p>
+          </div>
+        </div>
+        <!-- End of No Data -->
+        <div *ngIf="notasks === false;">
+        <p class=" text-info">
+            <strong>*Expand For Task Notes</strong>
+          </p>
+          <br>
+          <p-table #COTS class="tables" id="COTSTable" [columns]="TasksHeaders" [value]="TasksData"
+            [(selection)]="selecteddata2" [rows]="10" [rowsPerPageOptions]="[10,25,50]" [paginator]="true" editMode="row"
+            [reorderableColumns]="true" dataKey="developerTaskID">
+            <ng-template pTemplate="header" let-columns>
+              <tr>
+              <th style="width: 3em"></th>
+                <th *ngFor="let cols of TasksHeaders" style="text-transform: capitalize;" [pSortableColumn]="cols"
+                  pReorderableColumn pResizableColumn>
+                  {{cols}}
+                  <p-sortIcon [field]="cols"></p-sortIcon>
+                </th>
+              </tr>
+              <tr>
+              <th style="width: 3em"></th>
+                <th id="search" *ngFor="let cols of TasksHeaders" [ngSwitch]="cols">
+                  <input placeholder="Filter...." type="text" pInputText [style]="{'width':'100%'}"
+                    (input)="COTS.filter($event.target.value, cols, 'contains', cols.filterMatchMode)"
+                    [value]="COTS.filters[cols] ? COTS.filters[cols].value : ''">
+                </th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-TasksData let-expanded="expanded" let-columns="TasksHeaders">
+              <tr [pSelectableRow]="TasksData">
+                <td>
+                  <a href="#" [pRowToggler]="TasksData">
+                    <i [ngClass]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></i>
+                  </a>
+                </td>
+                <td *ngFor="let cols of TasksHeaders" style="height: 10px; max-height: 10px; overflow:hidden">
+                  {{TasksData[cols]}}
+                </td>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="rowexpansion" let-TasksData let-columns="columns">
+              <tr>
+                <td [attr.colspan]="columns.length + 1">
+                  <div class="p-grid -fluid" style="font-size:16px;padding:20px">
+                    <div class="p-col-12 p-md-9">
+                      <div class="p-grid">
+                        <div class="p-col-12">
+                          <b>{{TasksData.notes}}</b>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+    </div>
   </div>
+</div>
 
   <div *ngIf="isPendingOrder">
     <!-- First Card -->
@@ -37,7 +238,7 @@
                 <div><strong>Order Completed By:</strong><br>
                   {{item.dateOffered}}</div><br>
                 <div><strong>Order Requirements:</strong><br>
-                  <button pButton style="margin-top: 0.5em" type="button" label="View Requirements"
+                  <button pButton style="margin-top: 0.5em" type="button" label="View Requirements" style="margin-bottom: 3.5em;"
                     class="ui-button-rounded ui-button-info" (click)="showBasicDialog(item.requirements)"></button>
                 </div>
                 <br>
@@ -205,6 +406,78 @@
   </div>
 
   <div *ngIf="isOrderHistory">
-    Order History
+    <div class=" card">
+      <div class=" card-header">
+        <h5 class=" title">Previous Orders </h5>
+      </div>
+      <div class=" card-body">
+        <!-- No Data -->
+        <div *ngIf="noorderhistory">
+          <div class=" typography-line">
+            <span> </span>
+            <p class=" text-info">
+              <strong>You have no previous orders.</strong>
+            </p>
+          </div>
+        </div>
+        <!-- End of No Data -->
+        <div *ngIf="noorderhistory === false">
+          <p class=" text-info">
+            <strong>*Expand For Requirements</strong>
+          </p>
+          <br>
+          <p-table #COH class="tables" id="COHTable" [columns]="CustomerOrderHistoryHeaders" [value]="CustomerOrderHistory"
+             [(selection)]="cotselecteddata" [rows]="10" [rowsPerPageOptions]="[10,25,50]"
+            [paginator]="true" [reorderableColumns]="true" dataKey="orderNumber"
+            >
+            <ng-template pTemplate="header" let-columns>
+              <tr>
+                <th style="width: 3em"></th>
+                <th *ngFor="let cols of CustomerOrderHistoryHeaders" style="text-transform: capitalize;" [pSortableColumn]="cols"
+                  pReorderableColumn pResizableColumn>
+                  {{cols}}
+                  <p-sortIcon [field]="cols"></p-sortIcon>
+                </th>
+              </tr>
+              <tr>
+                <th style="width: 3em"></th>
+                <th id="search" *ngFor="let cols of CustomerOrderHistoryHeaders" [ngSwitch]="cols">
+                  <input placeholder="Filter...." type="text" pInputText [style]="{'width':'100%'}"
+                    (input)="COH.filter($event.target.value, cols, 'contains', cols.filterMatchMode)"
+                    [value]="COH.filters[cols] ? COH.filters[cols].value : ''">
+                </th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-CustomerOrderHistory let-expanded="expanded" let-columns="CustomerOrderHistoryHeaders">
+              <tr [pSelectableRow]="CustomerOrderHistory">
+                <td>
+                  <a href="#" [pRowToggler]="CustomerOrderHistory">
+                    <i [ngClass]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></i>
+                  </a>
+                </td>
+                <td *ngFor="let cols of CustomerOrderHistoryHeaders" style="height: 10px; max-height: 10px; overflow:hidden">
+                  {{CustomerOrderHistory[cols]}}
+                </td>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="rowexpansion" let-CustomerOrderHistory let-columns="columns">
+              <tr>
+                <td [attr.colspan]="columns.length + 1">
+                  <div class="p-grid -fluid" style="font-size:16px;padding:20px">
+                    <div class="p-col-12 p-md-9">
+                      <div class="p-grid">
+                        <div class="p-col-12">
+                          <b>{{CustomerOrderHistory.requirements}}</b>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

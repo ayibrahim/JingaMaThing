@@ -1,0 +1,45 @@
+::ng-deep body .ui-orderlist .ui-orderlist-controls {
+    
+    display: none;
+}
+::ng-deep body .ui-orderlist-list-container {
+    height: 500px;
+}
+::ng-deep body .ui-orderlist-list{
+    height: 100% !important;
+}
+
+::ng-deep body .ql-editor p{
+    color: black;
+}
+
+
+::ng-deep body .ql-editor h1{
+    color: black;
+}
+::ng-deep body .ql-editor h2{
+    color: black;
+}
+::ng-deep body .ql-editor h3{
+    color: black;
+}
+::ng-deep body .ql-editor h4{
+    color: black;
+}
+::ng-deep body .ql-editor li{
+    color: black;
+}
+::ng-deep body .ql-editor ul{
+    color: black;
+}
+::ng-deep body .ql-formats .ql-image{
+    display: none;
+}
+.inputdialog{
+
+	font-weight: bold;
+	float: left;
+	padding-top: 8px;
+    padding-right: 5px;
+    color: black;
+}

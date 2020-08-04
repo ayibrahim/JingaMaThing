@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MenuItem } from 'primeng';
@@ -16,6 +16,13 @@ export interface Developer{
 export interface CustomerPendingApproval{
   customerPendingID : number;customerID : number;developerID : number;priceOffered : string;dateOffered : string;requirements : string;orderDesc : string;name : string;
 }
+export interface TaskTable {
+  developerTaskID : number; orderNumber : number; title : string; description : string; notes : string; status : string;
+}
+export interface OrderComplete {
+  OrderID : string; Review : string; Rating : string; 
+}
+interface OrderCompleted extends Array<OrderComplete>{}
 @Component({
   selector: 'app-customerorders',
   templateUrl: './customerorders.component.html',
@@ -32,6 +39,10 @@ export class CustomerordersComponent implements OnInit {
   items: MenuItem[]; MenuLabelChosen : any;  CustomerPendingResponse : any[]; i : number; CustomerPendingHeader: any[]; dialogrequirment : string;
   CPDData : any[]; CPDHeader : any[];  nopendingdata2 : boolean = true; CustomerPendingList : CustomerPendingApproval[];  displayBasic : boolean = false;
   isOpenOrder : boolean = true ; isPendingOrder : boolean = false; isOrderHistory : boolean = false; nopendingdata1 : boolean = true; nopendingdatadeclined : boolean = true;
+  noopenorders : boolean = true; selecteddata1 : any;  CustomerOpenHeaders : any[]; CustomerOpenOrder : any[];
+  OrderSelectedLoadTask : boolean = false; notasks : boolean = true; TasksHeaders : any[]; TasksData : any[];  selecteddata2 : any; OrderIDSelected : any;
+  orderdevelopedrequirement : any; displaycustopenorderdeveloped : boolean = false; noopendevpending : boolean = true; CustOpenOrdersDeveloped : any[];
+  noorderhistory : boolean = true; cotselecteddata : any; CustomerOrderHistoryHeaders : any[]; CustomerOrderHistory : any[];
   constructor(private route: ActivatedRoute , private router : Router ,private http: HttpClient , private toastr: ToastrService) { }
 
   ngOnInit() {
@@ -63,6 +74,9 @@ export class CustomerordersComponent implements OnInit {
             this.GetCPendingOrders();
             this.GetCPendingDeclined();
             this.GetCustomerOrders();
+            this.GetCustomerOpenOrders();
+            this.GetCustomerDevelopedOrders();
+            this.GetCustomerHistoryOrders();
           }, (error) => {console.log('error message ' + error)}
           )
     }
@@ -97,6 +111,11 @@ export class CustomerordersComponent implements OnInit {
       {label: 'Order History', icon: 'pi pi-fw pi-search'}
   ];
   }
+  OnOrderOpenSelect(event){
+    this.OrderSelectedLoadTask = true;
+    this.OrderIDSelected = event.data.orderNumber;
+    this.GetOrderTasks(this.OrderIDSelected);
+  }
   menuswitch(event){
     this.MenuLabelChosen = event.toElement.parentNode.innerText;
     this.toastr.clear();
@@ -104,6 +123,8 @@ export class CustomerordersComponent implements OnInit {
       this.isOrderHistory = false;
       this.isPendingOrder = false;
       this.isOpenOrder = true;
+      this.GetCustomerOpenOrders();
+      this.GetCustomerDevelopedOrders();
     }
     if(this.MenuLabelChosen == "Pending Orders"){
       this.isOrderHistory = false;
@@ -117,7 +138,140 @@ export class CustomerordersComponent implements OnInit {
       this.isPendingOrder = false;
       this.isOpenOrder = false;
       this.isOrderHistory = true;
+      this.GetCustomerHistoryOrders();
     }
+  }
+  CustomerMarkDevelopedOrder(review : string , rating : string , ID : string)
+  {
+    if(!rating|| !review){
+      this.toastr.clear();
+      this.errormessage = '*Please fill out review and rating before completing order';
+      this.showNotification('top', 'center' , this.errormessage);
+      setTimeout(()=> this.toastr.clear() , 3000);
+      return;
+    }
+    var result: OrderCompleted = [
+      { OrderID : ID.toString() , Review : review.toString() , Rating : rating.toString()  }
+      ];
+      const httpOptions = {
+        headers: new HttpHeaders({'Content-Type': 'application/json'})
+      }    
+     this.http.post('https://localhost:44380/api/UpdateOrderComplete' , result[0] , httpOptions).subscribe(data => {
+         console.log(data)
+         this.toastr.clear();
+         this.errormessage = 'Submited Successfully';
+         this.showNotification('top', 'center' , this.errormessage);
+        }, error => {
+       console.log(error)
+     });
+     setTimeout(()=> this.GetCustomerDevelopedOrders() , 2000);
+     setTimeout(()=> this.toastr.clear() , 3000);
+  }
+  GetCustomerOpenOrders()
+  {
+    this.http.get('https://localhost:44380/api/GetCustomerOpenOrders/' + this.CustomerID).subscribe(
+    (response : headers[]) => {
+      this.CustomerOpenOrder = response;
+      console.log(this.CustomerOpenOrder);
+      if(this.CustomerOpenOrder.length == 0){
+        this.noopenorders = true;
+        this.toastr.clear();
+        this.errormessage = '*No Open Orders Found.';
+        this.showNotification('top', 'center' , this.errormessage);
+      } else {
+        this.noopenorders = false;
+      }
+      this.CustomerOpenHeaders = [];
+      for (this.i = 0; this.i < this.CustomerOpenOrder.length; this.i++){
+        for (var key in this.CustomerOpenOrder[this.i]){
+          if(this.CustomerOpenHeaders.indexOf(key) === -1){
+            if(key == 'customerID' || key == 'requirements'){
+
+            }else {
+              this.CustomerOpenHeaders.push(key);
+            }
+          }
+        }
+      }   
+    }, (error) => {this.noopenorders = true;this.toastr.clear();
+      this.errormessage = 'Error Happened When Loading Open Orders Try Again or Contact Support';
+      this.showNotification('top', 'center' , this.errormessage);
+      console.log('error message ' + error)}
+    )
+   
+  }
+  GetCustomerHistoryOrders()
+  {
+    this.http.get('https://localhost:44380/api/GetCustomerOrderHistory/' + this.CustomerID).subscribe(
+    (response : headers[]) => {
+      this.CustomerOrderHistory = response;
+      console.log(this.CustomerOrderHistory);
+      if(this.CustomerOrderHistory.length == 0){
+        this.noorderhistory = true;
+        this.toastr.clear();
+        this.errormessage = '*No Previous Orders Found.';
+        this.showNotification('top', 'center' , this.errormessage);
+      } else {
+        this.noorderhistory = false;
+      }
+      this.CustomerOrderHistoryHeaders = [];
+      for (this.i = 0; this.i < this.CustomerOrderHistory.length; this.i++){
+        for (var key in this.CustomerOrderHistory[this.i]){
+          if(this.CustomerOrderHistoryHeaders.indexOf(key) === -1){
+            if(key == 'requirements'){
+
+            }else {
+              this.CustomerOrderHistoryHeaders.push(key);
+            }
+          }
+        }
+      }   
+    }, (error) => {this.noorderhistory = true;this.toastr.clear();
+      this.errormessage = 'Error Happened When Loading Previous Orders Try Again or Contact Support';
+      this.showNotification('top', 'center' , this.errormessage);
+      console.log('error message ' + error)}
+    )
+   
+  }
+  showcustorderdevelopeddialog(requirement : any){
+    this.toastr.clear();
+    this.orderdevelopedrequirement = requirement;
+    this.displaycustopenorderdeveloped = true;
+  }
+  GetOrderTasks(ID : any)
+  {
+    this.http.get('https://localhost:44380/api/GetOrderTasks/' + ID).subscribe(
+    (response : TaskTable[]) => {
+      this.TasksData = response;
+      console.log(this.TasksData);
+      if(this.TasksData.length == 0){
+        this.notasks = true;
+        this.toastr.clear();
+        this.errormessage = '*No Tasks Found.';
+        setTimeout(()=> this.toastr.clear(),3000);
+        this.showNotification('top', 'center' , this.errormessage);
+      } else {
+        this.notasks = false;
+      }
+      this.TasksHeaders = [];
+      for (this.i = 0; this.i < this.TasksData.length; this.i++){
+        for (var key in this.TasksData[this.i]){
+          if(this.TasksHeaders.indexOf(key) === -1){
+            if(key == 'developerTaskID' || key =='notes'){
+
+            }else {
+              this.TasksHeaders.push(key);
+            }
+          }
+        }
+      }   
+    }, (error) => {this.notasks = true;this.toastr.clear();
+      this.errormessage = 'Error Happened When Loading Tasks for Order Try Again or Contact Support';
+      this.showNotification('top', 'center' , this.errormessage);
+      setTimeout(()=> this.toastr.clear(),3000);
+      console.log('error message ' + error)}
+    )
+   
   }
   showBasicDialog(requirmentval) {
     this.toastr.clear();
@@ -164,6 +318,20 @@ export class CustomerordersComponent implements OnInit {
           this.nopendingdata2 = true;
         } else {
           this.nopendingdata2 = false;
+        }
+        }, (error) => {console.log('error message ' + error)}
+        )
+  }
+  GetCustomerDevelopedOrders(){
+    this.http.get('https://localhost:44380/api/GetCustomerDevelopedOrders/' + this.CustomerID)
+    .subscribe(
+        (response : headers[] ) => {
+         this.CustOpenOrdersDeveloped = response;
+         console.log(this.CustOpenOrdersDeveloped);
+         if (this.CustOpenOrdersDeveloped.length == 0){
+          this.noopendevpending = true;
+        } else {
+          this.noopendevpending = false;
         }
         }, (error) => {console.log('error message ' + error)}
         )

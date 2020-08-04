@@ -276,7 +276,7 @@
               <div class="p-grid ui-fluid">
                 <label class="inputdialog"> New Price* </label> <br>
                 <div class="p-col-8">
-                  <p-inputNumber id="BudgetInput" placeholder="$0.00" [(ngModel)]="ONewPrice" name="ONewPrice"
+                  <p-inputNumber id="BudgetInput" placeholder="$0.00" [style]="{width: '100%'}" [(ngModel)]="ONewPrice" name="ONewPrice"
                     mode="currency" currency="USD" locale="en-US">
                   </p-inputNumber>
                 </div>
@@ -284,7 +284,7 @@
                 <label class="inputdialog"> New Completion Date* </label> <br>
                 <div class="p-col-8">
                   <p-calendar id="CalenderInput" [touchUI]="true" (onSelect)="onDate(OCompleteDate)"
-                    [(ngModel)]="OCompleteDate" name="OCompleteDate" placeholder="Choose a Date" [showIcon]="true"
+                    [(ngModel)]="OCompleteDate" name="OCompleteDate" [style]="{width: '100%'}" placeholder="Choose a Date" [showIcon]="true"
                     showButtonBar="true" dateFormat="yy-mm-dd"></p-calendar>
                 </div>
                 <br>

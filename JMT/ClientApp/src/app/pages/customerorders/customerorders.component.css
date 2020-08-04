@@ -8,11 +8,8 @@ p-table  tr {
 }
 ::ng-deep body .ui-card-body{
     width: 340px;
-    height: 450px;
     min-width: 340px;
-    min-height: 450px;
     max-width: 340px;
-    max-height: 600px;
 } 
 ::ng-deep body .ui-card-footer{
     position: absolute;
@@ -26,4 +23,10 @@ p-table  tr {
 	margin-right: 2em;
 	margin-bottom: 2em;
 	position: relative;
+}
+::ng-deep body .ui-table .ui-table-caption {
+
+    background: #27293d;
+    color: white;
+    border: none;
 }

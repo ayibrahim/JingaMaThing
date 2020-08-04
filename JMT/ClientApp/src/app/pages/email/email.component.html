@@ -4,12 +4,23 @@
   <p-tabMenu [model]="items" [activeItem]="items[0]" (click)="test($event)"></p-tabMenu>
   <br>
   <div *ngIf="isMessages">
-    <div *ngIf="display1 || display2;">
-      <div class=" card">
-        <div class=" card-header">
-          <h5 class=" title">My Messages</h5>
+
+    <div class=" card">
+      <div class=" card-header">
+        <h5 class=" title">My Messages</h5>
+      </div>
+      <div class=" card-body">
+        <div *ngIf="nodata">
+          <div class=" typography-line">
+            <span> </span>
+            <p class=" text-info">
+              <strong>You have no Messages to look at.</strong>
+            </p>
+          </div>
         </div>
-        <div class=" card-body">
+
+        <div *ngIf="nodata === false">
+
           <p class=" text-info">
             <strong>*Expand For Message</strong>
           </p>
@@ -68,83 +79,80 @@
     </div>
   </div>
 
-  <div *ngIf="nodata">
-    <div class=" typography-line">
-      <span> </span>
-      <p class=" text-info">
-        <strong>You have no Messages to look at.</strong>
-      </p>
-    </div>
-  </div>
+
   <div *ngIf="isSentMessages">
     <div class=" card">
       <div class=" card-header">
         <h5 class=" title">My Sent Messages</h5>
       </div>
       <div class=" card-body">
+
+        <div *ngIf="nodata2">
+          <div class=" typography-line">
+            <span> </span>
+            <p class=" text-info">
+              <strong>You have no Sent Messages to look at.</strong>
+            </p>
+          </div>
+        </div>
+        <div *ngIf="nodata2 === false" >
         <p class=" text-info">
           <strong>*Expand For Message</strong>
-        </p>
-        <br>
-        <p-table #SM class="tables" id="SMTable" [columns]="SMHeader" [value]="SMData" [(selection)]="selecteddata2"
-          [rows]="10" [rowsPerPageOptions]="[10,25,50]" [paginator]="true" [reorderableColumns]="true" dataKey="id">
-          <ng-template pTemplate="header" let-columns>
-            <tr>
-              <th style="width: 3em"></th>
-              <th *ngFor="let cols of SMHeader" style="text-transform: capitalize;" [pSortableColumn]="cols"
-                pReorderableColumn pResizableColumn>
-                {{cols}}
-                <p-sortIcon [field]="cols"></p-sortIcon>
-              </th>
-            </tr>
-            <tr>
-              <th style="width: 3em"></th>
-              <th id="search" *ngFor="let cols of SMHeader" [ngSwitch]="cols">
-                <input placeholder="Filter...." type="text" pInputText [style]="{'width':'100%'}"
-                  (input)="SM.filter($event.target.value, cols, 'contains', cols.filterMatchMode)"
-                  [value]="SM.filters[cols] ? SM.filters[cols].value : ''">
-              </th>
-            </tr>
-          </ng-template>
-          <ng-template pTemplate="body" let-SMData let-expanded="expanded" let-columns="SMHeader">
-            <tr [pSelectableRow]="SMData">
-              <td>
-                <a href="#" [pRowToggler]="SMData">
-                  <i [ngClass]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></i>
-                </a>
-              </td>
-              <td *ngFor="let cols of SMHeader" style="height: 10px; max-height: 10px; overflow:hidden">
-                {{SMData[cols]}}
-              </td>
-            </tr>
-          </ng-template>
-          <ng-template pTemplate="rowexpansion" let-SMData let-columns="columns">
-            <tr>
-              <td [attr.colspan]="columns.length + 1">
-                <div class="p-grid -fluid" style="font-size:16px;padding:20px">
-                  <div class="p-col-12 p-md-9">
-                    <div class="p-grid">
-                      <div class="p-col-12">
-                        <b>{{SMData.message}}</b>
-                      </div>
+          </p>
+          <br>
+          <p-table #SM class="tables" id="SMTable" [columns]="SMHeader" [value]="SMData" [(selection)]="selecteddata2"
+            [rows]="10" [rowsPerPageOptions]="[10,25,50]" [paginator]="true" [reorderableColumns]="true" dataKey="id">
+            <ng-template pTemplate="header" let-columns>
+              <tr>
+                <th style="width: 3em"></th>
+                <th *ngFor="let cols of SMHeader" style="text-transform: capitalize;" [pSortableColumn]="cols"
+                  pReorderableColumn pResizableColumn>
+                  {{cols}}
+                  <p-sortIcon [field]="cols"></p-sortIcon>
+                </th>
+              </tr>
+              <tr>
+                <th style="width: 3em"></th>
+                <th id="search" *ngFor="let cols of SMHeader" [ngSwitch]="cols">
+                  <input placeholder="Filter...." type="text" pInputText [style]="{'width':'100%'}"
+                    (input)="SM.filter($event.target.value, cols, 'contains', cols.filterMatchMode)"
+                    [value]="SM.filters[cols] ? SM.filters[cols].value : ''">
+                </th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-SMData let-expanded="expanded" let-columns="SMHeader">
+              <tr [pSelectableRow]="SMData">
+                <td>
+                  <a href="#" [pRowToggler]="SMData">
+                    <i [ngClass]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></i>
+                  </a>
+                </td>
+                <td *ngFor="let cols of SMHeader" style="height: 10px; max-height: 10px; overflow:hidden">
+                  {{SMData[cols]}}
+                </td>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="rowexpansion" let-SMData let-columns="columns">
+              <tr>
+                <td [attr.colspan]="columns.length + 1">
+                  <div class="p-grid -fluid" style="font-size:16px;padding:20px">
+                    <div class="p-col-12 p-md-9">
+                      <div class="p-grid">
+                        <div class="p-col-12">
+                          <b>{{SMData.message}}</b>
+                        </div>
 
+                      </div>
                     </div>
                   </div>
-                </div>
-              </td>
-            </tr>
-          </ng-template>
-        </p-table>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
       </div>
     </div>
-    <div *ngIf="nodata2">
-      <div class=" typography-line">
-        <span> </span>
-        <p class=" text-info">
-          <strong>You have no Sent Messages to look at.</strong>
-        </p>
-      </div>
-    </div>
+
   </div>
   <div *ngIf="isNewMessage">
 
@@ -158,10 +166,10 @@
           <div class=" col-md-8">
             <div class=" form-group">
 
-               <p-dropdown #stateDropdown [options]="DevRMListbox" placeholder="Send To" name="selectedDevRM"
-                  [style]="{'width':'371.5px'}" [(ngModel)]="selectedDevRM" optionLabel="name" [showClear]="true"
-                  filter="true"></p-dropdown>
-              
+              <p-dropdown #stateDropdown [options]="DevRMListbox" placeholder="Send To" name="selectedDevRM"
+                [style]="{'width':'371.5px'}" [(ngModel)]="selectedDevRM" optionLabel="name" [showClear]="true"
+                filter="true"></p-dropdown>
+
             </div>
           </div>
         </div>

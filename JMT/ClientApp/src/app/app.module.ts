@@ -41,6 +41,10 @@ import {OrderListModule} from 'primeng/orderlist';
 import { NotesComponent } from './pages/notes/notes.component';
 import { LinksComponent } from './pages/links/links.component';
 import {SelectButtonModule} from 'primeng/selectbutton';
+import {InputTextareaModule} from 'primeng/inputtextarea';
+import {RatingModule} from 'primeng/rating';
+import {EditorModule} from 'primeng/editor';
+import {BlockUIModule} from 'primeng/blockui';
 
 @NgModule({
   imports: [
@@ -50,10 +54,14 @@ import {SelectButtonModule} from 'primeng/selectbutton';
     ComponentsModule,
     TabMenuModule,
     ToggleButtonModule,
+    EditorModule,
     NgbModule,
     RouterModule,
     SelectButtonModule,
+    BlockUIModule,
+    RatingModule,
     AngularTiltModule,
+    InputTextareaModule,
     AppRoutingModule,
     InputNumberModule,
     OrderListModule,

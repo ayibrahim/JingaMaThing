@@ -42,6 +42,88 @@ namespace JMT.Controllers {
 		}
 
 		[HttpGet]
+		[Route("api/GetCustomerOpenOrders/{CustomerID}")]
+		public List<CustOpenOrders> GetCustomerOpenOrders(string CustomerID = "") {
+
+			List<CustOpenOrders> devlist = new List<CustOpenOrders>();
+			using (SqlConnection con = new SqlConnection(con2)) {
+				SqlCommand cmd = new SqlCommand("GetCustomerOpenOrders", con);
+				cmd.CommandType = CommandType.StoredProcedure;
+				cmd.Parameters.AddWithValue("@CustomerID", CustomerID);
+				con.Open();
+				SqlDataReader rdr = cmd.ExecuteReader();
+				while (rdr.Read()) {
+					CustOpenOrders finalcustomer = new CustOpenOrders();
+					finalcustomer.OrderNumber = Convert.ToInt32(rdr["OrderNumber"]);
+					finalcustomer.CustomerID = Convert.ToInt32(rdr["CustomerID"]);
+					finalcustomer.DeveloperName = (rdr["DeveloperName"].ToString());
+					finalcustomer.Description = (rdr["Description"].ToString());
+					finalcustomer.Requirements = (rdr["Requirements"].ToString());
+					finalcustomer.CompletionDate = (rdr["CompletionDate"].ToString());
+					finalcustomer.Status = (rdr["Status"].ToString());
+					devlist.Add(finalcustomer);
+				}
+				con.Close();
+			}
+			return devlist;
+		}
+
+		[HttpGet]
+		[Route("api/GetCustomerDevelopedOrders/{CustomerID}")]
+		public List<CustOpenOrders> GetCustomerDevelopedOrders(string CustomerID = "") {
+
+			List<CustOpenOrders> devlist = new List<CustOpenOrders>();
+			using (SqlConnection con = new SqlConnection(con2)) {
+				SqlCommand cmd = new SqlCommand("GetCustomerDevelopedOrders", con);
+				cmd.CommandType = CommandType.StoredProcedure;
+				cmd.Parameters.AddWithValue("@CustomerID", CustomerID);
+				con.Open();
+				SqlDataReader rdr = cmd.ExecuteReader();
+				while (rdr.Read()) {
+					CustOpenOrders finalcustomer = new CustOpenOrders();
+					finalcustomer.OrderNumber = Convert.ToInt32(rdr["OrderNumber"]);
+					finalcustomer.CustomerID = Convert.ToInt32(rdr["CustomerID"]);
+					finalcustomer.DeveloperName = (rdr["DeveloperName"].ToString());
+					finalcustomer.Description = (rdr["Description"].ToString());
+					finalcustomer.Requirements = (rdr["Requirements"].ToString());
+					finalcustomer.CompletionDate = (rdr["CompletionDate"].ToString());
+					finalcustomer.Status = (rdr["Status"].ToString());
+					devlist.Add(finalcustomer);
+				}
+				con.Close();
+			}
+			return devlist;
+		}
+
+		[HttpGet]
+		[Route("api/GetCustomerOrderHistory/{CustomerID}")]
+		public List<CustOrderHistory> GetCustomerOrderHistory(string CustomerID = "") {
+
+			List<CustOrderHistory> devlist = new List<CustOrderHistory>();
+			using (SqlConnection con = new SqlConnection(con2)) {
+				SqlCommand cmd = new SqlCommand("GetCustomerOrderHistory", con);
+				cmd.CommandType = CommandType.StoredProcedure;
+				cmd.Parameters.AddWithValue("@CustomerID", CustomerID);
+				con.Open();
+				SqlDataReader rdr = cmd.ExecuteReader();
+				while (rdr.Read()) {
+					CustOrderHistory finalcustomer = new CustOrderHistory();
+					finalcustomer.OrderNumber = Convert.ToInt32(rdr["OrderNumber"]);
+					finalcustomer.DeveloperName = (rdr["DeveloperName"].ToString());
+					finalcustomer.Description = (rdr["Description"].ToString());
+					finalcustomer.Requirements = (rdr["Requirements"].ToString());
+					finalcustomer.CompletionDate = (rdr["CompletionDate"].ToString());
+					finalcustomer.Rating = (rdr["Rating"].ToString());
+					finalcustomer.CustomerReview = (rdr["CustomerReview"].ToString());
+					devlist.Add(finalcustomer);
+				}
+				con.Close();
+			}
+			return devlist;
+		}
+
+
+		[HttpGet]
 		[Route("api/GetOrderTasks/{OrderID}")]
 		public List<Tasks> GetOrderTasks(string OrderID = "") {
 

@@ -34,7 +34,7 @@ export interface DevRMList{
 })
 export class EmailComponent implements OnInit {
   //Menu Items
-  items: MenuItem[]; MenuLabelChosen : any; errormessage : String; nodata: boolean = false;nodata2: boolean = false;
+  items: MenuItem[]; MenuLabelChosen : any; errormessage : String; nodata: boolean = true;nodata2: boolean = true;
   // Entering Component - Routing Params
   retrievedID : string; retrievedRole : string;customerId : string;developerId : string; selectedDevRM : DevRMList; NMTitle : string; NMDescription : string;
   developerlogin : Developer[]; loginresponse : customer[]; DevRMListbox : DevRMList[]; insertresponse : any;
@@ -75,7 +75,6 @@ export class EmailComponent implements OnInit {
             this.CPhoto = this.loginresponse[0].photo;
             this.display2 = true;
             this.LoadDevRMList();
-            this.CSentMessages();
             this.CInbox();
           }, (error) => {console.log('error message ' + error)}
           )
@@ -102,9 +101,8 @@ export class EmailComponent implements OnInit {
                         this.DRoleDesc = this.developerlogin[0].roleDesc;
                         this.DPhoto = this.developerlogin[0].photo;
                         this.display1 = true;
-                        this.DInbox();
                         this.LoadDevRMCustomerList();
-                        this.DSentMessages();
+                        this.DInbox();
                     }, (error) => {console.log('error message ' + error)}
                     )
         
