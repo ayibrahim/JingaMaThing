@@ -14,11 +14,20 @@ namespace JMT.Model {
 		public string CompletionDate { get; set; }
 		public string Status { get; set; }
 
+	}
+	public class DevOrderHistory {
+		public int OrderNumber { get; set; }
+		public string CustomerName { get; set; }
+		public string Description { get; set; }
+		public string Requirements { get; set; }
+		public string CompletionDate { get; set; }
+		public string Rating { get; set; }
+		public string CustomerReview { get; set; }
+	}
 
-
-
-
-
-
+	public class DevHistoryCustomerReview {
+		public int OrderNumber { get; set; }
+		public string Rating { get; set; }
+		public string CustomerReview { get; set; }
 	}
 }

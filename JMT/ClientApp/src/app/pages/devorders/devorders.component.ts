@@ -52,6 +52,7 @@ export class DevordersComponent implements OnInit {
   NTTitle : string; NTDescription : string; NTNotes : string; disabled: boolean = true; editing : boolean = false;
   Statuses: SelectItem[]; deletedialog : boolean = false; TaskDeleteID : number; TaskDeletOrderID : number;
   custpendingdata : boolean = false; CustApprovPendingHeader : any[]; CustApprovPendingData : any[]; selecteddata3 : any;
+  noorderhistory : boolean = true; DevOrderHistoryHeaders : any[]; DevOrderHistory : any[];devhistoryselected : any; 
   constructor(private route: ActivatedRoute , private router : Router ,private http: HttpClient , private toastr: ToastrService) { }
 
   ngOnInit() {
@@ -112,6 +113,7 @@ export class DevordersComponent implements OnInit {
                         this.DTitle = this.developerlogin[0].title;
                         this.DRoleDesc = this.developerlogin[0].roleDesc;
                         this.DPhoto = this.developerlogin[0].photo;
+                        this.GetCustomerHistoryOrders();
                         this.GetDevOpenOrders();
                         this.GetDevOrders();
                         this.GetDevPendingCustomerOrders();
@@ -182,6 +184,39 @@ export class DevordersComponent implements OnInit {
       }   
     }, (error) => {this.custpendingdata = true;this.toastr.clear();
       this.errormessage = 'Error Happened When Loading Pending Orders Try Again or Contact Support';
+      this.showNotification('top', 'center' , this.errormessage);
+      console.log('error message ' + error)}
+    )
+   
+  }
+  GetCustomerHistoryOrders()
+  {
+    this.http.get('https://localhost:44380/api/GetDevOrderHistory/' + this.DeveloperID).subscribe(
+    (response : headers[]) => {
+      this.DevOrderHistory = response;
+      console.log(this.DevOrderHistory);
+      if(this.DevOrderHistory.length == 0){
+        this.noorderhistory = true;
+        this.toastr.clear();
+        this.errormessage = '*No Previous Orders Found.';
+        this.showNotification('top', 'center' , this.errormessage);
+      } else {
+        this.noorderhistory = false;
+      }
+      this.DevOrderHistoryHeaders = [];
+      for (this.i = 0; this.i < this.DevOrderHistory.length; this.i++){
+        for (var key in this.DevOrderHistory[this.i]){
+          if(this.DevOrderHistoryHeaders.indexOf(key) === -1){
+            if(key == 'requirements'){
+
+            }else {
+              this.DevOrderHistoryHeaders.push(key);
+            }
+          }
+        }
+      }   
+    }, (error) => {this.noorderhistory = true;this.toastr.clear();
+      this.errormessage = 'Error Happened When Loading Previous Orders Try Again or Contact Support';
       this.showNotification('top', 'center' , this.errormessage);
       console.log('error message ' + error)}
     )
@@ -343,6 +378,7 @@ export class DevordersComponent implements OnInit {
       this.isPendingOrder = false;
       this.isOpenOrder = false;
       this.isOrderHistory = true;
+      this.GetCustomerHistoryOrders();
     }
   }
   GetDevOpenOrders()

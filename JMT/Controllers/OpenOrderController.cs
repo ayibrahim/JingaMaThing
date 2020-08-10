@@ -122,6 +122,34 @@ namespace JMT.Controllers {
 			return devlist;
 		}
 
+		[HttpGet]
+		[Route("api/GetDevOrderHistory/{DeveloperID}")]
+		public List<DevOrderHistory> GetDevOrderHistory(string DeveloperID = "") {
+
+			List<DevOrderHistory> devlist = new List<DevOrderHistory>();
+			using (SqlConnection con = new SqlConnection(con2)) {
+				SqlCommand cmd = new SqlCommand("GetDevOrderHistory", con);
+				cmd.CommandType = CommandType.StoredProcedure;
+				cmd.Parameters.AddWithValue("@DeveloperID", DeveloperID);
+				con.Open();
+				SqlDataReader rdr = cmd.ExecuteReader();
+				while (rdr.Read()) {
+					DevOrderHistory finalcustomer = new DevOrderHistory();
+					finalcustomer.OrderNumber = Convert.ToInt32(rdr["OrderNumber"]);
+					finalcustomer.CustomerName = (rdr["CustomerName"].ToString());
+					finalcustomer.Description = (rdr["Description"].ToString());
+					finalcustomer.Requirements = (rdr["Requirements"].ToString());
+					finalcustomer.CompletionDate = (rdr["CompletionDate"].ToString());
+					finalcustomer.Rating = (rdr["Rating"].ToString());
+					finalcustomer.CustomerReview = (rdr["CustomerReview"].ToString());
+					devlist.Add(finalcustomer);
+				}
+				con.Close();
+			}
+			return devlist;
+		}
+
+		
 
 		[HttpGet]
 		[Route("api/GetOrderTasks/{OrderID}")]

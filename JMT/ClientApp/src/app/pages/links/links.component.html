@@ -1,11 +1,11 @@
 <div class=" content">
+  <!-- First Card -->
   <div class=" col-md-12">
     <div class=" card">
       <div class=" card-header">
         <h5 class=" title">My Links List</h5>
       </div>
       <div class=" card-body">
-        <form autocomplete="off">
           <!-- No Data -->
           <div *ngIf="nodevlinks">
             <div class=" typography-line">
@@ -17,11 +17,175 @@
           </div>
           <!-- End of No Data -->
           <div *ngIf="nodevlinks === false">
-            test
+            <p-table #DL class="tables" id="DevLinksTable" [columns]="DevLinksHeader" [value]="DevLinksData"
+            [(selection)]="selecteddata1" [rows]="10" [rowsPerPageOptions]="[10,25,50]" [paginator]="true" editMode="row"
+            [reorderableColumns]="true" dataKey="developerLinkID">
+            <ng-template pTemplate="header" let-columns>
+              <tr>
+                <th *ngFor="let cols of DevLinksHeader" style="text-transform: capitalize;" [pSortableColumn]="cols"
+                  pReorderableColumn pResizableColumn>
+                  {{cols}}
+                  <p-sortIcon [field]="cols"></p-sortIcon>
+                </th>
+                <th style="width:8em"></th>
+              </tr>
+              <tr>
+                <th id="search" *ngFor="let cols of DevLinksHeader" [ngSwitch]="cols">
+                  <input placeholder="Filter...." type="text" pInputText [style]="{'width':'100%'}"
+                    (input)="DL.filter($event.target.value, cols, 'contains', cols.filterMatchMode)"
+                    [value]="DL.filters[cols] ? DL.filters[cols].value : ''">
+                </th>
+                <th style="width:8em"></th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-DevLinksData let-columns="DevLinksHeader" let-editing="editing" let-ri="rowIndex">
+              <tr  [pEditableRow]="DevLinksData">
+                <td *ngFor="let cols of DevLinksHeader" style="height: 10px; max-height: 10px; overflow:hidden" >
+                <div *ngIf="cols == 'viewType' ">
+                    <p-cellEditor>
+                    <ng-template pTemplate="input">
+                        <p-dropdown [options]="LinksTypes" [(ngModel)]="DevLinksData[cols]" [style]="{'width':'100%'}" appendTo="body"></p-dropdown>
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                        {{DevLinksData[cols]}}
+                    </ng-template>
+                    </p-cellEditor>
+                  </div>
+                  <div *ngIf="cols != 'viewType' ">
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                        <input pInputText type="text" [(ngModel)]="DevLinksData[cols]" [style]="{'width':'100%'}">
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      <div *ngIf="cols == 'hyperLink'">
+                      <a href={{DevLinksData[cols]}} target="_blank">{{DevLinksData[cols]}}</a>
+                      
+                      </div>
+                      <div *ngIf="cols != 'hyperLink'">
+                      {{DevLinksData[cols]}}
+                      </div>
+                      </ng-template>
+                    </p-cellEditor>
+                    </div>
+                </td>
+                <td style="text-align:center">
+                  <button *ngIf="!editing" pButton type="button" pInitEditableRow icon="pi pi-pencil" class="ui-button-info" (click)="onRowEditInit(DevLinksData)"></button>
+                  <button *ngIf="editing" pButton type="button" pSaveEditableRow icon="pi pi-check" class="ui-button-success" style="margin-right: .5em" (click)="onRowEditSave(DevLinksData)"></button>
+                  <button *ngIf="editing" pButton type="button" pCancelEditableRow icon="pi pi-times" class="ui-button-danger" (click)="onRowEditCancel(DevLinksData, ri)"></button>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+          <p-dialog header="Delete Confirmation" [(visible)]="deletedialog" [focusOnShow]="false"
+                  [responsive]="true" showEffect="fade" [modal]="true" [style]="{width: '500px'}">
+                  Are you sure you want to delete this link ?
+                  <p-footer>
+                    <div class="ui-dialog-buttonpane ui-helper-clearfix">
+                      <button type="button" pButton icon="pi pi-times" class="ui-button-danger" (click)="DeleteLink()"
+                        label="Delete"></button>
+                      <button type="button" pButton (click)="CloseDeleteDialog()" label="Close"></button>
+                    </div>
+                  </p-footer>
+                </p-dialog>
           </div>
-          </form>
       </div>
       </div>
       </div>
- 
+      <br>
+      <!-- Second Card -->
+       <!-- Second Card -->
+      <div class=" col-md-12">
+      <div class=" card">
+        <div class=" card-header">
+          <h5 class=" title">Create New Link</h5>
+        </div>
+        <div class=" card-body">
+          <div class=" row">
+            <div class=" col-md-6">
+              <div class=" form-group">
+                <label for="exampleInputTitle1"> Link Title* </label>
+                <input class=" form-control" type="text" placeholder="Here can be your Link's Title"
+                  [(ngModel)]="LinkTitle" name="LinkTitle" autocomplete="doNotAutoComplete">
+              </div>
+            </div>
+            <div class=" col-md-6">
+              <div class=" form-group">
+                <label for="exampleInputTitle1"> Display Type* </label><br>
+                <p-selectButton [options]="LinksTypes" [(ngModel)]="LinkType"></p-selectButton>
+              </div>
+            </div>
+          </div>
+           <div class=" row">
+            <div class=" col-md-6">
+            <div class=" form-group">
+                <label for="exampleInputTitle1"> Link URL* </label>
+                <input class=" form-control" type="text" placeholder="Here can be your Link's URL"
+                  [(ngModel)]="LinkURL" name="LinkURL" autocomplete="doNotAutoComplete">
+              </div>
+            </div>
+            </div>
+          <br>
+          <button class="btn btn-primary animation-on-hover btn-round" (click)="CreateNewlink()">Create New
+            Link</button>
+          <br>
+        </div>
+      </div>
+    </div>
+    <br>
+     <!-- Third Card -->
+    <div class=" col-md-12">
+      <div class=" card">
+        <div class=" card-header">
+          <h5 class=" title">Public Links</h5>
+        </div>
+        <div class=" card-body">
+            <!-- No Data -->
+            <div *ngIf="nopubliclinks">
+              <div class=" typography-line">
+                <span> </span>
+                <p class=" text-info">
+                  <strong>You have no public links</strong>
+                </p>
+              </div>
+            </div>
+            <!-- End of No Data -->
+
+            <div *ngIf="nopubliclinks === false">
+              <p-table #PL class="tables" id="PLTable" [columns]="PLHeader" [value]="PLData"
+                [(selection)]="selecteddata2" [rows]="10" [rowsPerPageOptions]="[10,25,50]" [paginator]="true"
+                [reorderableColumns]="true" >
+                <ng-template pTemplate="header" let-columns>
+                  <tr>
+                    <th *ngFor="let cols of PLHeader" style="text-transform: capitalize;" [pSortableColumn]="cols"
+                      pReorderableColumn pResizableColumn>
+                      {{cols}}
+                      <p-sortIcon [field]="cols"></p-sortIcon>
+                    </th>
+                  </tr>
+                  <tr>
+                    <th id="search" *ngFor="let cols of PLHeader" [ngSwitch]="cols">
+                      <input placeholder="Filter...." type="text" pInputText [style]="{'width':'100%'}"
+                        (input)="PL.filter($event.target.value, cols, 'contains', cols.filterMatchMode)"
+                        [value]="PL.filters[cols] ? PL.filters[cols].value : ''">
+                    </th>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-PLData let-expanded="expanded" let-columns="PLHeader">
+                  <tr [pSelectableRow]="PLData">
+                    <td *ngFor="let cols of PLHeader" style="height: 10px; max-height: 10px; overflow:hidden">
+                      <div *ngIf="cols == 'hyperLink'">
+                      <a href={{PLData[cols]}} target="_blank">{{PLData[cols]}}</a>
+                      
+                      </div>
+                      <div *ngIf="cols != 'hyperLink'">
+                      {{PLData[cols]}}
+                      </div>
+                    </td>
+                  </tr>
+                </ng-template>
+              </p-table>
+            </div>
+        </div>
+      </div>
+    </div>
 </div>

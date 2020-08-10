@@ -69,7 +69,7 @@
             </ng-template>
             <ng-template pTemplate="rowexpansion" let-DevOpenOrders let-columns="columns">
               <tr>
-                <td [attr.colspan]="columns.length + 1">
+                <td [attr.colspan]="columns.length + 2">
                   <div class="p-grid -fluid" style="font-size:16px;padding:20px">
                     <div class="p-col-12 p-md-9">
                       <div class="p-grid">
@@ -407,6 +407,82 @@
     </div>
 </div>
 <div *ngIf="isOrderHistory">
-  Order History
-</div>
+  <div class=" card">
+      <div class=" card-header">
+        <h5 class=" title">Previous Orders </h5>
+      </div>
+      <div class=" card-body">
+        <!-- No Data -->
+        <div *ngIf="noorderhistory">
+          <div class=" typography-line">
+            <span> </span>
+            <p class=" text-info">
+              <strong>You have no previous orders.</strong>
+            </p>
+          </div>
+        </div>
+        <!-- End of No Data -->
+        <div *ngIf="noorderhistory === false">
+          <p class=" text-info">
+            <strong>*Expand For Requirements</strong>
+          </p>
+          <br>
+          <p-table #DOH class="tables" id="DOHTable" [columns]="DevOrderHistoryHeaders" [value]="DevOrderHistory"
+             [(selection)]="devhistoryselected" [rows]="10" [rowsPerPageOptions]="[10,25,50]"
+            [paginator]="true" [reorderableColumns]="true" dataKey="orderNumber"
+            >
+            <ng-template pTemplate="header" let-columns>
+              <tr>
+                <th style="width: 3em"></th>
+                <th *ngFor="let cols of DevOrderHistoryHeaders" style="text-transform: capitalize;" [pSortableColumn]="cols"
+                  pReorderableColumn pResizableColumn>
+                  {{cols}}
+                  <p-sortIcon [field]="cols"></p-sortIcon>
+                </th>
+              </tr>
+              <tr>
+                <th style="width: 3em"></th>
+                <th id="search" *ngFor="let cols of DevOrderHistoryHeaders" [ngSwitch]="cols">
+                  <input placeholder="Filter...." type="text" pInputText [style]="{'width':'100%'}"
+                    (input)="DOH.filter($event.target.value, cols, 'contains', cols.filterMatchMode)"
+                    [value]="DOH.filters[cols] ? DOH.filters[cols].value : ''">
+                </th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-DevOrderHistory let-expanded="expanded" let-columns="DevOrderHistoryHeaders">
+              <tr [pSelectableRow]="DevOrderHistory">
+                <td>
+                  <a href="#" [pRowToggler]="DevOrderHistory">
+                    <i [ngClass]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></i>
+                  </a>
+                </td>
+                <td *ngFor="let cols of DevOrderHistoryHeaders" style="height: 10px; max-height: 10px; overflow:hidden">
+                  <div *ngIf="cols == 'rating'">
+                    <p-rating [(ngModel)]="DevOrderHistory[cols]" disabled="disabled"></p-rating>
+                  </div>
+                  <div *ngIf="cols != 'rating'">
+                    {{DevOrderHistory[cols]}}
+                  </div>
+                </td>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="rowexpansion" let-DevOrderHistory let-columns="columns">
+              <tr>
+                <td [attr.colspan]="columns.length + 1">
+                  <div class="p-grid -fluid" style="font-size:16px;padding:20px">
+                    <div class="p-col-12 p-md-9">
+                      <div class="p-grid">
+                        <div class="p-col-12">
+                          <b>{{DevOrderHistory.requirements}}</b>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+      </div>
+  </div>
 </div>

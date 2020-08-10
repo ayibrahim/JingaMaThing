@@ -199,6 +199,60 @@
       </div>
     </div>
     <br>
+     <!-- Last Card -->
+    <div class=" col-md-12">
+      <div class=" card">
+        <div class=" card-header">
+          <h5 class=" title">Order History - Customer Reviews</h5>
+        </div>
+        <div class=" card-body">
+            <!-- No Data -->
+            <div *ngIf="nodevhoh">
+              <div class=" typography-line">
+                <span> </span>
+                <p class=" text-info">
+                  <strong>Developer has no order history.</strong>
+                </p>
+              </div>
+            </div>
+            <!-- End of No Data -->
 
+            <div *ngIf="nodevhoh === false">
+              <p-table #DOHH class="tables" id="DOHHTable" [columns]="DevHOH" [value]="DevHO"
+                [(selection)]="devselectedhoh" [rows]="10" [rowsPerPageOptions]="[10,25,50]" [paginator]="true"
+                [reorderableColumns]="true" >
+                <ng-template pTemplate="header" let-columns>
+                  <tr>
+                    <th *ngFor="let cols of DevHOH" style="text-transform: capitalize;" [pSortableColumn]="cols"
+                      pReorderableColumn pResizableColumn>
+                      {{cols}}
+                      <p-sortIcon [field]="cols"></p-sortIcon>
+                    </th>
+                  </tr>
+                  <tr>
+                    <th id="search" *ngFor="let cols of DevHOH" [ngSwitch]="cols">
+                      <input placeholder="Filter...." type="text" pInputText [style]="{'width':'100%'}"
+                        (input)="DOHH.filter($event.target.value, cols, 'contains', cols.filterMatchMode)"
+                        [value]="DOHH.filters[cols] ? DOHH.filters[cols].value : ''">
+                    </th>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-DevHO let-expanded="expanded" let-columns="DevHOH">
+                  <tr [pSelectableRow]="DevHO">
+                    <td *ngFor="let cols of DevHOH" style="height: 10px; max-height: 10px; overflow:hidden">
+                       <div *ngIf="cols == 'rating'">
+                        <p-rating [(ngModel)]="DevHO[cols]" disabled="disabled"></p-rating>
+                      </div>
+                      <div *ngIf="cols != 'rating'">
+                        {{DevHO[cols]}}
+                      </div>
+                    </td>
+                  </tr>
+                </ng-template>
+              </p-table>
+            </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

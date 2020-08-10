@@ -25,7 +25,8 @@ export class CustomerDashboardComponent implements OnInit {
   DDescription: string; DPLanguages: string; DSkills: string; DEducation: string; DCertificates: string; DTitle: string; DRoleDesc : string;
   developerlogin : Developer[]; loginresponse : customer[];
   DevList : any[];  nodevlist : boolean = true;
-  images: any[]; isListofDevs : boolean = true;  gallerdisplay : boolean = false;
+  images: any[]; isListofDevs : boolean = true;  gallerdisplay : boolean = false; 
+  DevHO : any[]; DevHOH : any[]; devselectedhoh: any; nodevhoh : boolean = true; i : number;
   constructor(private route: ActivatedRoute , private router : Router ,private http: HttpClient , private toastr: ToastrService) { }
 
   ngOnInit() 
@@ -113,11 +114,46 @@ export class CustomerDashboardComponent implements OnInit {
                         this.DRoleDesc = this.developerlogin[0].roleDesc;
                         this.DPhoto = this.developerlogin[0].photo;
                         this.getImages(this.DeveloperID).then(images => this.images = images);
+                        this.GetDevPastOrders(this.DeveloperID);
                         this.isListofDevs = false;
                         this.isdeveloper = true;
                         this.gallerdisplay = true;
                     }, (error) => {console.log('error message ' + error)}
                     )
+  }
+  GetDevPastOrders(ID)
+  {
+    this.http.get('https://localhost:44380/api/DevHistoryCustomerReview/' + ID).subscribe(
+    (response : headers[]) => {
+      this.DevHO = response;
+      console.log(this.DevHO);
+      if(this.DevHO.length == 0){
+        this.nodevhoh = true;
+        this.toastr.clear();
+        this.errormessage = '*No Dev Order History Found.';
+        setTimeout(()=> this.toastr.clear(),3000);
+        this.showNotification('top', 'center' , this.errormessage);
+      } else {
+        this.nodevhoh = false;
+      }
+      this.DevHOH = [];
+      for (this.i = 0; this.i < this.DevHO.length; this.i++){
+        for (var key in this.DevHO[this.i]){
+          if(this.DevHOH.indexOf(key) === -1){
+            if(key == 'orderNumber'){
+
+            }else {
+              this.DevHOH.push(key);
+            }
+          }
+        }
+      }   
+    }, (error) => {this.nodevhoh = true;this.toastr.clear();
+      this.errormessage = 'Error Happened When Loading Developers Orders History Try Again or Contact Support';
+      this.showNotification('top', 'center' , this.errormessage);
+      setTimeout(()=> this.toastr.clear(),3000);
+      console.log('error message ' + error)}
+    )
   }
   getImages(devid : number) {
     return this.http.get<any>('https://localhost:44380/api/getDevGalleryInfo/'+ devid)

@@ -76,12 +76,12 @@
                       <input pInputText id="NoteTitleView" name="SelectedNoteTitleView" [(ngModel)]="SelectedNoteTitleView" [disabled]="disabled" autofocus />
                     </div>
                     <br>
-                    <label class="inputdialog">New Title</label>
+                    <label class="inputdialog">New Title*</label>
                     <div class="p-col-8">
                       <input pInputText id="NewTitle" name="NewTitle" [(ngModel)]="NewTitle" />
                     </div>
                     <br>
-                    <label class="inputdialog">New Display Type</label>
+                    <label class="inputdialog">New Display Type*</label>
                     <div class="p-col-8">
                       <p-selectButton [options]="NotesTypes" [(ngModel)]="NewViewType"></p-selectButton>
                     </div>
@@ -115,14 +115,14 @@
           <div class=" row">
             <div class=" col-md-6">
               <div class=" form-group">
-                <label for="exampleInputTitle1"> Note Title </label>
+                <label for="exampleInputTitle1"> Note Title* </label>
                 <input class=" form-control" type="text" placeholder="Here can be your Note's Title"
                   [(ngModel)]="NTitle" name="NTitle" autocomplete="doNotAutoComplete">
               </div>
             </div>
             <div class=" col-md-6">
               <div class=" form-group">
-                <label for="exampleInputTitle1"> Display Type </label><br>
+                <label for="exampleInputTitle1"> Display Type* </label><br>
                 <p-selectButton [options]="NotesTypes" [(ngModel)]="NType"></p-selectButton>
               </div>
             </div>

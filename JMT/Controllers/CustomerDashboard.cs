@@ -42,7 +42,30 @@ namespace JMT.Controllers {
 			}
 			return customer;
 		}
-	
+
+		[HttpGet]
+		[Route("api/DevHistoryCustomerReview/{DeveloperID}")]
+		public List<DevHistoryCustomerReview> DevHistoryCustomerReview(string DeveloperID = "") {
+
+			List<DevHistoryCustomerReview> devlist = new List<DevHistoryCustomerReview>();
+			using (SqlConnection con = new SqlConnection(con2)) {
+				SqlCommand cmd = new SqlCommand("DevHistoryCustomerReview", con);
+				cmd.CommandType = CommandType.StoredProcedure;
+				cmd.Parameters.AddWithValue("@DeveloperID", DeveloperID);
+				con.Open();
+				SqlDataReader rdr = cmd.ExecuteReader();
+				while (rdr.Read()) {
+					DevHistoryCustomerReview finalcustomer = new DevHistoryCustomerReview();
+					finalcustomer.OrderNumber = Convert.ToInt32(rdr["OrderNumber"]);
+					finalcustomer.Rating = (rdr["Rating"].ToString());
+					finalcustomer.CustomerReview = (rdr["CustomerReview"].ToString());
+					devlist.Add(finalcustomer);
+				}
+				con.Close();
+			}
+			return devlist;
+		}
+
 	}
 
 }

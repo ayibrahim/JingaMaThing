@@ -6,7 +6,7 @@
 
   <div *ngIf="isOpenOrder">
   <!-- First Card -->
-      <div class=" card">
+      <div class=" card" style="height: 750px">
         <div class=" card-header">
           <h5 class=" title">Orders Developed - Pending your Completion and Review. </h5>
         </div>
@@ -456,7 +456,12 @@
                   </a>
                 </td>
                 <td *ngFor="let cols of CustomerOrderHistoryHeaders" style="height: 10px; max-height: 10px; overflow:hidden">
-                  {{CustomerOrderHistory[cols]}}
+                  <div *ngIf="cols == 'rating'">
+                    <p-rating [(ngModel)]="CustomerOrderHistory[cols]" disabled="disabled"></p-rating>
+                  </div>
+                  <div *ngIf="cols != 'rating'">
+                    {{CustomerOrderHistory[cols]}}
+                  </div>
                 </td>
               </tr>
             </ng-template>

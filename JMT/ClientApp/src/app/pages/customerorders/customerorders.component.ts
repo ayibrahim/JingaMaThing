@@ -42,7 +42,7 @@ export class CustomerordersComponent implements OnInit {
   noopenorders : boolean = true; selecteddata1 : any;  CustomerOpenHeaders : any[]; CustomerOpenOrder : any[];
   OrderSelectedLoadTask : boolean = false; notasks : boolean = true; TasksHeaders : any[]; TasksData : any[];  selecteddata2 : any; OrderIDSelected : any;
   orderdevelopedrequirement : any; displaycustopenorderdeveloped : boolean = false; noopendevpending : boolean = true; CustOpenOrdersDeveloped : any[];
-  noorderhistory : boolean = true; cotselecteddata : any; CustomerOrderHistoryHeaders : any[]; CustomerOrderHistory : any[];
+  noorderhistory : boolean = true; cotselecteddata : any; CustomerOrderHistoryHeaders : any[]; CustomerOrderHistory : any[]; disabled : boolean = true;
   constructor(private route: ActivatedRoute , private router : Router ,private http: HttpClient , private toastr: ToastrService) { }
 
   ngOnInit() {
