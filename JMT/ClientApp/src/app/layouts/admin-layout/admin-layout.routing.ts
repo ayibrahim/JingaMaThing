@@ -13,7 +13,7 @@ import { NotesComponent } from 'src/app/pages/notes/notes.component';
 // import { RtlComponent } from "../../pages/rtl/rtl.component";
 
 export const AdminLayoutRoutes: Routes = [
-
+  { path: "dashboard", component: DashboardComponent },
   { path: "home", component: HomeComponent },
   { path: "user-profile", component: UserProfileComponent },
   { path: "email" , component : EmailComponent},

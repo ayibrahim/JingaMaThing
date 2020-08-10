@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, OnDestroy, Input } from "@angular/core";
+import { Component, OnInit, ElementRef, OnDestroy, Input, ɵConsole } from "@angular/core";
 import { ROUTES } from "../sidebar/sidebar.component";
 import { Location } from "@angular/common";
 import { Router, ActivatedRoute } from "@angular/router";
@@ -13,6 +13,9 @@ export interface customer{
 export interface Developer{
   developerID : number; email : string; firstName : string; lastName : string; password : string; phoneNumber : string; description : string; pLanguages : string; skills : string; education : string; certification : string; title : string; roleDesc : string; photo : string;
 }
+export interface rmanager{
+  resourceManagerID : number;email : string;firstName : string;lastName : string;password : string;phoneNumber : string;roleDesc : string;photo : string;
+}
 @Component({
   selector: "app-navbar",
   templateUrl: "./navbar.component.html",
@@ -23,9 +26,10 @@ export class NavbarComponent implements OnInit, OnDestroy {
   @Input()
   NewUser : UserInfo = new UserInfo();
   CFirstName : string; CLastName : string; CEmail : string;  CustomerID : number; CPhoneNumber : string;  CPassword: string; CRoleDesc : string; CPhoto : any; CEmail2: string;
+  RFirstName : string; RLastName : string; REmail : string; REmail2 : string; RPassword: string; ResourceManagerID : number; RPhoneNumber : string; RRoleDesc : string; RPhoto : string;
   DFirstName : string; DLastName : string; DEmail : string; DPassword: string; DeveloperID : number; DPhoneNumber : string; DPhoto : any; DEmail2 : string;
   DDescription: string; DPLanguages: string; DSkills: string; DEducation: string; DCertificates: string; DTitle: string; DRoleDesc : string;
-  developerlogin : Developer[]; loginresponse : customer[];
+  developerlogin : Developer[]; loginresponse : customer[]; rmresponse : rmanager[];
   UserPhoto : string;
   private listTitles: any[];
   location: Location;
@@ -100,6 +104,25 @@ export class NavbarComponent implements OnInit, OnDestroy {
             this.CRoleDesc = this.loginresponse[0].roleDesc;
             this.CPhoto = this.loginresponse[0].photo;
             this.UserPhoto = this.CPhoto;
+          }, (error) => {console.log('error message ' + error)}
+          )
+    }
+    if(this.NewUser.RoleDesc == 'ResourceManager'){
+      console.log(this.NewUser.ID);
+      this.http.get('https://localhost:44380/api/GetResourceManagerInfoByID/' + this.NewUser.ID)
+      .subscribe(
+          (response : rmanager[] ) => {
+           this.rmresponse = response;
+           this.RFirstName = this.rmresponse[0].firstName;
+            this.RLastName = this.rmresponse[0].lastName;
+            this.REmail = this.rmresponse[0].email;
+            this.REmail2 = this.rmresponse[0].email;
+            this.RPassword = this.rmresponse[0].password;
+            this.ResourceManagerID = this.rmresponse[0].resourceManagerID;
+            this.RPhoneNumber = this.rmresponse[0].phoneNumber;
+            this.RRoleDesc = this.rmresponse[0].roleDesc;
+            this.RPhoto = this.rmresponse[0].photo;
+            this.UserPhoto = this.RPhoto;
           }, (error) => {console.log('error message ' + error)}
           )
     }

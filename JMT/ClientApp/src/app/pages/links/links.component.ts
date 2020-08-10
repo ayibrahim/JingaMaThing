@@ -13,11 +13,17 @@ export interface Developer{
 export interface LinkTable {
   developerLinkID : number;  title : string; hyperLink : string; viewType : string; 
 }
+export interface rmLinkTable {
+  resourceManagerLinkID : number;  title : string; hyperLink : string; viewType : string; 
+}
 export interface UpdateLink {
   DeveloperLinkID : string; Title : string; HyperLink : string; ViewType : string;
 }
 export interface CreateLink {
   DeveloperID : string; LinkTitle : string; LinkURL : string; LinkType : string;
+}
+export interface rmanager{ 
+  resourceManagerID : number; email : string; firstName : string; lastName : string; password : string; phoneNumber : string; roleDesc : string; photo : string;
 }
 interface CreateLinks extends Array<CreateLink>{}
 interface UpdateLinks extends Array<UpdateLink>{}
@@ -28,14 +34,20 @@ interface UpdateLinks extends Array<UpdateLink>{}
 })
 export class LinksComponent implements OnInit {
   retrievedID : string; retrievedRole : string;customerId : string;developerId : string; errormessage : String;  newdata : headers[];
-  iscustomer : boolean  = false; isdeveloper : boolean = false;
+  iscustomer : boolean  = false; isdeveloper : boolean = false; rmanagerId : any; isrmanager : boolean = false;
   CFirstName : string; CLastName : string; CEmail : string;  CustomerID : number; CPhoneNumber : string;  CPassword: string; CRoleDesc : string; CPhoto : any; CEmail2: string;
+  RFirstName : string; RLastName : string; REmail2 : string; REmail : string; RPassword: string; ResourceManagerID : number; RPhoneNumber : string; RRoleDesc : string; RPhoto : any;
   DFirstName : string; DLastName : string; DEmail : string; DPassword: string; DeveloperID : number; DPhoneNumber : string; DPhoto : any; DEmail2 : string;
   DDescription: string; DPLanguages: string; DSkills: string; DEducation: string; DCertificates: string; DTitle: string; DRoleDesc : string;
   developerlogin : Developer[]; loginresponse : customer[]; nodevlinks : boolean = true;
   SelectedLinkID : any; deletedialog : boolean = false; DevLinksHeader : any[]; DevLinksData : any[]; i : any;
   LinkURL : any; LinkTitle : any; LinksTypes: SelectItem[];  LinkType: any;
-  nopubliclinks : boolean = true; selecteddata1 : any; selecteddata2 : any; PLHeader : any[]; PLData : any[];
+  nopubliclinks : boolean = true; selecteddata1 : any; selecteddata2 : any; PLHeader : any[]; PLData : any[]; 
+  rmresponse : rmanager[];
+  normlinks : boolean = true; nopublicrmlinks : boolean = true; deletedialog2 : boolean = false;
+  selecteddata4 : any; selecteddata3 : any; 
+  PLRMHeader : any[]; PLRMData : any[]; RMLinksHeader : any[]; RMLinksData: any[];
+  RMLinkURL : any; RMLinkTitle : any;  RMLinkType: any;  SelectedRMLinkID : any;
   constructor(private route: ActivatedRoute , private router : Router ,private http: HttpClient , private toastr: ToastrService) { }
 
   ngOnInit() 
@@ -48,6 +60,9 @@ export class LinksComponent implements OnInit {
       }
       if(this.retrievedRole == 'Developer'){
         this.developerId = this.retrievedID;
+      }
+      if(this.retrievedRole == 'ResourceManager'){
+        this.rmanagerId = this.retrievedID;
       }
     }))
     if(this.customerId != undefined){
@@ -65,6 +80,24 @@ export class LinksComponent implements OnInit {
             this.CPhoneNumber = this.loginresponse[0].phoneNumber;
             this.CRoleDesc = this.loginresponse[0].roleDesc;
             this.CPhoto = this.loginresponse[0].photo;
+          }, (error) => {console.log('error message ' + error)}
+          )
+    }
+    if(this.rmanagerId != undefined){
+      this.isrmanager = true;
+      this.http.get('https://localhost:44380/api/GetResourceManagerInfoByID/' + this.rmanagerId)
+      .subscribe(
+          (response : rmanager[] ) => {
+           this.rmresponse = response;
+           this.RFirstName = this.rmresponse[0].firstName;
+            this.RLastName = this.rmresponse[0].lastName;
+            this.REmail = this.rmresponse[0].email;
+            this.REmail2 = this.rmresponse[0].email;
+            this.RPassword = this.rmresponse[0].password;
+            this.ResourceManagerID = this.rmresponse[0].resourceManagerID;
+            this.RPhoneNumber = this.rmresponse[0].phoneNumber;
+            this.RRoleDesc = this.rmresponse[0].roleDesc;
+            this.RPhoto = this.rmresponse[0].photo;
           }, (error) => {console.log('error message ' + error)}
           )
     }
@@ -93,7 +126,7 @@ export class LinksComponent implements OnInit {
                         this.GetPublicLinks();
                     }, (error) => {console.log('error message ' + error)}
                     )
-                          
+                     
     }
     this.LinksTypes = [
       {label:'Public', value: 'Public'},
@@ -170,6 +203,10 @@ export class LinksComponent implements OnInit {
       console.log('error message ' + error)}
     )
   }
+  CreateNewRMlink()
+  {
+
+  }
   CreateNewlink()
   {
     if(!this.LinkTitle){
@@ -225,7 +262,13 @@ export class LinksComponent implements OnInit {
   }
   CloseDeleteDialog(){this.deletedialog = false;}
   onRowEditInit(task: LinkTable) {
-    
+  }
+  CloseDeleteDialog2(){this.deletedialog2 = false;}
+  onRMRowEditInit(task2: rmLinkTable) {
+  }
+  onRMRowEditSave(task2: rmLinkTable)
+  {
+
   }
   onRowEditSave(task: LinkTable) {
     var result2 : UpdateLinks = [
@@ -267,9 +310,13 @@ export class LinksComponent implements OnInit {
     setTimeout(()=> this.toastr.clear() , 4000);
   }
   onRowEditCancel(task: LinkTable, index: number) {
-    console.log(task);
     this.deletedialog = true;
-    this.SelectedLinkID = task.developerLinkID
+    this.SelectedLinkID = task.developerLinkID;
+  }
+  onRMRowEditCancel(task2: rmLinkTable, index : number)
+  {
+    this.deletedialog2 = true;
+    this.SelectedRMLinkID = task2.resourceManagerLinkID;
   }
   showNotification(from, align , message){
     const color = Math.floor((Math.random() * 5) + 1);

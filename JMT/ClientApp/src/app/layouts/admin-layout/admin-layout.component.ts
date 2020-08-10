@@ -5,6 +5,9 @@ import { ToastrService } from 'ngx-toastr';
 export class customer{
   FirstName : string ; LastName : string; Email : string; Password: string; CustomerID : number; PhoneNumber : string; RoleDesc : string; Photo : string;
 }
+export class rmanager{
+  FirstName : string ; LastName : string; Email : string; Password: string; ResourceManagerID : number; PhoneNumber : string; RoleDesc : string; Photo : string;
+}
 export class Dev{
   FirstName : string; LastName : string; Email : string; Password: string; DeveloperID : number; PhoneNumber : string;  RoleDesc : string; Description : string; PLanguages : string;
   Skills : string; Education : string; Certification : string; Title : string; Photo: string;
@@ -22,7 +25,8 @@ export class AdminLayoutComponent implements OnInit {
   public sidebarColor: string = "red";
   testing : string;
   custfull : customer = new customer(); devfull : Dev = new Dev();
-  iscustomer : boolean = false; isdeveloper: boolean = false;
+  rmfull : rmanager = new rmanager();
+  iscustomer : boolean = false; isdeveloper: boolean = false; isrmanager : boolean = false;
   customerID : number;
   isuserporifle : boolean;
   istesting : boolean = true;
@@ -89,7 +93,21 @@ export class AdminLayoutComponent implements OnInit {
       this.devfull.RoleDesc = history.state.RoleDesc;
       this.devfull.Photo = history.state.Photo;
       this.isdeveloper = true;
-      }
+    }
+    if(history.state.type == 'resourcemanager'){
+      this.newuser.RoleDesc = history.state.RoleDesc;
+      this.newuser.ID = history.state.ResourceManagerID;
+      this.historytype = history.state.type;
+      this.rmfull.FirstName = history.state.FirstName;
+      this.rmfull.LastName = history.state.LastName;
+      this.rmfull.PhoneNumber = history.state.PhoneNumber;
+      this.rmfull.Email = history.state.Email;
+      this.rmfull.Password = history.state.Password;
+      this.rmfull.ResourceManagerID = history.state.ResourceManagerID;
+      this.rmfull.RoleDesc = history.state.RoleDesc;
+      this.rmfull.Photo = history.state.Photo;
+      this.isrmanager = true;
+    }
     
   }
   public onRouterOutletActivate(event : any) {
@@ -105,6 +123,11 @@ export class AdminLayoutComponent implements OnInit {
         queryParams : {data : this.custfull.CustomerID , data2 : this.custfull.RoleDesc}
       })
       }
+      if(this.historytype == 'resourcemanager'){
+        this.router.navigate(['./user-profile'],{
+          queryParams : {data : this.rmfull.ResourceManagerID , data2 : this.rmfull.RoleDesc}
+        })
+        }
       if(this.historytype == 'developer'){
         this.router.navigate(['./user-profile'],{
           queryParams : {data : this.devfull.DeveloperID , data2 : this.devfull.RoleDesc}
@@ -178,6 +201,11 @@ export class AdminLayoutComponent implements OnInit {
         queryParams : {data : this.custfull.CustomerID , data2 : this.custfull.RoleDesc}
       })
       }
+      if(this.historytype == 'resourcemanager'){
+        this.router.navigate(['./links'],{
+          queryParams : {data : this.rmfull.ResourceManagerID , data2 : this.rmfull.RoleDesc}
+        })
+        }
       if(this.historytype == 'developer'){
         this.router.navigate(['./links'],{
           queryParams : {data : this.devfull.DeveloperID , data2 : this.devfull.RoleDesc}

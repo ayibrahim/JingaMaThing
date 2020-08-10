@@ -101,9 +101,62 @@ namespace JMT.Controllers
 			}
             return customer;
         }
-       
 
-        [HttpGet]
+		[HttpGet]
+		[Route("api/GetResourceManagerInfo/{Email}/{Password}")]
+		public List<RMInfo> GetResourceManagerInfo(string Email = "", string Password = "") {
+			List<RMInfo> customer = new List<RMInfo>();
+			using (SqlConnection con = new SqlConnection(con2)) {
+				SqlCommand cmd = new SqlCommand("GetResourceManagerInfo", con);
+				cmd.CommandType = CommandType.StoredProcedure;
+				cmd.Parameters.AddWithValue("@Email", Email);
+				cmd.Parameters.AddWithValue("@Password", Password);
+				con.Open();
+				SqlDataReader rdr = cmd.ExecuteReader();
+				while (rdr.Read()) {
+					RMInfo finalcustomer = new RMInfo();
+					finalcustomer.ResourceManagerID = (Convert.ToInt32(rdr["ResourceManagerID"]));
+					finalcustomer.FirstName = (rdr["FirstName"].ToString());
+					finalcustomer.LastName = (rdr["LastName"].ToString());
+					finalcustomer.PhoneNumber = (rdr["PhoneNumber"].ToString());
+					finalcustomer.Email = (rdr["Email"].ToString());
+					finalcustomer.Password = (rdr["Password"].ToString());
+					finalcustomer.RoleDesc = (rdr["RoleDesc"].ToString());
+					finalcustomer.Photo = (rdr["Photo"].ToString());
+					customer.Add(finalcustomer);
+				}
+				con.Close();
+			}
+			return customer;
+		}
+
+		[HttpGet]
+		[Route("api/GetResourceManagerInfoByID/{ID}")]
+		public List<RMInfo> GetResourceManagerInfoByID(string ID = "") {
+			List<RMInfo> customer = new List<RMInfo>();
+			using (SqlConnection con = new SqlConnection(con2)) {
+				SqlCommand cmd = new SqlCommand("GetResourceManagerInfoByID", con);
+				cmd.CommandType = CommandType.StoredProcedure;
+				cmd.Parameters.AddWithValue("@ID", ID);
+				con.Open();
+				SqlDataReader rdr = cmd.ExecuteReader();
+				while (rdr.Read()) {
+					RMInfo finalcustomer = new RMInfo();
+					finalcustomer.ResourceManagerID = (Convert.ToInt32(rdr["ResourceManagerID"]));
+					finalcustomer.FirstName = (rdr["FirstName"].ToString());
+					finalcustomer.LastName = (rdr["LastName"].ToString());
+					finalcustomer.PhoneNumber = (rdr["PhoneNumber"].ToString());
+					finalcustomer.Email = (rdr["Email"].ToString());
+					finalcustomer.Password = (rdr["Password"].ToString());
+					finalcustomer.RoleDesc = (rdr["RoleDesc"].ToString());
+					finalcustomer.Photo = (rdr["Photo"].ToString());
+					customer.Add(finalcustomer);
+				}
+				con.Close();
+			}
+			return customer;
+		}
+		[HttpGet]
         [Route("api/getDeveloperInfo/{Email}/{Password}")]
         public List<DeveloperInfo> GetDeveloperInfo(string Email = "", string Password = "")
         {
@@ -226,27 +279,46 @@ namespace JMT.Controllers
             return response;
         }
 
-        [HttpGet]
-        [Route("api/UpdateDeveloperInfo/{DeveloperID}/{FirstName}/{LastName}/{PhoneNumber}/{Email}/{Title}/{Skills}/{PLanguages}/{Education}/{Certificates}/{Description}")]
-        public string UpdateDevInfo(string DeveloperID = "", string FirstName = "", string LastName = "", string PhoneNumber = "", string Email = "" , string Title = "" , string Skills = "" , string PLanguages = "" , string Education = "",
-            string Certificates = "" , string Description = "")
+		[HttpGet]
+		[Route("api/UpdateRMInfo/{ResourceManagerID}/{FirstName}/{LastName}/{PhoneNumber}/{Email}")]
+		public string UpdateRMInfo(string ResourceManagerID = "", string FirstName = "", string LastName = "", string PhoneNumber = "", string Email = "") {
+			string response = "positive";
+			using (SqlConnection con = new SqlConnection(con2)) {
+				SqlCommand cmd = new SqlCommand("UpdateRMInfo", con);
+				cmd.CommandType = CommandType.StoredProcedure;
+				cmd.Parameters.AddWithValue("@ResourceManagerID", ResourceManagerID);
+				cmd.Parameters.AddWithValue("@FirstName", FirstName);
+				cmd.Parameters.AddWithValue("@LastName", LastName);
+				cmd.Parameters.AddWithValue("@PhoneNumber", PhoneNumber);
+				cmd.Parameters.AddWithValue("@Email", Email);
+				con.Open();
+				cmd.ExecuteNonQuery();
+
+				con.Close();
+			}
+			return response;
+		}
+
+		[HttpPost]
+        [Route("api/UpdateDeveloperInfo")]
+        public string UpdateDevInfo([FromBody]DevUpdate data)
         {
             string response = "positive";
             using (SqlConnection con = new SqlConnection(con2))
             {
                 SqlCommand cmd = new SqlCommand("UpdateDeveloperInfo", con);
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@DeveloperID", DeveloperID);
-                cmd.Parameters.AddWithValue("@FirstName", FirstName);
-                cmd.Parameters.AddWithValue("@LastName", LastName);
-                cmd.Parameters.AddWithValue("@PhoneNumber", PhoneNumber);
-                cmd.Parameters.AddWithValue("@Email", Email);
-                cmd.Parameters.AddWithValue("@Title", Title);
-                cmd.Parameters.AddWithValue("@Skills", Skills);
-                cmd.Parameters.AddWithValue("@PLanguages", PLanguages);
-                cmd.Parameters.AddWithValue("@Education", Education);
-                cmd.Parameters.AddWithValue("@Certificates", Certificates);
-                cmd.Parameters.AddWithValue("@Description", Description);
+                cmd.Parameters.AddWithValue("@DeveloperID", data.DeveloperID);
+                cmd.Parameters.AddWithValue("@FirstName", data.FirstName);
+                cmd.Parameters.AddWithValue("@LastName", data.LastName);
+                cmd.Parameters.AddWithValue("@PhoneNumber", data.PhoneNumber);
+                cmd.Parameters.AddWithValue("@Email", data.Email);
+                cmd.Parameters.AddWithValue("@Title", data.Title);
+                cmd.Parameters.AddWithValue("@Skills", data.Skills);
+                cmd.Parameters.AddWithValue("@PLanguages", data.PLanguages);
+                cmd.Parameters.AddWithValue("@Education", data.Education);
+                cmd.Parameters.AddWithValue("@Certificates", data.Certificates);
+                cmd.Parameters.AddWithValue("@Description", data.Description);
                 
                 con.Open();
                 cmd.ExecuteNonQuery();

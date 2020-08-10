@@ -1,10 +1,11 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { HttpClient, HttpRequest, HttpEventType } from '@angular/common/http';
+import { HttpClient, HttpRequest, HttpEventType, HttpHeaders } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
 import { Galleria } from 'primeng';
 import { PhotoServiceService } from 'src/app/Shared/photo-service.service';
+import { ThrowStmt } from '@angular/compiler';
 export interface headers{}
 export interface customer{ 
   customerID : number; email : string; firstName : string; lastName : string; password : string; phoneNumber : string; roleDesc : string; photo : string;
@@ -12,7 +13,14 @@ export interface customer{
 export interface Developer{
   developerID : number; email : string; firstName : string; lastName : string; password : string; phoneNumber : string; description : string; pLanguages : string; skills : string; education : string; certification : string; title : string; roleDesc : string; photo : string;
 }
+export interface rmanager{ 
+  resourceManagerID : number; email : string; firstName : string; lastName : string; password : string; phoneNumber : string; roleDesc : string; photo : string;
+}
 export interface Image{}
+export interface DeveloperInfo{
+  DeveloperID : string; FirstName: string; LastName: string; PhoneNumber: string; Email: string;  Description: string; PLanguages: string; Skills: string; Education: string; Certificates: string; Title: string; 
+}
+interface DeveloperInfos extends Array<DeveloperInfo>{}
 @Component({
   selector: 'app-user-profile',
   templateUrl: './user-profile.component.html',
@@ -27,9 +35,12 @@ export class UserProfileComponent implements OnInit {
   retrievedRole : string;
   customerId : string;
   developerId : string;
-  developerlogin : Developer[]; loginresponse : customer[];
+  rmanagerId : string;
+  developerlogin : Developer[]; loginresponse : customer[]; rmresponse : rmanager[];
+  RFirstName : string; RLastName : string; REmail2 : string; REmail : string; RPassword: string; ResourceManagerID : number; RPhoneNumber : string; RRoleDesc : string; RPhoto : any;
   iscustomer : boolean  = false;
   isdeveloper : boolean = false;
+  isrmanager : boolean = false;
   CFirstName : string; CLastName : string; CEmail : string;  CustomerID : number; CPhoneNumber : string;  CPassword: string; CRoleDesc : string; CPhoto : any; CEmail2: string;
   DFirstName : string; DLastName : string; DEmail : string; DPassword: string; DeveloperID : number; DPhoneNumber : string; DPhoto : any; DEmail2 : string;
   DDescription: string; DPLanguages: string; DSkills: string; DEducation: string; DCertificates: string; DTitle: string; DRoleDesc : string;
@@ -39,6 +50,7 @@ export class UserProfileComponent implements OnInit {
   DGTitle : any; DGDescription : any; DGID : any;
   disabled: boolean = true;
   gallerdisplay : boolean = false;
+  
   regexp = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
   constructor(private route: ActivatedRoute , private router : Router , private http: HttpClient , private toastr: ToastrService , private photoService : PhotoServiceService) { }
   images: any[];
@@ -77,10 +89,10 @@ export class UserProfileComponent implements OnInit {
       if(this.retrievedRole == 'Developer'){
         this.developerId = this.retrievedID;
       }
+      if(this.retrievedRole == 'ResourceManager'){
+        this.rmanagerId = this.retrievedID;
+      }
     }))
-
-
-
     if(this.customerId != undefined){
       this.iscustomer = true;
       this.http.get('https://localhost:44380/api/getCustomerInfoByID/' + this.customerId)
@@ -96,6 +108,24 @@ export class UserProfileComponent implements OnInit {
             this.CPhoneNumber = this.loginresponse[0].phoneNumber;
             this.CRoleDesc = this.loginresponse[0].roleDesc;
             this.CPhoto = this.loginresponse[0].photo;
+          }, (error) => {console.log('error message ' + error)}
+          )
+    }
+    if(this.rmanagerId != undefined){
+      this.isrmanager = true;
+      this.http.get('https://localhost:44380/api/GetResourceManagerInfoByID/' + this.rmanagerId)
+      .subscribe(
+          (response : rmanager[] ) => {
+           this.rmresponse = response;
+           this.RFirstName = this.rmresponse[0].firstName;
+            this.RLastName = this.rmresponse[0].lastName;
+            this.REmail = this.rmresponse[0].email;
+            this.REmail2 = this.rmresponse[0].email;
+            this.RPassword = this.rmresponse[0].password;
+            this.ResourceManagerID = this.rmresponse[0].resourceManagerID;
+            this.RPhoneNumber = this.rmresponse[0].phoneNumber;
+            this.RRoleDesc = this.rmresponse[0].roleDesc;
+            this.RPhoto = this.rmresponse[0].photo;
           }, (error) => {console.log('error message ' + error)}
           )
     }
@@ -162,17 +192,50 @@ export class UserProfileComponent implements OnInit {
         this.message = event.body.toString();
     });
     setTimeout(()=>{    //<<<---    using ()=> syntax
-      this.getImageFromService();
+      this.CgetImageFromService();
  }, 1000);
   }
-
-  getImageFromService() {
+  CgetImageFromService() {
     this.http.get('https://localhost:44380/api/GetProfileImageCustomer/' + this.CEmail2).subscribe(data => {
         this.CPhoto = data;
     }, error => {
       console.log(error);
     });
-}
+  }
+
+  RUploadPhoto(files) {
+    if (files.length === 0){
+      this.toastr.clear();
+      this.errormessage = '*No File Chosen Update Failed.';
+      this.showNotification('top', 'center' , this.errormessage);
+      return;
+    }
+    this.toastr.clear();
+    const formData = new FormData();
+
+    for (let file of files)
+      formData.append(file.name, file);
+
+    const uploadReq = new HttpRequest('POST', 'https://localhost:44380/api/upload/'+ this.REmail2 + '/' + this.RRoleDesc , formData, {
+      reportProgress: true,
+    });
+    this.http.request(uploadReq).subscribe(event => {
+      if (event.type === HttpEventType.UploadProgress)
+        this.progress = Math.round(100 * event.loaded / event.total);
+      else if (event.type === HttpEventType.Response)
+        this.message = event.body.toString();
+    });
+    setTimeout(()=>{    //<<<---    using ()=> syntax
+      this.getImageFromService();
+    }, 1000);
+  }
+  getImageFromService() {
+    this.http.get('https://localhost:44380/api/GetProfileImageRManager/' + this.REmail2).subscribe(data => {
+        this.RPhoto = data;
+    }, error => {
+      console.log(error);
+    });
+  }
   UpdateCustomerInfo(){
     if(!this.CFirstName|| !this.CLastName|| !this.CPhoneNumber || !this.CEmail){
       this.toastr.clear();
@@ -207,7 +270,44 @@ export class UserProfileComponent implements OnInit {
     this.showNotification('top', 'center' , this.errormessage);
     setTimeout(()=>{    //<<<---    using ()=> syntax
      this.toastr.clear();
- }, 5000);
+    }, 5000);
+  }
+
+  UpdateRMInfo(){
+    if(!this.RFirstName|| !this.RLastName|| !this.RPhoneNumber || !this.REmail){
+      this.toastr.clear();
+      this.errormessage = '*All Fields Must Have Value Before Updating';
+      this.showNotification('top', 'center' , this.errormessage);
+      return;
+     }
+     if(this.RPhoneNumber.toString().length != 10){
+      this.toastr.clear();
+      this.errormessage = '*Phone Number Must be 10 digits';
+      this.showNotification('top', 'center' , this.errormessage);
+      return;
+    }
+    var  serchfind:boolean;
+    serchfind = this.regexp.test(this.REmail);
+    if(serchfind != true){
+      this.toastr.clear();
+      this.errormessage = '*Email Must be in Correct Format';
+      this.showNotification('top', 'center' , this.errormessage);
+      return;
+    }
+    this.http.get('https://localhost:44380/api/UpdateRMInfo/' + this.ResourceManagerID + '/' + this.RFirstName + '/' + this.RLastName + '/' + this.RPhoneNumber + '/' + this.REmail ).subscribe(
+      (response2 : headers[]) => {
+        this.newdata = response2
+        this.REmail2 = this.REmail;
+        console.log(this.newdata);
+      }, (error) => {console.log('error message ' + error)}
+      
+    )
+    this.toastr.clear();
+    this.errormessage = '*Updated Successfully';
+    this.showNotification('top', 'center' , this.errormessage);
+    setTimeout(()=>{    //<<<---    using ()=> syntax
+     this.toastr.clear();
+    }, 5000);
   }
   showNotification(from, align , message){
 
@@ -284,15 +384,21 @@ export class UserProfileComponent implements OnInit {
       this.showNotification('top', 'center' , this.errormessage);
       return;
     }
-    this.http.get('https://localhost:44380/api/UpdateDeveloperInfo/' + this.DeveloperID + '/' + this.DFirstName + '/' + this.DLastName + '/' + this.DPhoneNumber + '/' 
-    + this.DEmail + '/' + this.DTitle + '/' + this.DSkills + '/' +  this.DPLanguages + '/' + this.DEducation + '/' + this.DCertificates + '/' + this.DDescription ).subscribe(
-      (response2 : headers[]) => {
-        this.DEmail2 = this.DEmail;
-        this.newdata = response2;
-        console.log(this.newdata);
-      }, (error) => {console.log('error message ' + error)}
+    var result: DeveloperInfos = [
+      {  DeveloperID: this.DeveloperID.toString() , FirstName: this.DFirstName.toString(), LastName : this.DLastName.toString() , PhoneNumber : this.DPhoneNumber.toString() , Email : this.DEmail.toString() 
+       , Title : this.DTitle.toString() , Skills : this.DSkills.toString() , PLanguages : this.DPLanguages.toString() , Education : this.DEducation.toString() , Certificates : this.DCertificates.toString()
+      ,Description : this.DDescription.toString() }
+      ];
+      const httpOptions = {
+        headers: new HttpHeaders({'Content-Type': 'application/json'})
+      }    
       
-    )
+     this.http.post('https://localhost:44380/api/UpdateDeveloperInfo' , result[0] , httpOptions).subscribe(data => {
+         console.log(data)
+        }, error => {
+       console.log(error)
+     })
+
     this.toastr.clear();
     this.errormessage = '*Updated Successfully';
     this.showNotification('top', 'center' , this.errormessage);

@@ -18,4 +18,18 @@ namespace JMT.Model {
 		public string DCertificates { get; set; }
 		public string DTitle { get; set; }
 	}
+	public class DevUpdate {
+		public string DeveloperID { get; set; }
+		public string FirstName { get; set; }
+		public string LastName { get; set; }
+		public string PhoneNumber { get; set; }
+		public string Email { get; set; }
+		public string Title { get; set; }
+		public string Skills { get; set; }
+		public string PLanguages { get; set; }
+		public string Education { get; set; }
+		public string Certificates { get; set; }
+		public string Description { get; set; }
+
+	}
 }

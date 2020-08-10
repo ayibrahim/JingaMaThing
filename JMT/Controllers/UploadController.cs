@@ -92,7 +92,22 @@ namespace JMT.Controllers
 			return finalresult;
         }
 
-        [HttpGet]
+		[HttpGet]
+		[Route("api/GetProfileImageRManager/{Email}")]
+		public String GetProfileImageRManager(string Email = "") {
+			object result = "";
+			string finalresult = "";
+
+			SqlConnection con = new SqlConnection(con2);
+			SqlCommand cmd = new SqlCommand("SELECT Photo From TResourceManagers Where Email = '" + Email + "'", con);
+			con.Open();
+			result = cmd.ExecuteScalar();
+			finalresult = result.ToString();
+			con.Close();
+			return finalresult;
+		}
+
+		[HttpGet]
         [Route("api/GetProfileImageDeveloper/{Email}")]
         public String GetDevImage(string Email = "")
         {

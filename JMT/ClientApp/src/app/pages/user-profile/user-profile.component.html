@@ -37,7 +37,7 @@
               <div class=" col-md-12">
                 <div class=" form-group">
                   <label for="exampleInputEmail1"> Email address </label>
-                  <input class=" form-control" type="text" placeholder="Email" [(ngModel)]="CEmail" name="CEmail"
+                  <input class=" form-control" type="text" disabled="" placeholder="Email" [(ngModel)]="CEmail" name="CEmail"
                     autocomplete="doNotAutoComplete">
                 </div>
               </div>
@@ -92,6 +92,97 @@
       </div>
     </div>
   </div>
+  <div *ngIf="isrmanager" class=" row">
+    <div class=" col-md-8">
+      <div class=" card">
+        <div class=" card-header">
+          <h5 class=" title">Edit Profile</h5>
+        </div>
+        <div class=" card-body">
+          <form>
+            <div class=" row">
+              <div class=" col-md-12">
+                <div class=" form-group">
+                  <label> Company (disabled) </label>
+                  <input class=" form-control" disabled="" placeholder="Company" type="text" value="Jinga-Ma-Thing" />
+                </div>
+              </div>
+            </div>
+            <div class=" row">
+              <div class=" col-md-12">
+                <div class=" form-group">
+                  <label> FirstName </label>
+                  <input class=" form-control" type="text" placeholder="FirstName" [(ngModel)]="RFirstName"
+                    name="RFirstName" autocomplete="doNotAutoComplete">
+                </div>
+              </div>
+            </div>
+            <div class=" row">
+              <div class=" col-md-12">
+                <div class=" form-group">
+                  <label for="exampleInputEmail1"> LastName </label>
+                  <input class=" form-control" type="text" placeholder="LastName" [(ngModel)]="RLastName"
+                    name="RLastName" autocomplete="doNotAutoComplete">
+                </div>
+              </div>
+            </div>
+            <div class=" row">
+              <div class=" col-md-12">
+                <div class=" form-group">
+                  <label for="exampleInputEmail1"> Email address </label>
+                  <input class=" form-control" type="text" disabled="" placeholder="Email" [(ngModel)]="REmail" name="REmail"
+                    autocomplete="doNotAutoComplete">
+                </div>
+              </div>
+            </div>
+            <div class=" row">
+              <div class=" col-md-12">
+                <div class=" form-group">
+                  <label for="exampleInputEmail1"> PhoneNumber </label>
+                  <input class=" form-control" type="text" placeholder="PhoneNumber" [(ngModel)]="RPhoneNumber"
+                    name="RPhoneNumber" autocomplete="doNotAutoComplete">
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class=" card-footer">
+          <button class="btn btn-primary animation-on-hover btn-round" type="submit"
+            (click)="UpdateRMInfo()">Save</button>
+        </div>
+      </div>
+    </div>
+    <div class=" col-md-4">
+      <div class=" card card-user">
+        <div class=" card-body">
+          <p class=" card-text"></p>
+          <div class=" author">
+            <div class=" block block-one"></div>
+            <div class=" block block-two"></div>
+            <div class=" block block-three"></div>
+            <div class=" block block-four"></div>
+            <a href="javascript:void(0)">
+              <img alt="..." class=" avatar" src={{RPhoto}} />
+
+              <h5 class=" title">{{RFirstName}} {{RLastName}}</h5>
+            </a>
+            <p class=" description">Resource Manager</p>
+            <br>
+            <input #file type="file" name="file" id="file" class="inputfile" accept="image/*" />
+            <label for="file"><strong>Choose a file</strong></label>
+            <br>
+            <br>
+            <button class="btn btn-primary animation-on-hover btn-round" (click)="RUploadPhoto(file.files)">Update
+              Photo</button>
+            <br />
+            <span style="font-weight:bold;color:green;" *ngIf="progress > 0 && progress < 100">
+              {{progress}}%
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
   <div *ngIf="isdeveloper" class=" row">
     <div class=" col-md-8">
       <div class=" card">
@@ -135,7 +226,7 @@
               <div class=" col-md-6">
                 <div class=" form-group">
                   <label for="exampleInputEmail1"> Email address </label>
-                  <input class=" form-control" type="text" placeholder="Email" [(ngModel)]="DEmail" name="DEmail"
+                  <input class=" form-control" type="text" disabled="" placeholder="Email" [(ngModel)]="DEmail" name="DEmail"
                     autocomplete="doNotAutoComplete">
                 </div>
               </div>

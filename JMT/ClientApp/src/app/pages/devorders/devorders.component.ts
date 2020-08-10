@@ -113,10 +113,10 @@ export class DevordersComponent implements OnInit {
                         this.DTitle = this.developerlogin[0].title;
                         this.DRoleDesc = this.developerlogin[0].roleDesc;
                         this.DPhoto = this.developerlogin[0].photo;
-                        this.GetCustomerHistoryOrders();
                         this.GetDevOpenOrders();
                         this.GetDevOrders();
                         this.GetDevPendingCustomerOrders();
+                        this.GetCustomerHistoryOrders();
                     }, (error) => {console.log('error message ' + error)}
                     )
        
@@ -496,6 +496,10 @@ export class DevordersComponent implements OnInit {
          console.log(this.DevPendingList);
          if (this.DevPendingList.length == 0){
           this.nopendingdata1 = true;
+          this.toastr.clear();
+          this.errormessage = 'You have no orders to accept or decline';
+          this.showNotification('top', 'center' , this.errormessage);
+          setTimeout(()=> this.toastr.clear(),3000);
         } else {
           this.nopendingdata1 = false;
         }

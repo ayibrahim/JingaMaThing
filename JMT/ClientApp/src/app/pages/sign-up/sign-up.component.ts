@@ -85,9 +85,9 @@ export class SignUpComponent implements OnInit {
       this.showNotification('top', 'center' , this.errormessage);
       return;
     }
-    if(this.CPassword.length < 8){
+    if(this.CPassword.length < 8 || this.CPassword.length > 16){
       this.toastr.clear();
-      this.errormessage = '*Password Length Must be at least 8 characters';
+      this.errormessage = '*Password Length Must be between 8 and 16 characters';
       this.showNotification('top', 'center' , this.errormessage);
       return;
     }
@@ -140,7 +140,7 @@ export class SignUpComponent implements OnInit {
             this.CPhoto = this.loginresponse[0].photo;
           this.toastr.clear();
           this.CnotD = 'customer';
-          this.router.navigate(['./dashboard'], {state: {type: this.CnotD, FirstName: this.CFirstName , LastName: this.CLastName, PhoneNumber : this.CPhoneNumber ,
+          this.router.navigate(['./customerdashboard'], {state: {type: this.CnotD, FirstName: this.CFirstName , LastName: this.CLastName, PhoneNumber : this.CPhoneNumber ,
              Email : this.CEmail, Password : this.CPassword ,CustomerID : this.CustomerID ,RoleDesc : this.CRoleDesc , Photo : this.CPhoto}});
          }, (error) => {console.log('error message ' + error)}
        )
@@ -202,7 +202,7 @@ export class SignUpComponent implements OnInit {
                       this.DPhoto = this.developerlogin[0].photo;
       this.toastr.clear();
       this.CnotD = 'developer';
-      this.router.navigate(['./dashboard'], 
+      this.router.navigate(['./devorders'], 
       {state: {type: this.CnotD, FirstName: this.DFirstName , LastName: this.DLastName, PhoneNumber : this.DPhoneNumber , Email : this.DEmail, Password : this.DPassword
       , Description : this.DDescription , PLanguages : this.DPLanguages , Skills : this.DSkills, Education : this.DEducation , Certification : this.DCertificates,
         Title : this.DTitle , DeveloperID : this.DeveloperID , RoleDesc : this.DRoleDesc , Photo : this.DPhoto }});

@@ -6,7 +6,9 @@
   <div *ngIf="isdeveloper" class="sidebar">
     <app-sidebar [devfull]="devfull"></app-sidebar>
   </div>
-        
+  <div *ngIf="isrmanager" class="sidebar">
+    <app-sidebar [rmfull]="rmfull"></app-sidebar>
+  </div>      
   <div class="main-panel">
     <app-navbar [NewUser]="newuser"></app-navbar>
     <router-outlet (activate)="onRouterOutletActivate($event)"></router-outlet>

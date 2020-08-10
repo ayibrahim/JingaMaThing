@@ -4,30 +4,13 @@ import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { HttpClient } from '@angular/common/http';
 export interface customer{
-  customerID : number;
-  email : string;
-  firstName : string;
-  lastName : string;
-  password : string;
-  phoneNumber : string;
-  roleDesc : string;
-  photo : string;
+  customerID : number;email : string;firstName : string;lastName : string;password : string;phoneNumber : string;roleDesc : string;photo : string;
+}
+export interface rmanager{
+  resourceManagerID : number;email : string;firstName : string;lastName : string;password : string;phoneNumber : string;roleDesc : string;photo : string;
 }
 export interface Developer{
-  developerID : number;
-  email : string;
-  firstName : string;
-  lastName : string;
-  password : string;
-  phoneNumber : string;
-  description : string;
-  pLanguages : string;
-  skills : string;
-  education : string;
-  certification : string;
-  title : string;
-  roleDesc : string;
-  photo : string;
+  developerID : number; email : string;firstName : string;lastName : string;password : string;phoneNumber : string;description : string;pLanguages : string;skills : string;education : string;certification : string;title : string;roleDesc : string;photo : string;
 }
 @Component({
   selector: 'app-sign-in',
@@ -37,8 +20,9 @@ export interface Developer{
 })
 export class SignInComponent implements OnInit {
   constructor(public globals: Globals , private router : Router , private toastr: ToastrService , private http : HttpClient) { }
-  Email: string; Password: string; errormessage: string; loginresponse: customer[]; developerlogin : Developer[];
+  Email: string; Password: string; errormessage: string; loginresponse: customer[]; developerlogin : Developer[]; rmlogin : rmanager[];
   CFirstName : string; CLastName : string; CEmail2 : string; CPassword2: string; CustomerID : number; CPhoneNumber : string; CRoleDesc : string; CPhoto : string;
+  RFirstName : string; RLastName : string; REmail2 : string; RPassword2: string; ResourceManagerID : number; RPhoneNumber : string; RRoleDesc : string; RPhoto : string;
   DFirstName : string; DLastName : string; DEmail2 : string; DPassword2: string; DeveloperID : number; DPhoneNumber : string;  DPhoto: string;
   DDescription: string; DPLanguages: string; DSkills: string; DEducation: string; DCertificates: string; DTitle: string; DRoleDesc : string;
   CnotD : string ; 
@@ -48,14 +32,20 @@ export class SignInComponent implements OnInit {
     //this.Email = 'ayibrahi@hotmail.com';
     //this.Password = 'testing332211'
     //Customer
-     this.Email = 'ryibrahim@something.com';
-     this.Password = 'testingtesting'
-     this.Login();
+     //this.Email = 'ryibrahim@something.com';
+     //this.Password = 'testingtesting'
+
+      // Resource Managers
+     //this.Email = 'sjeong2@testing.net';
+     //this.Password = 'testing123456';
+
+     //this.Login();
+
   }
   Login(){
     if(!this.Email || !this.Password){
       this.toastr.clear();
-      this.errormessage = '*Please Fill Out All Fields';
+      this.errormessage = '*Please Fill Email & Password';
       this.showNotification('top', 'center' , this.errormessage);
       return;
     }
@@ -78,9 +68,31 @@ export class SignInComponent implements OnInit {
                     (response2 : Developer[] ) => { 
                       this.developerlogin = response2;
                       if(this.developerlogin.length === 0){
-                        this.toastr.clear();
-                        this.errormessage = '*Email or Password Incorrect. Try again!';
-                        this.showNotification('top', 'center' , this.errormessage);
+                        console.log("test");
+                        this.http.get('https://localhost:44380/api/GetResourceManagerInfo/' + this.Email + '/' + this.Password) .subscribe(
+                          (response3 : rmanager[]) =>{
+                            this.rmlogin = response3;
+                            if(this.rmlogin.length === 0){
+                              this.toastr.clear();
+                              this.errormessage = 'Email or Password Incorrect , Try again!';
+                              this.showNotification('top', 'center' , this.errormessage);
+                              setTimeout(()=> this.toastr.clear(), 3000);
+                              return;
+                            } else {
+                              this.RFirstName = this.rmlogin[0].firstName;
+                              this.RLastName = this.rmlogin[0].lastName;
+                              this.REmail2 = this.rmlogin[0].email;
+                              this.RPassword2 = this.rmlogin[0].password;
+                              this.ResourceManagerID = this.rmlogin[0].resourceManagerID;
+                              this.RPhoneNumber = this.rmlogin[0].phoneNumber;
+                              this.RRoleDesc = this.rmlogin[0].roleDesc;
+                              this.RPhoto = this.rmlogin[0].photo
+                              this.CnotD = 'resourcemanager';
+                              this.router.navigate(['./dashboard'], {state: {type: this.CnotD, FirstName: this.RFirstName , LastName: this.RLastName, PhoneNumber : this.RPhoneNumber , Email : this.REmail2, Password : this.RPassword2 
+                                ,ResourceManagerID : this.ResourceManagerID ,RoleDesc : this.RRoleDesc , Photo : this.RPhoto}});
+                              }
+                            } , (error) => {console.log('error message ' + error)} );
+                            
                       }else{
                         this.DFirstName = this.developerlogin[0].firstName;
                         this.DLastName = this.developerlogin[0].lastName;

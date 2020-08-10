@@ -15,6 +15,9 @@ export class Dev{
   FirstName : string; LastName : string; Email : string; Password: string; DeveloperID : number; PhoneNumber : string;  RoleDesc : string; Description : string; PLanguages : string;
   Skills : string; Education : string; Certification : string; Title : string;
 }
+export class rmanager{
+  FirstName : string ; LastName : string; Email : string; Password: string; ResourceManagerID : number; PhoneNumber : string; RoleDesc : string; Photo : string;
+}
 export var ROUTES: RouteInfo[] = [
   
 ];
@@ -30,16 +33,60 @@ export class SidebarComponent implements OnInit {
   menuItems: any[];
   @Input() custfull : customer = new customer();
   @Input() devfull : Dev = new Dev();
+  @Input() rmfull : rmanager = new rmanager();
   iscustomer : boolean  = false;
   isdeveloper : boolean = false;
+  isrmanager : boolean = false;
   constructor() {}
   
   ngOnInit() {
-    if(this.custfull.FirstName == undefined){
+    if(this.custfull.FirstName != undefined){
+      this.iscustomer = true;
+    }
+    if(this.devfull.FirstName != undefined){
       this.isdeveloper = true;
     }
-    if(this.devfull.FirstName == undefined){
-      this.iscustomer = true;
+    if(this.rmfull.FirstName != undefined){
+      this.isrmanager = true;
+    }
+    if(this.isrmanager == true)
+    {
+      ROUTES = [
+        {
+          path: "/dashboard",
+          title: "Dashboard",
+          icon: "icon-cart",
+          class: ""
+        },
+        {
+          path: "/email",
+          title: "Messages",
+          icon: "icon-chat-33",
+          class: ""
+        },
+        {
+          path: "/notes",
+          title: "Notes",
+          icon: "icon-notes",
+          class: "" },
+          {
+            path: "/links",
+            title: "Links",
+            icon: "icon-world",
+            class: "" },
+        {
+          path: "/user-profile",
+          title: "Profile",
+          icon: "icon-single-02",
+          class: ""
+        },
+        {
+          path: "/tables",
+          title: "Logout",
+          icon: "icon-lock-circle",
+          class: ""
+        }
+      ];
     }
     if(this.isdeveloper == true){
       ROUTES = [
