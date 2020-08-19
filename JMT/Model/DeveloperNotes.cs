@@ -17,4 +17,16 @@ namespace JMT.Model {
 		public string DeveloperNoteID { get; set; }
 		public string NoteContent { get; set; }
 	}
+
+	public class ResourceManagerNotes {
+		public int ResourceManagerNotesID { get; set; }
+		public string Title { get; set; }
+		public string NoteContent { get; set; }
+		public string ViewType { get; set; }
+
+	}
+	public class UpdateRMNote {
+		public string ResourceManagerNotesID { get; set; }
+		public string NoteContent { get; set; }
+	}
 }

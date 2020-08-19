@@ -42,6 +42,36 @@ namespace JMT.Controllers {
 		}
 
 		[HttpGet]
+		[Route("api/GetDevRMOpenOrders/{ResourceManagerID}")]
+		public List<RMDevOpenOrder> GetDevRMOpenOrders(string ResourceManagerID = "") {
+
+			List<RMDevOpenOrder> devlist = new List<RMDevOpenOrder>();
+			using (SqlConnection con = new SqlConnection(con2)) {
+				SqlCommand cmd = new SqlCommand("GetDevRMOpenOrders", con);
+				cmd.CommandType = CommandType.StoredProcedure;
+				cmd.Parameters.AddWithValue("@ResourceManagerID", ResourceManagerID);
+				con.Open();
+				SqlDataReader rdr = cmd.ExecuteReader();
+				while (rdr.Read()) {
+					RMDevOpenOrder finalcustomer = new RMDevOpenOrder();
+					finalcustomer.OrderNumber = Convert.ToInt32(rdr["OrderNumber"]);
+					finalcustomer.CustomerID = Convert.ToInt32(rdr["CustomerID"]);
+					finalcustomer.DeveloperID = Convert.ToInt32(rdr["DeveloperID"]);
+					finalcustomer.DeveloperName = (rdr["DeveloperName"].ToString());
+					finalcustomer.CustomerName = (rdr["CustomerName"].ToString());
+					finalcustomer.Description = (rdr["Description"].ToString());
+					finalcustomer.Requirements = (rdr["Requirements"].ToString());
+					finalcustomer.CompletionDate = (rdr["CompletionDate"].ToString());
+					finalcustomer.Price = (rdr["Price"].ToString());
+					finalcustomer.Status = (rdr["Status"].ToString());
+					devlist.Add(finalcustomer);
+				}
+				con.Close();
+			}
+			return devlist;
+		}
+
+		[HttpGet]
 		[Route("api/GetCustomerOpenOrders/{CustomerID}")]
 		public List<CustOpenOrders> GetCustomerOpenOrders(string CustomerID = "") {
 

@@ -1,0 +1,286 @@
+<div class=" content">
+  <div *ngIf="isrmanager">
+  <div *ngIf="isListofDevs">
+   <!-- First Card -->
+    <div class=" card">
+      <div class=" card-header">
+        <h5 class=" title">Your Assigned Developers - Click on a Developer to view their profile</h5>
+      </div>
+      <div class="card-body">
+        <!-- No Data -->
+        <div *ngIf="nodevlist">
+          <div class=" typography-line">
+            <span> </span>
+            <p class=" text-info">
+              <strong>There are no developers for you to view.</strong>
+            </p>
+          </div>
+        </div>
+        <!-- End of No Data -->
+        <div *ngIf="nodevlist === false">
+          <p-orderList class="orderListDevProfiles" [value]="DevList" filterBy="name,email,pLanguages"
+            filterPlaceholder="Filter by Name - Email - Languages" [listStyle]="{'height':'250px'}"
+            header="Developers - Click to View" (onSelectionChange)="LoadDevProfile($event)">
+            <ng-template let-DevList pTemplate="item">
+              <div class="ui-helper-clearfix" style="display: flex;">
+                <img src={{DevList.photo}} style="margin:2px 0 2px 2px" width="140" height="140">
+                <div style="margin:2px 0px 2px 50px; display: grid;">
+                  <strong>Name: </strong> {{DevList.name}}
+                  <strong>Email: </strong> {{DevList.email}}
+                  <strong>Languages: </strong> {{DevList.pLanguages}}
+                </div>
+              </div>
+            </ng-template>
+          </p-orderList>
+        </div>
+      </div>
+    </div>
+    <br>
+    <!-- Second Card -->
+    <div class=" card">
+      <div class=" card-header">
+        <h5 class=" title">Developers - Not Assigned</h5>
+      </div>
+      <div class="card-body">
+        <!-- No Data -->
+        <div *ngIf="nodevlist2">
+          <div class=" typography-line">
+            <span> </span>
+            <p class=" text-info">
+              <strong>There are no developers not assigned to a ResourceManager.</strong>
+            </p>
+          </div>
+        </div>
+        <!-- End of No Data -->
+        <div *ngIf="nodevlist2 === false">
+          <p-orderList class="orderListDevProfiles"  [value]="DevList2" filterBy="name,email,pLanguages"
+            filterPlaceholder="Filter by Name - Email - Languages" [listStyle]="{'height':'250px'}"
+            header="Developers Information" >
+            <ng-template let-DevList2 pTemplate="item">
+              <div class="ui-helper-clearfix" style="display: flex;">
+                <img src={{DevList2.photo}} style="margin:2px 0 2px 2px" width="140" height="140">
+                <div style="margin:2px 0px 2px 50px; display: grid;">
+                  <strong>Name: </strong> {{DevList2.name}}
+                  <strong>Email: </strong> {{DevList2.email}}
+                  <strong>Languages: </strong> {{DevList2.pLanguages}}
+                   <strong style="margin-top: 0.5em; margin-bottom: 0.5em;"><button pButton type="button" label="Add To My Developers" icon="pi pi-check" 
+                  class="ui-button-success" (click)="AddToMyDevelopers(DevList2)"></button></strong>
+                </div>
+              </div>
+            </ng-template>
+          </p-orderList>
+        </div>
+      </div>
+    </div>
+
+    </div>
+    <div *ngIf="isdeveloper" class=" row">
+
+      <div class=" col-md-8">
+      <div class=" card">
+        <div class=" card-header">
+         <nav aria-label="breadcrumb" role="navigation">
+            <ol class="breadcrumb bg-transparent ml-3">
+              <li class="breadcrumb-item"><a href="JavaScript:void(0);" (click)="testing2()" style="color: #ba54f5;font-weight: 300;"><i class="tim-icons icon-double-left"></i> to Dashboard</a></li>
+              <li class="breadcrumb-item active" aria-current="page" style="color: #ba54f5;font-weight: 300;">Dev Profile View</li>
+            </ol>
+          </nav>
+          <h5 class=" title">Developer Profile</h5>
+        </div>
+        <div class=" card-body">
+          <form>
+            <div class=" row">
+              <div class=" col-md-6">
+                <div class=" form-group">
+                  <label> Company (disabled) </label>
+                  <input class=" form-control" disabled="" placeholder="Company" type="text" value="Jinga-Ma-Thing" />
+                </div>
+              </div>
+              <div class=" col-md-6">
+                <div class=" form-group">
+                  <label for="exampleInputEmail1"> Title </label><br>
+                  <p class="text-primary">{{DTitle}}</p>
+                </div>
+              </div>
+            </div>
+            <div class=" row">
+              <div class=" col-md-6">
+                <div class=" form-group">
+                  <label> FirstName </label><br>
+                  <p class="text-primary">{{DFirstName}}</p>
+                </div>
+              </div>
+              <div class=" col-md-6">
+                <div class=" form-group">
+                  <label for="exampleInputEmail1"> LastName </label><br>
+                  <p class="text-primary">{{DLastName}}</p>
+                </div>
+              </div>
+            </div>
+            <div class=" row">
+              <div class=" col-md-6">
+                <div class=" form-group">
+                  <label for="exampleInputEmail1"> Email address </label><br>
+                  <p class="text-primary">{{DEmail}}</p>
+                </div>
+              </div>
+              <div class=" col-md-6">
+                <div class=" form-group">
+                  <label for="exampleInputEmail1"> PhoneNumber </label><br>
+                  <p class="text-primary">{{DPhoneNumber}}</p>
+                </div>
+              </div>
+
+            </div>
+
+            <div class=" row">
+
+              <div class=" col-md-6">
+                <div class=" form-group">
+                  <label> Programming Languages </label><br>
+                  <p class="text-primary">{{DPLanguages}}</p>
+                </div>
+              </div>
+              <div class=" col-md-6">
+                <div class=" form-group">
+                  <label> Skills </label><br>
+                  <p class="text-primary">{{DSkills}}</p>
+                </div>
+              </div>
+              <div class=" col-md-6">
+                <div class=" form-group">
+                  <label> Education </label><br>
+                  <p class="text-primary">{{DEducation}}</p>
+                </div>
+              </div>
+              <div class=" col-md-6">
+                <div class=" form-group">
+                  <label> Certificates </label><br>
+                  <p class="text-primary">{{DCertificates}}</p>
+                </div>
+              </div>
+              <div class=" col-md-12">
+                <div class=" form-group">
+                  <label> Description </label><br>
+                  <p class="text-primary">{{DDescription}}</p>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+
+      </div>
+    </div>
+      <div class=" col-md-4">
+        <div class=" card card-user">
+          <div class=" card-body">
+            <p class=" card-text"></p>
+            <div class=" author">
+              <div class=" block block-one"></div>
+              <div class=" block block-two"></div>
+              <div class=" block block-three"></div>
+              <div class=" block block-four"></div>
+              <a href="javascript:void(0)">
+                <img alt="..." class=" avatar" src={{DPhoto}} />
+                <h5 class=" title">{{DFirstName}} {{DLastName}}</h5>
+              </a>
+              <p class=" description text-info">{{DTitle}}</p>
+              <br>
+              <div class=" card-description">
+               <p class="text-primary"> {{DDescription}}</p>
+              </div>
+              <br>
+              <div class=" card-description">
+                <hr>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class=" col-md-8">
+        <div class=" card">
+          <div class=" card-header">
+            <h5 class=" title">Projects Display</h5>
+          </div>
+          <div class=" card-body">
+            <form>
+              <p-galleria *ngIf="gallerdisplay" [(value)]="images" [showItemNavigators]="true"
+                [showItemNavigatorsOnHover]="true" [responsiveOptions]="responsiveOptions" [circular]="true"
+                [autoPlay]="true" [numVisible]="3">
+                <ng-template pTemplate="item" let-item>
+                  <img [src]="item.previewImageSrc" style="width: 100%; height: 433.77px;" />
+                </ng-template>
+                <ng-template pTemplate="thumbnail" let-item>
+                  <div class="p-grid p-nogutter p-justify-center">
+                    <img [src]="item.thumbnailImageSrc" style="width: 100%; height: 122.36px;" />
+                  </div>
+                </ng-template>
+                <ng-template pTemplate="caption" let-item>
+                  <h4 style="margin-bottom: .5rem; color: #ffffff;">{{item.title}}</h4>
+                  <p style="color: #ffffff;">{{item.alt}}</p>
+                </ng-template>
+              </p-galleria>
+              <br>
+            </form>
+          </div>
+        </div>
+      </div>
+      <br>
+      <!-- Last Card -->
+      <div class=" col-md-8">
+        <div class=" card">
+          <div class=" card-header">
+            <h5 class=" title">Order History - Customer Reviews</h5>
+          </div>
+          <div class=" card-body">
+            <!-- No Data -->
+            <div *ngIf="nodevhoh">
+              <div class=" typography-line">
+                <span> </span>
+                <p class=" text-info">
+                  <strong>Developer has no order history.</strong>
+                </p>
+              </div>
+            </div>
+            <!-- End of No Data -->
+
+            <div *ngIf="nodevhoh === false">
+              <p-table #DOHH class="tables" id="DOHHTable" [columns]="DevHOH" [value]="DevHO"
+                [(selection)]="devselectedhoh" [rows]="10" [rowsPerPageOptions]="[10,25,50]" [paginator]="true"
+                [reorderableColumns]="true">
+                <ng-template pTemplate="header" let-columns>
+                  <tr>
+                    <th *ngFor="let cols of DevHOH" style="text-transform: capitalize;" [pSortableColumn]="cols"
+                      pReorderableColumn pResizableColumn>
+                      {{cols}}
+                      <p-sortIcon [field]="cols"></p-sortIcon>
+                    </th>
+                  </tr>
+                  <tr>
+                    <th id="search" *ngFor="let cols of DevHOH" [ngSwitch]="cols">
+                      <input placeholder="Filter...." type="text" pInputText [style]="{'width':'100%'}"
+                        (input)="DOHH.filter($event.target.value, cols, 'contains', cols.filterMatchMode)"
+                        [value]="DOHH.filters[cols] ? DOHH.filters[cols].value : ''">
+                    </th>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-DevHO let-expanded="expanded" let-columns="DevHOH">
+                  <tr [pSelectableRow]="DevHO">
+                    <td *ngFor="let cols of DevHOH" style="height: 10px; max-height: 10px; overflow:hidden">
+                      <div *ngIf="cols == 'rating'">
+                        <p-rating [(ngModel)]="DevHO[cols]" disabled="disabled"></p-rating>
+                      </div>
+                      <div *ngIf="cols != 'rating'">
+                        {{DevHO[cols]}}
+                      </div>
+                    </td>
+                  </tr>
+                </ng-template>
+              </p-table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,214 @@
+<div class=" content">
+  <div *ngIf="isrmanager">
+    <!-- First Card -->
+      <div class=" card">
+        <div class=" card-header">
+          <h5 class=" title">Your Assigned Developer Orders</h5>
+        </div>
+        <div class=" card-body">
+
+          <!-- No Data -->
+          <div *ngIf="nodevorders">
+            <div class=" typography-line">
+              <span> </span>
+              <p class=" text-info">
+                <strong>You Have No Assigned Developer Orders.</strong>
+              </p>
+            </div>
+          </div>
+          <!-- End of No Data -->
+          <div *ngIf="nodevorders === false">
+            <p class=" text-info">
+              <strong>*Expand For Requirements</strong>
+            </p>
+            <br>
+            <p-table #DOR class="tables" id="DORTable" [columns]="DORHeaders" [value]="DORData" selectionMode="single"
+              [(selection)]="selecteddata1" [rows]="10" [rowsPerPageOptions]="[10,25,50]" [paginator]="true"
+              [reorderableColumns]="true" dataKey="orderNumber" (onRowSelect)="GetOrderTasks($event)">
+              <ng-template pTemplate="caption">
+                Orders - Click on order to load its tasks
+              </ng-template>
+              <ng-template pTemplate="header" let-columns>
+                <tr>
+                  <th style="width: 3em"></th>
+                  <th *ngFor="let cols of DORHeaders" style="text-transform: capitalize;" [pSortableColumn]="cols"
+                    pReorderableColumn pResizableColumn>
+                    {{cols}}
+                    <p-sortIcon [field]="cols"></p-sortIcon>
+                  </th>
+                  <th style="width: 8em">Actions</th>
+                </tr>
+                <tr>
+                  <th style="width: 3em"></th>
+                  <th id="search" *ngFor="let cols of DORHeaders" [ngSwitch]="cols">
+                    <input placeholder="Filter...." type="text" pInputText [style]="{'width':'100%'}"
+                      (input)="DOR.filter($event.target.value, cols, 'contains', cols.filterMatchMode)"
+                      [value]="DOR.filters[cols] ? DOR.filters[cols].value : ''">
+                  </th>
+                  <th style="width: 8em">No Filter</th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-DORData let-expanded="expanded" let-columns="DORHeaders">
+                <tr [pSelectableRow]="DORData">
+                  <td>
+                    <a href="#" [pRowToggler]="DORData">
+                      <i [ngClass]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></i>
+                    </a>
+                  </td>
+                  <td *ngFor="let cols of DORHeaders" style="height: 10px; max-height: 10px; overflow:hidden">
+                    <div *ngIf="cols == 'price'">
+                      ${{DORData[cols]}}
+                    </div>
+                    <div *ngIf="cols != 'price'">
+                      {{DORData[cols]}}
+                    </div>
+                  </td>
+                  <td>
+                    <button pButton type="button" icon="pi pi-pencil" class="ui-button-warning" label="Edit"
+                      (click)="EditOrder(DORData)"></button>
+                  </td>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="rowexpansion" let-DORData let-columns="columns">
+                <tr>
+                  <td [attr.colspan]="columns.length + 2">
+                    <div class="p-grid -fluid" style="font-size:16px;padding:20px">
+                      <div class="p-col-12 p-md-9">
+                        <div class="p-grid">
+                          <div class="p-col-12">
+                            <b>{{DORData.requirements}}</b>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+            <br>
+            <div *ngIf="neworderdialog">
+              <form>
+                <div class=" row">
+                  <div class=" col-md-6">
+                    <div class=" form-group">
+                      <label> OrderID </label><br>
+                      <input style="width : 300px;" class=" form-control" disabled="" type="text" placeholder="OrderID"
+                        [(ngModel)]="OrderIDSelected" name="OrderIDSelected" autocomplete="doNotAutoComplete">
+                    </div>
+                  </div>
+                </div>
+                <br>
+                <div class=" row">
+                  <div class=" col-md-6">
+                    <div class=" form-group">
+                      <label for="exampleInputTitle1"> New Price* </label><br>
+                       <p-inputNumber  id="BudgetInput"  [(ngModel)]="NPrice" name="NPrice" placeholder="$0.00" mode="currency" currency="USD" locale="en-US">
+                        </p-inputNumber>
+                    </div>
+                  </div>
+                </div>
+                <br>
+                <div class=" row">
+                  <div class=" col-md-12">
+                    <div class=" form-group">
+                      <label> New CompletionDate* </label><br>
+                      <p-calendar id="CalenderInput" (onSelect)="onDate()" [(ngModel)]="NDateBy" name="NDateBy"  placeholder="Choose a Date" [showIcon]="true" showButtonBar="true" dateFormat="yy-mm-dd"></p-calendar>
+                      
+                    </div>
+                  </div>
+                </div>
+                <br>
+                <div class=" row">
+                  <div class=" col-md-12">
+                    <div class=" form-group">
+                      <label> New Requirements* </label>
+                      <textarea class=" form-control" cols="80" placeholder="Here can your requirements"
+                        [(ngModel)]="NRequirements" name="NRequirements"></textarea>
+                    </div>
+                  </div>
+                </div>
+
+              </form>
+              <br>
+              <button class="btn btn-success animation-on-hover btn-round" style="margin-right: 1em;" (click)="UpdateOrder()">Submit</button>
+              <button class="btn btn-danger  animation-on-hover btn-round" (click)="HideEditDialog()">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+
+  <!-- Second Card -->
+    <div class=" card" *ngIf="OrderSelectedLoadTask">
+      <div class=" card-header">
+        <h5 class=" title">Tasks</h5>
+      </div>
+      <div class=" card-body">
+        <!-- No Data -->
+        <div *ngIf="notasks">
+          <div class=" typography-line">
+            <span> </span>
+            <p class=" text-info">
+              <strong>There are no Tasks for Selected Order.</strong>
+            </p>
+          </div>
+        </div>
+        <!-- End of No Data -->
+        <div *ngIf="notasks === false;">
+        <p class=" text-info">
+            <strong>*Expand For Task Notes</strong>
+          </p>
+          <br>
+          <p-table #COTS class="tables" id="COTSTable" [columns]="TasksHeaders" [value]="TasksData"
+            [(selection)]="selecteddata2" [rows]="10" [rowsPerPageOptions]="[10,25,50]" [paginator]="true" editMode="row"
+            [reorderableColumns]="true" dataKey="developerTaskID">
+            <ng-template pTemplate="header" let-columns>
+              <tr>
+              <th style="width: 3em"></th>
+                <th *ngFor="let cols of TasksHeaders" style="text-transform: capitalize;" [pSortableColumn]="cols"
+                  pReorderableColumn pResizableColumn>
+                  {{cols}}
+                  <p-sortIcon [field]="cols"></p-sortIcon>
+                </th>
+              </tr>
+              <tr>
+              <th style="width: 3em"></th>
+                <th id="search" *ngFor="let cols of TasksHeaders" [ngSwitch]="cols">
+                  <input placeholder="Filter...." type="text" pInputText [style]="{'width':'100%'}"
+                    (input)="COTS.filter($event.target.value, cols, 'contains', cols.filterMatchMode)"
+                    [value]="COTS.filters[cols] ? COTS.filters[cols].value : ''">
+                </th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-TasksData let-expanded="expanded" let-columns="TasksHeaders">
+              <tr [pSelectableRow]="TasksData">
+                <td>
+                  <a href="#" [pRowToggler]="TasksData">
+                    <i [ngClass]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></i>
+                  </a>
+                </td>
+                <td *ngFor="let cols of TasksHeaders" style="height: 10px; max-height: 10px; overflow:hidden">
+                  {{TasksData[cols]}}
+                </td>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="rowexpansion" let-TasksData let-columns="columns">
+              <tr>
+                <td [attr.colspan]="columns.length + 1">
+                  <div class="p-grid -fluid" style="font-size:16px;padding:20px">
+                    <div class="p-col-12 p-md-9">
+                      <div class="p-grid">
+                        <div class="p-col-12">
+                          <b>{{TasksData.notes}}</b>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+    </div>
+  </div>
+</div>

@@ -23,7 +23,7 @@ export class HomeComponent implements OnInit {
   constructor(private router: Router , private http : HttpClient) { }
 
   ngOnInit() {
-    //this.onSignIn();
+    this.onSignIn();
   }
   onSignIn(){
     this.isnotLoggedIn = false;

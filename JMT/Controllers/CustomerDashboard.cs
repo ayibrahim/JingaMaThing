@@ -44,6 +44,77 @@ namespace JMT.Controllers {
 		}
 
 		[HttpGet]
+		[Route("api/GetDevListRMDevelopers/{ResourceManagerID}")]
+		public List<DevListCustDashboard> GetDevListRMDevelopers(string ResourceManagerID = "") {
+
+			List<DevListCustDashboard> customer = new List<DevListCustDashboard>();
+			using (SqlConnection con = new SqlConnection(con2)) {
+				SqlCommand cmd = new SqlCommand("GetDevList_RMDevelopers", con);
+				cmd.CommandType = CommandType.StoredProcedure;
+				cmd.Parameters.AddWithValue("@ResourceManagerID", ResourceManagerID);
+				con.Open();
+				SqlDataReader rdr = cmd.ExecuteReader();
+				while (rdr.Read()) {
+					DevListCustDashboard finalcustomer = new DevListCustDashboard();
+					finalcustomer.DeveloperID = (Convert.ToInt32(rdr["DeveloperID"]));
+					finalcustomer.Name = (rdr["Name"].ToString());
+					finalcustomer.Email = (rdr["Email"].ToString());
+					finalcustomer.Photo = (rdr["Photo"].ToString());
+					finalcustomer.PLanguages = (rdr["PLanguages"].ToString());
+					customer.Add(finalcustomer);
+				}
+				con.Close();
+			}
+			return customer;
+		}
+
+		[HttpGet]
+		[Route("api/GetDevNotAssignedToRM/{ResourceManagerID}")]
+		public List<DevNotAssignedToRM> GetDevNotAssignedToRM(string ResourceManagerID = "") {
+
+			List<DevNotAssignedToRM> customer = new List<DevNotAssignedToRM>();
+			using (SqlConnection con = new SqlConnection(con2)) {
+				SqlCommand cmd = new SqlCommand("GetDevNotAssignedToRM", con);
+				cmd.CommandType = CommandType.StoredProcedure;
+				cmd.Parameters.AddWithValue("@ResourceManagerID", ResourceManagerID);
+				con.Open();
+				SqlDataReader rdr = cmd.ExecuteReader();
+				while (rdr.Read()) {
+					DevNotAssignedToRM finalcustomer = new DevNotAssignedToRM();
+					finalcustomer.Email = (rdr["Email"].ToString());
+					finalcustomer.DeveloperID =  Convert.ToInt32(rdr["DeveloperID"]);
+					finalcustomer.Name = (rdr["Name"].ToString());
+					finalcustomer.Photo = (rdr["Photo"].ToString());
+					finalcustomer.PLanguages = (rdr["PLanguages"].ToString());
+					customer.Add(finalcustomer);
+				}
+				con.Close();
+			}
+			return customer;
+		}
+
+		[HttpGet]
+		[Route("api/AssignDevToRM/{ResourceManagerID}/{DeveloperID}")]
+		public List<Response> AssignDevToRM(string ResourceManagerID = "" , string DeveloperID = "") {
+			Response finalresult = new Response();
+			List<Response> Customer = new List<Response>();
+			string result = "Successful ";
+			//SqlConnection con = new SqlConnection("Data Source=NiluNilesh;Integrated Security=True");  
+			SqlConnection con = new SqlConnection(con2);
+			SqlCommand cmd = new SqlCommand("AssignDevToRM", con);
+			cmd.CommandType = CommandType.StoredProcedure;
+			cmd.Parameters.AddWithValue("@ResourceManagerID", ResourceManagerID);
+			cmd.Parameters.AddWithValue("@DeveloperID", DeveloperID);
+
+			con.Open();
+			int i = cmd.ExecuteNonQuery();
+			con.Close();
+			finalresult.response = result.ToString();
+			Customer.Add(finalresult);
+			return Customer;
+		}
+
+		[HttpGet]
 		[Route("api/DevHistoryCustomerReview/{DeveloperID}")]
 		public List<DevHistoryCustomerReview> DevHistoryCustomerReview(string DeveloperID = "") {
 

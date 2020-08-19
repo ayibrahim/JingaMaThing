@@ -18,6 +18,15 @@ namespace JMT.Model {
 		public string DCertificates { get; set; }
 		public string DTitle { get; set; }
 	}
+	public class InsertNewOrder {
+		public string CustomerID { get; set; }
+		public string DevEmail { get; set; }
+		public string OrderDesc { get; set; }
+		public string OrderRequirments { get; set; }
+		public string Budget { get; set; }
+		public string DateBy { get; set; }
+		
+	}
 	public class DevUpdate {
 		public string DeveloperID { get; set; }
 		public string FirstName { get; set; }
@@ -30,6 +39,24 @@ namespace JMT.Model {
 		public string Education { get; set; }
 		public string Certificates { get; set; }
 		public string Description { get; set; }
+
+	}
+
+	public class CustInsert {
+		public string FirstName { get; set; }
+		public string LastName { get; set; }
+		public string PhoneNumber { get; set; }
+		public string Email { get; set; }
+		public string Password { get; set; }
+		
+	}
+
+	public class SendMessage {
+		public string RoleDesc { get; set; }
+		public string Email { get; set; }
+		public string Title { get; set; }
+		public string Description { get; set; }
+		public string EmailTo { get; set; }
 
 	}
 }

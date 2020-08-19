@@ -240,6 +240,7 @@ export class DevordersComponent implements OnInit {
     setTimeout(()=>{  
       this.toastr.clear();
     }, 3000);
+    this.OrderSelectedLoadTask = false;
   }
   onRowEditInit(task: TaskTable) {
     
@@ -349,7 +350,7 @@ export class DevordersComponent implements OnInit {
         console.log('error message ' + error)}
       )
       this.displayEditDialog = false;
-  
+  setTimeout(()=> this.GetDevPendingCustomerOrders(),2000) ;
  }
  ShowEditDialog(ID : any){
    this.displayBasic = false;

@@ -53,9 +53,15 @@ export class SidebarComponent implements OnInit {
     {
       ROUTES = [
         {
-          path: "/dashboard",
-          title: "Dashboard",
+          path: "/rmorders",
+          title: "Orders",
           icon: "icon-cart",
+          class: ""
+        },
+        {
+          path: "/rmdevelopers",
+          title: "Developers",
+          icon: "icon-badge",
           class: ""
         },
         {
@@ -81,7 +87,7 @@ export class SidebarComponent implements OnInit {
           class: ""
         },
         {
-          path: "/tables",
+          path: "/home",
           title: "Logout",
           icon: "icon-lock-circle",
           class: ""
@@ -120,7 +126,7 @@ export class SidebarComponent implements OnInit {
           class: ""
         },
         {
-          path: "/tables",
+          path: "/home",
           title: "Logout",
           icon: "icon-lock-circle",
           class: ""
@@ -160,7 +166,7 @@ export class SidebarComponent implements OnInit {
         class: ""
       },
       {
-        path: "/tables",
+        path: "/home",
         title: "Logout",
         icon: "icon-lock-circle",
         class: ""

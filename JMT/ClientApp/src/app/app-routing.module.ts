@@ -8,9 +8,13 @@ import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component
 import { HomeComponent } from './pages/home/home.component';
 import { SignInComponent } from './pages/sign-in/sign-in.component';
 import { SignUpComponent } from './pages/sign-up/sign-up.component';
+import { NotFoundComponent } from './pages/not-found/not-found.component';
+import { AccessDeniedComponent } from './pages/access-denied/access-denied.component';
 
 const routes: Routes = [
   { path: "home" , component : HomeComponent },
+  { path: "not-found" , component : NotFoundComponent },
+  { path: "access-denied" , component : AccessDeniedComponent },
   {
     path: "",
     redirectTo: "home",
@@ -39,7 +43,7 @@ const routes: Routes = [
   // },
   {
     path: "**",
-    redirectTo: "home"
+    redirectTo: "not-found"
   }
 ];
 

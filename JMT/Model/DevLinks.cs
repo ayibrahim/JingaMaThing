@@ -12,6 +12,15 @@ namespace JMT.Model {
 		public string ViewType { get; set; }
 
 	}
+
+	public class RMLinks {
+		public string ResourceManagerLinkID { get; set; }
+		public string Title { get; set; }
+		public string HyperLink { get; set; }
+		public string ViewType { get; set; }
+
+	}
+
 	public class DevLinksData {
 		public int DeveloperLinkID { get; set; }
 		public string Title { get; set; }
@@ -33,5 +42,21 @@ namespace JMT.Model {
 		public string LinkType { get; set; }
 
 	}
-	
+
+	public class CreateRMLink {
+		public string ResourceManagerID { get; set; }
+		public string LinkTitle { get; set; }
+		public string LinkURL { get; set; }
+		public string LinkType { get; set; }
+
+	}
+
+	public class RMLinkData {
+		public int ResourceManagerLinkID { get; set; }
+		public string Title { get; set; }
+		public string HyperLink { get; set; }
+		public string ViewType { get; set; }
+
+	}
+
 }

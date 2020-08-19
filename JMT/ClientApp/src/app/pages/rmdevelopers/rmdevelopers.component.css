@@ -1,12 +1,11 @@
-::ng-deep body .devlistprofiles .ui-orderlist .ui-orderlist-controls {
-    
+::ng-deep body .orderListDevProfiles .ui-orderlist .ui-orderlist-controls {
     display: none;
 }
-::ng-deep body .devlistprofiles .ui-orderlist-list-container {
+::ng-deep body .orderListDevProfiles .ui-orderlist-list-container {
     width: 100%;
     min-height: 700px;
 }
-::ng-deep body .devlistprofiles .ui-orderlist-list{
+::ng-deep body .orderListDevProfiles .ui-orderlist-list{
     min-height: 700px !important;
 }
 

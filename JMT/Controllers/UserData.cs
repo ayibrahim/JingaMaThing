@@ -43,35 +43,31 @@ namespace JMT.Controllers
             return user;
         }
 
-        [HttpGet]
-        [Route("api/InserNewCustomer/{FirstName}/{LastName}/{PhoneNumber}/{Email}/{Password}")]
-        public List<Response> InsertCustomer( string FirstName = "" , string LastName = "" , string PhoneNumber = "" , string Email = "" , string Password = "")
-        {
-            Response finalresult = new Response();
-            List<Response> Customer = new List<Response>();
-            string result = "Successful ";
-            //SqlConnection con = new SqlConnection("Data Source=NiluNilesh;Integrated Security=True");  
-            SqlConnection con = new SqlConnection(con2);
-            SqlCommand cmd = new SqlCommand("InsertNewCustomer", con);
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.AddWithValue("@FirstName", FirstName);
-            cmd.Parameters.AddWithValue("@LastName", LastName);
-            cmd.Parameters.AddWithValue("@PhoneNumber", PhoneNumber);
-            cmd.Parameters.AddWithValue("@Email", Email);
-            cmd.Parameters.AddWithValue("@Password", Password);
-            con.Open();
-            int i = cmd.ExecuteNonQuery();
 
-            con.Close();
-            finalresult.response = result.ToString();
-            Customer.Add(finalresult);
-            return Customer;
-        }
-
-       
+		[HttpPost]
+		[Route("api/InserNewCustomer")]
+		public List<Response> InsertDeveloper([FromBody]CustInsert data) {
+			Response finalresult = new Response();
+			List<Response> Customer = new List<Response>();
+			string result = "Successful ";
+			SqlConnection con = new SqlConnection(con2);
+			SqlCommand cmd = new SqlCommand("InsertNewCustomer", con);
+			cmd.CommandType = CommandType.StoredProcedure;
+			cmd.Parameters.AddWithValue("@FirstName", data.FirstName);
+			cmd.Parameters.AddWithValue("@LastName", data.LastName);
+			cmd.Parameters.AddWithValue("@PhoneNumber", data.PhoneNumber);
+			cmd.Parameters.AddWithValue("@Email", data.Email);
+			cmd.Parameters.AddWithValue("@Password", data.Password);
+			con.Open();
+			int i = cmd.ExecuteNonQuery();
+			con.Close();
+			finalresult.response = result.ToString();
+			Customer.Add(finalresult);
+			return Customer;
+		}
 
 
-        [HttpGet]
+		[HttpGet]
         [Route("api/getCustomerInfo/{Email}/{Password}")]
         public List<CustomerInfo> GetCustomerInfo( string Email = "" , string Password = "")
         {
@@ -95,7 +91,9 @@ namespace JMT.Controllers
                     finalcustomer.Password = (rdr["Password"].ToString());
                     finalcustomer.RoleDesc = (rdr["RoleDesc"].ToString());
                     finalcustomer.Photo = (rdr["Photo"].ToString());
-                    customer.Add(finalcustomer);
+					finalcustomer.SideBarColor = (rdr["SideBarColor"].ToString());
+					finalcustomer.DashboardColor = (rdr["DashboardColor"].ToString());
+					customer.Add(finalcustomer);
                 }
 				con.Close();
 			}
@@ -123,6 +121,8 @@ namespace JMT.Controllers
 					finalcustomer.Password = (rdr["Password"].ToString());
 					finalcustomer.RoleDesc = (rdr["RoleDesc"].ToString());
 					finalcustomer.Photo = (rdr["Photo"].ToString());
+					finalcustomer.SideBarColor = (rdr["SideBarColor"].ToString());
+					finalcustomer.DashboardColor = (rdr["DashboardColor"].ToString());
 					customer.Add(finalcustomer);
 				}
 				con.Close();
@@ -186,7 +186,9 @@ namespace JMT.Controllers
                     finalcustomer.Title = (rdr["Title"].ToString());
                     finalcustomer.RoleDesc = (rdr["RoleDesc"].ToString());
                     finalcustomer.Photo = (rdr["Photo"].ToString());
-                    customer.Add(finalcustomer);
+					finalcustomer.SideBarColor = (rdr["SideBarColor"].ToString());
+					finalcustomer.DashboardColor = (rdr["DashboardColor"].ToString());
+					customer.Add(finalcustomer);
                 }
 				con.Close();
 			}
@@ -259,10 +261,12 @@ namespace JMT.Controllers
 
         [HttpGet]
         [Route("api/UpdateCustomerInfo/{CustomerID}/{FirstName}/{LastName}/{PhoneNumber}/{Email}")]
-        public string UpdateCustomerInfo(string CustomerID = "" , string FirstName = "" , string LastName = "" , string PhoneNumber = "" , string Email = "")
+        public List<Response> UpdateCustomerInfo(string CustomerID = "" , string FirstName = "" , string LastName = "" , string PhoneNumber = "" , string Email = "")
         {
-            string response = "positive";
-            using (SqlConnection con = new SqlConnection(con2))
+			Response finalresult = new Response();
+			List<Response> Customer = new List<Response>();
+			string result = "Successful ";
+			using (SqlConnection con = new SqlConnection(con2))
             {
                 SqlCommand cmd = new SqlCommand("UpdateCustomerInfo", con);
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -276,13 +280,17 @@ namespace JMT.Controllers
 
 				con.Close();
 			}
-            return response;
-        }
+			finalresult.response = result.ToString();
+			Customer.Add(finalresult);
+			return Customer;
+		}
 
 		[HttpGet]
 		[Route("api/UpdateRMInfo/{ResourceManagerID}/{FirstName}/{LastName}/{PhoneNumber}/{Email}")]
-		public string UpdateRMInfo(string ResourceManagerID = "", string FirstName = "", string LastName = "", string PhoneNumber = "", string Email = "") {
-			string response = "positive";
+		public List<Response> UpdateRMInfo(string ResourceManagerID = "", string FirstName = "", string LastName = "", string PhoneNumber = "", string Email = "") {
+			Response finalresult = new Response();
+			List<Response> Customer = new List<Response>();
+			string result = "Successful ";
 			using (SqlConnection con = new SqlConnection(con2)) {
 				SqlCommand cmd = new SqlCommand("UpdateRMInfo", con);
 				cmd.CommandType = CommandType.StoredProcedure;
@@ -296,15 +304,19 @@ namespace JMT.Controllers
 
 				con.Close();
 			}
-			return response;
+			finalresult.response = result.ToString();
+			Customer.Add(finalresult);
+			return Customer;
 		}
 
 		[HttpPost]
         [Route("api/UpdateDeveloperInfo")]
-        public string UpdateDevInfo([FromBody]DevUpdate data)
+        public List<Response> UpdateDevInfo([FromBody]DevUpdate data)
         {
-            string response = "positive";
-            using (SqlConnection con = new SqlConnection(con2))
+			Response finalresult = new Response();
+			List<Response> Customer = new List<Response>();
+			string result = "Successful ";
+			using (SqlConnection con = new SqlConnection(con2))
             {
                 SqlCommand cmd = new SqlCommand("UpdateDeveloperInfo", con);
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -325,8 +337,10 @@ namespace JMT.Controllers
 
 				con.Close();
 			}
-            return response;
-        }
+			finalresult.response = result.ToString();
+			Customer.Add(finalresult);
+			return Customer;
+		}
 
         [HttpGet]
         [Route("api/getDevGalleryInfo/{DeveloperID}")]
@@ -382,10 +396,12 @@ namespace JMT.Controllers
         }
         [HttpGet]
         [Route("api/UpdateDevGallery/{DeveloperProjectID}/{Description}/{Title}")]
-        public string UpdateDevGallery(string DeveloperProjectID = "", string Description = "", string Title = "")
+        public List<Response> UpdateDevGallery(string DeveloperProjectID = "", string Description = "", string Title = "")
         {
-            string response = "positive";
-            using (SqlConnection con = new SqlConnection(con2))
+			Response finalresult = new Response();
+			List<Response> Customer = new List<Response>();
+			string result = "Successful ";
+			using (SqlConnection con = new SqlConnection(con2))
             {
                 SqlCommand cmd = new SqlCommand("UpdateDevGalleryPhoto", con);
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -396,15 +412,19 @@ namespace JMT.Controllers
                 cmd.ExecuteNonQuery();
 				con.Close();
 			}
-            return response;
-        }
+			finalresult.response = result.ToString();
+			Customer.Add(finalresult);
+			return Customer;
+		}
 
         [HttpGet]
         [Route("api/DeleteDevGallery/{DeveloperProjectID}")]
-        public string DeleteDevGallery(string DeveloperProjectID = "")
+        public List<Response> DeleteDevGallery(string DeveloperProjectID = "")
         {
-            string response = "positive";
-            using (SqlConnection con = new SqlConnection(con2))
+			Response finalresult = new Response();
+			List<Response> Customer = new List<Response>();
+			string result = "Successful ";
+			using (SqlConnection con = new SqlConnection(con2))
             {
                 SqlCommand cmd = new SqlCommand("DeleteDevGalleryPhoto", con);
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -414,8 +434,10 @@ namespace JMT.Controllers
                 cmd.ExecuteNonQuery();
 				con.Close();
 			}
-            return response;
-        }
+			finalresult.response = result.ToString();
+			Customer.Add(finalresult);
+			return Customer;
+		}
 
 		[HttpGet]
 		[Route("api/CheckUserEmail/{Email}")]
@@ -443,7 +465,50 @@ namespace JMT.Controllers
 			}
 			return Customer;
 		}
-		
+
+		[HttpGet]
+		[Route("api/UpdateUserSideBarColor/{UserID}/{UserRoleDesc}/{SideBarColor}")]
+		public List<Response> UpdateUserSideBarColor(string UserID = "", string UserRoleDesc = "", string SideBarColor = "") {
+			Response finalresult = new Response();
+			List<Response> Customer = new List<Response>();
+			string result = "Successful ";
+			using (SqlConnection con = new SqlConnection(con2)) {
+				SqlCommand cmd = new SqlCommand("UpdateUserSideBarColor", con);
+				cmd.CommandType = CommandType.StoredProcedure;
+				cmd.Parameters.AddWithValue("@UserID", UserID);
+				cmd.Parameters.AddWithValue("@UserRoleDesc", UserRoleDesc);
+				cmd.Parameters.AddWithValue("@SideBarColor", SideBarColor);
+				con.Open();
+				cmd.ExecuteNonQuery();
+
+				con.Close();
+			}
+			finalresult.response = result.ToString();
+			Customer.Add(finalresult);
+			return Customer;
+		}
+
+		[HttpGet]
+		[Route("api/UpdateUserDashboardColor/{UserID}/{UserRoleDesc}/{DashboardColor}")]
+		public List<Response> UpdateUserDashboardColor(string UserID = "", string UserRoleDesc = "", string DashboardColor = "") {
+			Response finalresult = new Response();
+			List<Response> Customer = new List<Response>();
+			string result = "Successful ";
+			using (SqlConnection con = new SqlConnection(con2)) {
+				SqlCommand cmd = new SqlCommand("UpdateUserDashboardColor", con);
+				cmd.CommandType = CommandType.StoredProcedure;
+				cmd.Parameters.AddWithValue("@UserID", UserID);
+				cmd.Parameters.AddWithValue("@UserRoleDesc", UserRoleDesc);
+				cmd.Parameters.AddWithValue("@DashboardColor", DashboardColor);
+				con.Open();
+				cmd.ExecuteNonQuery();
+
+				con.Close();
+			}
+			finalresult.response = result.ToString();
+			Customer.Add(finalresult);
+			return Customer;
+		}
 	}
    
 }

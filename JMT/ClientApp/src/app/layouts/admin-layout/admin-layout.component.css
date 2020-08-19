@@ -21,7 +21,9 @@
     left: 39%;
 }
 
-  
+::ng-deep body .sidebar .sidebar-wrapper {
+    overflow: inherit !important;
+}
   
   
  

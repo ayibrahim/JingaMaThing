@@ -61,6 +61,29 @@ namespace JMT.Controllers {
 			return Order;
 		}
 
+		[HttpPost]
+		[Route("api/InsertNewOrder")]
+		public List<Response> InsertNewOrder([FromBody]InsertNewOrder data) {
+			Response finalresult = new Response();
+			List<Response> Customer = new List<Response>();
+			string result = "Successful ";
+			//SqlConnection con = new SqlConnection("Data Source=NiluNilesh;Integrated Security=True");  
+			SqlConnection con = new SqlConnection(con2);
+			SqlCommand cmd = new SqlCommand("InsertNewOrder", con);
+			cmd.CommandType = CommandType.StoredProcedure;
+			cmd.Parameters.AddWithValue("@CustomerID", data.CustomerID);
+			cmd.Parameters.AddWithValue("@DevEmail", data.DevEmail);
+			cmd.Parameters.AddWithValue("@OrderDesc", data.OrderDesc);
+			cmd.Parameters.AddWithValue("@OrderRequirments", data.OrderRequirments);
+			cmd.Parameters.AddWithValue("@Budget", data.Budget);
+			cmd.Parameters.AddWithValue("@DateBy", data.DateBy);
+			con.Open();
+			int i = cmd.ExecuteNonQuery();
+			con.Close();
+			finalresult.response = result.ToString();
+			Customer.Add(finalresult);
+			return Customer;
+		}
 
 		[HttpGet]
 		[Route("api/GetDevPendingOrders/{DeveloperID}")]

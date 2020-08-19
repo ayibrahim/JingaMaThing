@@ -6,7 +6,7 @@
 
   <div *ngIf="isOpenOrder">
   <!-- First Card -->
-      <div class=" card" style="height: 750px">
+      <div class=" card" >
         <div class=" card-header">
           <h5 class=" title">Orders Developed - Pending your Completion and Review. </h5>
         </div>
@@ -41,7 +41,7 @@
                 <p-rating [(ngModel)]="item.myrating"></p-rating>
                 </div>
                 <br>
-                <p-footer>
+                <p-footer style="margin-top: 3.5em;">
                   <button pButton type="button" label="Mark Complete" icon="pi pi-check" style="margin-right: 0.5em" class="ui-button-success"
                    (click)="CustomerMarkDevelopedOrder(item.myreview , item.myrating , item.orderNumber)"></button>
                 </p-footer>

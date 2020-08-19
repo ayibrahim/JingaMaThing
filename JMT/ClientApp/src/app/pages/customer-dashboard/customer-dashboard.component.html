@@ -1,7 +1,7 @@
 <div class="content">
   <div *ngIf="isListofDevs">
     <div class=" col-md-12">
-      <div class=" card" style="height: 900px">
+      <div class=" card" >
         <div class=" card-header">
           <h5 class=" title">Our Developers - Click on a Developer to view their profile</h5>
         </div>
@@ -17,7 +17,7 @@
           </div>
           <!-- End of No Data -->
           <div *ngIf="nodevlist === false">
-            <p-orderList [value]="DevList" filterBy="name,email,pLanguages"
+            <p-orderList class="devlistprofiles" [value]="DevList" filterBy="name,email,pLanguages"
               filterPlaceholder="Filter by Name - Email - Languages" [listStyle]="{'height':'250px'}"
               header="Developers - Click to View" (onSelectionChange)="LoadDevProfile($event)">
               <ng-template let-DevList pTemplate="item">
@@ -42,9 +42,9 @@
       <div class=" card">
         <div class=" card-header">
           <nav aria-label="breadcrumb" role="navigation">
-            <ol class="breadcrumb">
+            <ol class="breadcrumb bg-transparent ml-3">
               <li class="breadcrumb-item"><a [routerLink]="" (click)="testing2()" style="color: #ba54f5;font-weight: 300;"><i class="tim-icons icon-double-left"></i> to Dashboard</a></li>
-              <li class="breadcrumb-item active" aria-current="page">Dev Profile View</li>
+              <li class="breadcrumb-item active" aria-current="page" style="color: #ba54f5;font-weight: 300;">Dev Profile View</li>
             </ol>
           </nav>
           <h5 class=" title">Developer Profile</h5>
@@ -60,41 +60,36 @@
               </div>
               <div class=" col-md-6">
                 <div class=" form-group">
-                  <label for="exampleInputEmail1"> Title </label>
-                  <input class=" form-control" disabled="" type="text" placeholder="Title" [(ngModel)]="DTitle"
-                    name="DTitle" autocomplete="doNotAutoComplete">
+                  <label for="exampleInputEmail1"> Title </label><br>
+                  <p class="text-primary">{{DTitle}}</p>
                 </div>
               </div>
             </div>
             <div class=" row">
               <div class=" col-md-6">
                 <div class=" form-group">
-                  <label> FirstName </label>
-                  <input class=" form-control" disabled="" type="text" placeholder="FirstName" [(ngModel)]="DFirstName"
-                    name="DFirstName" autocomplete="doNotAutoComplete">
+                  <label> FirstName </label><br>
+                  <p class="text-primary">{{DFirstName}}</p>
                 </div>
               </div>
               <div class=" col-md-6">
                 <div class=" form-group">
-                  <label for="exampleInputEmail1"> LastName </label>
-                  <input class=" form-control" disabled="" type="text" placeholder="LastName" [(ngModel)]="DLastName"
-                    name="DLastName" autocomplete="doNotAutoComplete">
+                  <label for="exampleInputEmail1"> LastName </label><br>
+                  <p class="text-primary">{{DLastName}}</p>
                 </div>
               </div>
             </div>
             <div class=" row">
               <div class=" col-md-6">
                 <div class=" form-group">
-                  <label for="exampleInputEmail1"> Email address </label>
-                  <input class=" form-control" disabled="" type="text" placeholder="Email" [(ngModel)]="DEmail"
-                    name="DEmail" autocomplete="doNotAutoComplete">
+                  <label for="exampleInputEmail1"> Email address </label><br>
+                  <p class="text-primary">{{DEmail}}</p>
                 </div>
               </div>
               <div class=" col-md-6">
                 <div class=" form-group">
-                  <label for="exampleInputEmail1"> PhoneNumber </label>
-                  <input class=" form-control" disabled="" type="text" placeholder="PhoneNumber"
-                    [(ngModel)]="DPhoneNumber" name="DPhoneNumber" autocomplete="doNotAutoComplete">
+                  <label for="exampleInputEmail1"> PhoneNumber </label><br>
+                  <p class="text-primary">{{DPhoneNumber}}</p>
                 </div>
               </div>
 
@@ -104,38 +99,32 @@
 
               <div class=" col-md-6">
                 <div class=" form-group">
-                  <label> Programming Languages </label>
-                  <textarea class=" form-control" disabled="" cols="80"
-                    placeholder="Here can be your Programming Languages" [(ngModel)]="DPLanguages"
-                    name="DPLanguages"></textarea>
+                  <label> Programming Languages </label><br>
+                  <p class="text-primary">{{DPLanguages}}</p>
                 </div>
               </div>
               <div class=" col-md-6">
                 <div class=" form-group">
-                  <label> Skills </label>
-                  <textarea class=" form-control" disabled="" cols="80" placeholder="Here can be your Skills"
-                    [(ngModel)]="DSkills" name="DSkills"></textarea>
+                  <label> Skills </label><br>
+                  <p class="text-primary">{{DSkills}}</p>
                 </div>
               </div>
               <div class=" col-md-6">
                 <div class=" form-group">
-                  <label> Education </label>
-                  <textarea class=" form-control" disabled="" cols="80" placeholder="Here can be your Education"
-                    [(ngModel)]="DEducation" name="DEducation"></textarea>
+                  <label> Education </label><br>
+                  <p class="text-primary">{{DEducation}}</p>
                 </div>
               </div>
               <div class=" col-md-6">
                 <div class=" form-group">
-                  <label> Certificates </label>
-                  <textarea class=" form-control" disabled="" cols="80" placeholder="Here can be your Certificates"
-                    [(ngModel)]="DCertificates" name="DCertificates"></textarea>
+                  <label> Certificates </label><br>
+                  <p class="text-primary">{{DCertificates}}</p>
                 </div>
               </div>
               <div class=" col-md-12">
                 <div class=" form-group">
-                  <label> Description </label>
-                  <textarea class=" form-control" disabled="" cols="80" placeholder="Here can be your description"
-                    [(ngModel)]="DDescription" name="DDescription"></textarea>
+                  <label> Description </label><br>
+                  <p class="text-primary">{{DDescription}}</p>
                 </div>
               </div>
             </div>
@@ -157,10 +146,10 @@
               <img alt="..." class=" avatar" src={{DPhoto}} />
               <h5 class=" title">{{DFirstName}} {{DLastName}}</h5>
             </a>
-            <p class=" description">{{DTitle}}</p>
+            <p class=" description text-info">{{DTitle}}</p>
             <br>
             <div class=" card-description">
-              {{DDescription}}
+              <p class="text-primary">{{DDescription}}</p>
             </div>
             <br>
             <div class=" card-description">
@@ -200,7 +189,7 @@
     </div>
     <br>
      <!-- Last Card -->
-    <div class=" col-md-12">
+    <div class=" col-md-8">
       <div class=" card">
         <div class=" card-header">
           <h5 class=" title">Order History - Customer Reviews</h5>

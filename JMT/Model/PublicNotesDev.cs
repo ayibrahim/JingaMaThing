@@ -11,4 +11,5 @@ namespace JMT.Model {
 		public string NoteContent { get; set; }
 		public string Role { get; set; }
 	}
+
 }

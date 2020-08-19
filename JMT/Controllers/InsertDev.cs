@@ -118,6 +118,29 @@ namespace JMT.Controllers {
 			Customer.Add(finalresult);
 			return Customer;
 		}
+
+		[HttpPost]
+		[Route("api/UpdateRMOpenOrder")]
+		public List<Response> UpdateRMOpenOrder([FromBody]UpdateRMOrder data) {
+			Response finalresult = new Response();
+			List<Response> Customer = new List<Response>();
+			string result = "Successful ";
+			//SqlConnection con = new SqlConnection("Data Source=NiluNilesh;Integrated Security=True");  
+			SqlConnection con = new SqlConnection(con2);
+			SqlCommand cmd = new SqlCommand("UpdateRMOpenOrder", con);
+			cmd.CommandType = CommandType.StoredProcedure;
+			cmd.Parameters.AddWithValue("@OrderID", data.OrderNumber);
+			cmd.Parameters.AddWithValue("@NewPrice", data.NewPrice);
+			cmd.Parameters.AddWithValue("@DateBy", data.DateBy);
+			cmd.Parameters.AddWithValue("@Requirements", data.Requirements);
+			con.Open();
+			int i = cmd.ExecuteNonQuery();
+			con.Close();
+			finalresult.response = result.ToString();
+			Customer.Add(finalresult);
+			return Customer;
+		}
+		
 	}
 
 }

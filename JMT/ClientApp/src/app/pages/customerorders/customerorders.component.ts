@@ -290,7 +290,7 @@ export class CustomerordersComponent implements OnInit {
         this.showNotification('top', 'center' , this.errormessage);
         console.log('error message ' + error)}
       )
-    this.GetCustomerOrders();
+      setTimeout(()=> this.GetCustomerOrders(), 2000);
   }
   AcceptCustomerOrder(ID : any , CustomerID : any , DeveloperID : any , Price : any, CompletionDate : any , OrderDesc : any , Requirements : any){
     this.http.get('https://localhost:44380/api/InsertNewOrderDevCustomerApproved/' + ID + '/' + CustomerID + '/' + DeveloperID + '/' + Price + '/' + CompletionDate
@@ -300,13 +300,12 @@ export class CustomerordersComponent implements OnInit {
         this.toastr.clear();
         this.errormessage = 'Accepted Succesfully';
         this.showNotification('top', 'center' , this.errormessage);
-        this.GetCustomerOrders();
       }, (error) => {this.toastr.clear();
        this.errormessage = 'Error Happened When Accepting Order , Refresh and Try Again!';
        this.showNotification('top', 'center' , this.errormessage);
        console.log('error message ' + error)}
      )
-    
+    setTimeout(()=> this.GetCustomerOrders(), 2000);
   }
   GetCustomerOrders(){
     this.http.get('https://localhost:44380/api/GetCustomerPendingApproval/' + this.CustomerID)

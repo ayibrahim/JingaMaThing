@@ -35,8 +35,14 @@
 ::ng-deep body .ql-formats .ql-image{
     display: none;
 }
+.secondcont{
+	float: left;
+    overflow: hidden;
+	margin-right: 2em;
+	margin-bottom: 2em;
+	position: relative;
+}
 .inputdialog{
-
 	font-weight: bold;
 	float: left;
 	padding-top: 8px;

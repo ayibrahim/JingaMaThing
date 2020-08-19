@@ -71,7 +71,7 @@ namespace JMT.Controllers {
 			return customer;
 		}
 		[HttpGet]
-		[Route("api/GetRMInbox/{@ResourceManagerID}")]
+		[Route("api/GetRMInbox/{ResourceManagerID}")]
 		public List<Inbox> GetResourceMangerInbox(string ResourceManagerID = "") {
 			
 			List<Inbox> customer = new List<Inbox>();
@@ -133,25 +133,23 @@ namespace JMT.Controllers {
 			return customer;
 		}
 
-		[HttpGet]
-		[Route("api/SendMessage/{RoleDesc}/{Email}/{Title}/{Description}/{EmailTo}")]
-		public List<Response> SendCustomerMessage(string RoleDesc = "", string Email = "", string Title = "", string Description = "", string EmailTo = "") {
+
+		[HttpPost]
+		[Route("api/SendMessage")]
+		public List<Response> InsertDeveloper([FromBody]SendMessage data) {
 			Response finalresult = new Response();
 			List<Response> Customer = new List<Response>();
 			string result = "Successful ";
-			
-			//SqlConnection con = new SqlConnection("Data Source=NiluNilesh;Integrated Security=True");  
 			SqlConnection con = new SqlConnection(con2);
 			SqlCommand cmd = new SqlCommand("SendMessage", con);
 			cmd.CommandType = CommandType.StoredProcedure;
-			cmd.Parameters.AddWithValue("@RoleDesc", RoleDesc);
-			cmd.Parameters.AddWithValue("@Email", Email);
-			cmd.Parameters.AddWithValue("@Title", Title);
-			cmd.Parameters.AddWithValue("@Description", Description);
-			cmd.Parameters.AddWithValue("@EmailTo", EmailTo);
+			cmd.Parameters.AddWithValue("@RoleDesc", data.RoleDesc);
+			cmd.Parameters.AddWithValue("@Email", data.Email);
+			cmd.Parameters.AddWithValue("@Title", data.Title);
+			cmd.Parameters.AddWithValue("@Description", data.Description);
+			cmd.Parameters.AddWithValue("@EmailTo", data.EmailTo);
 			con.Open();
 			int i = cmd.ExecuteNonQuery();
-
 			con.Close();
 			finalresult.response = result.ToString();
 			Customer.Add(finalresult);
@@ -301,6 +299,68 @@ namespace JMT.Controllers {
 				SqlCommand cmd = new SqlCommand("GetDevSentMessages", con);
 				cmd.CommandType = CommandType.StoredProcedure;
 				cmd.Parameters.AddWithValue("@DeveloperID", DeveloperID);
+				cmd.Parameters.AddWithValue("@Number", 3);
+				con.Open();
+				SqlDataReader rdr = cmd.ExecuteReader();
+				while (rdr.Read()) {
+					InboxSent finalcustomer = new InboxSent();
+					finalcustomer.ID = (rdr["ID"].ToString());
+					finalcustomer.Name = (rdr["Name"].ToString());
+					finalcustomer.Subject = (rdr["Subject"].ToString());
+					finalcustomer.Message = (rdr["Message"].ToString());
+					finalcustomer.SentDate = (rdr["SentDate"].ToString());
+					customer.Add(finalcustomer);
+				}
+				con.Close();
+			}
+			return customer;
+		}
+
+		[HttpGet]
+		[Route("api/GetRMSentMessages/{ResourceManagerID}")]
+		public List<InboxSent> GetRMSentMessages(string ResourceManagerID = "") {
+
+			List<InboxSent> customer = new List<InboxSent>();
+			using (SqlConnection con = new SqlConnection(con2)) {
+				SqlCommand cmd = new SqlCommand("GetRMSentMessages", con);
+				cmd.CommandType = CommandType.StoredProcedure;
+				cmd.Parameters.AddWithValue("@ResourceManagerID", ResourceManagerID);
+				cmd.Parameters.AddWithValue("@Number", 1);
+				con.Open();
+				SqlDataReader rdr = cmd.ExecuteReader();
+				while (rdr.Read()) {
+					InboxSent finalcustomer = new InboxSent();
+					finalcustomer.ID = (rdr["ID"].ToString());
+					finalcustomer.Name = (rdr["Name"].ToString());
+					finalcustomer.Subject = (rdr["Subject"].ToString());
+					finalcustomer.Message = (rdr["Message"].ToString());
+					finalcustomer.SentDate = (rdr["SentDate"].ToString());
+					customer.Add(finalcustomer);
+				}
+				con.Close();
+			}
+			using (SqlConnection con = new SqlConnection(con2)) {
+				SqlCommand cmd = new SqlCommand("GetRMSentMessages", con);
+				cmd.CommandType = CommandType.StoredProcedure;
+				cmd.Parameters.AddWithValue("@ResourceManagerID", ResourceManagerID);
+				cmd.Parameters.AddWithValue("@Number", 2);
+				con.Open();
+				SqlDataReader rdr = cmd.ExecuteReader();
+				while (rdr.Read()) {
+					InboxSent finalcustomer = new InboxSent();
+					finalcustomer.ID = (rdr["ID"].ToString());
+					finalcustomer.Name = (rdr["Name"].ToString());
+					finalcustomer.Subject = (rdr["Subject"].ToString());
+					finalcustomer.Message = (rdr["Message"].ToString());
+					finalcustomer.SentDate = (rdr["SentDate"].ToString());
+					customer.Add(finalcustomer);
+				}
+				con.Close();
+			}
+			using (SqlConnection con = new SqlConnection(con2)) {
+				SqlCommand cmd = new SqlCommand("GetRMSentMessages", con);
+				cmd.CommandType = CommandType.StoredProcedure;
+				cmd.Parameters.AddWithValue("@ResourceManagerID", ResourceManagerID);
 				cmd.Parameters.AddWithValue("@Number", 3);
 				con.Open();
 				SqlDataReader rdr = cmd.ExecuteReader();

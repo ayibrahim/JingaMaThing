@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { MenuItem } from 'primeng';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { trigger, style, state, transition, animate } from '@angular/animations';
+import { interval } from 'rxjs';
 export interface headers{}
 export interface customer{ 
   customerID : number; email : string; firstName : string; lastName : string; password : string; phoneNumber : string; roleDesc : string; photo : string;
@@ -14,6 +15,13 @@ export interface Developer{
 export interface DevRMList{
   name : string; role : string; email : string;
 }
+export interface rmanager{ 
+  resourceManagerID : number; email : string; firstName : string; lastName : string; password : string; phoneNumber : string; roleDesc : string; photo : string;
+}
+export interface SendMessage{
+  RoleDesc: string; Email: string; Title: string; Description: string; EmailTo: string;
+}
+interface SendMessages extends Array<SendMessage>{}
 @Component({
   selector: 'app-email',
   templateUrl: './email.component.html',
@@ -40,11 +48,13 @@ export class EmailComponent implements OnInit {
   developerlogin : Developer[]; loginresponse : customer[]; DevRMListbox : DevRMList[]; insertresponse : any;
   iscustomer : boolean  = false; isdeveloper : boolean = false; isMessages : boolean = true; isSentMessages : boolean = false; isNewMessage : boolean = false;
   CFirstName : string; CLastName : string; CEmail : string;  CustomerID : number; CPhoneNumber : string;  CPassword: string; CRoleDesc : string; CPhoto : any; CEmail2: string;
+  RFirstName : string; RLastName : string; REmail2 : string; REmail : string; RPassword: string; ResourceManagerID : number; RPhoneNumber : string; RRoleDesc : string; RPhoto : any;
   DFirstName : string; DLastName : string; DEmail : string; DPassword: string; DeveloperID : number; DPhoneNumber : string; DPhoto : any; DEmail2 : string;
   DDescription: string; DPLanguages: string; DSkills: string; DEducation: string; DCertificates: string; DTitle: string; DRoleDesc : string;
   selecteddata1 : any; SenderEmail : string;
   display1 : boolean = false; display2 : boolean = false; MSData : any[]; MSHeader : any[]; i : number;
   SMData : any[]; SMHeader : any[];  selecteddata2 : any;
+  isrmanager : boolean = false; rmanagerId : string; rmresponse : rmanager[];
   constructor(private route: ActivatedRoute , private router : Router ,private http: HttpClient , private toastr: ToastrService) { }
 
   ngOnInit() {
@@ -56,6 +66,9 @@ export class EmailComponent implements OnInit {
       }
       if(this.retrievedRole == 'Developer'){
         this.developerId = this.retrievedID;
+      }
+      if(this.retrievedRole == 'ResourceManager'){
+        this.rmanagerId = this.retrievedID;
       }
     }))
     if(this.customerId != undefined){
@@ -73,9 +86,34 @@ export class EmailComponent implements OnInit {
             this.CPhoneNumber = this.loginresponse[0].phoneNumber;
             this.CRoleDesc = this.loginresponse[0].roleDesc;
             this.CPhoto = this.loginresponse[0].photo;
-            this.display2 = true;
             this.LoadDevRMList();
+            this.CSentMessages();
             this.CInbox();
+            const source = interval(4000);
+            const subscribe = source.subscribe(val => this.CInbox());
+          }, (error) => {console.log('error message ' + error)}
+          )
+    }
+    if(this.rmanagerId != undefined){
+      this.isrmanager = true;
+      this.http.get('https://localhost:44380/api/GetResourceManagerInfoByID/' + this.rmanagerId)
+      .subscribe(
+          (response : rmanager[] ) => {
+           this.rmresponse = response;
+           this.RFirstName = this.rmresponse[0].firstName;
+            this.RLastName = this.rmresponse[0].lastName;
+            this.REmail = this.rmresponse[0].email;
+            this.REmail2 = this.rmresponse[0].email;
+            this.RPassword = this.rmresponse[0].password;
+            this.ResourceManagerID = this.rmresponse[0].resourceManagerID;
+            this.RPhoneNumber = this.rmresponse[0].phoneNumber;
+            this.RRoleDesc = this.rmresponse[0].roleDesc;
+            this.RPhoto = this.rmresponse[0].photo;
+            this.LoadDevRMCustomerList();
+            this.RMSentMessages();
+            this.RMInbox();
+            const source = interval(4000);
+            const subscribe = source.subscribe(val => this.RMInbox());
           }, (error) => {console.log('error message ' + error)}
           )
     }
@@ -100,9 +138,11 @@ export class EmailComponent implements OnInit {
                         this.DTitle = this.developerlogin[0].title;
                         this.DRoleDesc = this.developerlogin[0].roleDesc;
                         this.DPhoto = this.developerlogin[0].photo;
-                        this.display1 = true;
                         this.LoadDevRMCustomerList();
+                        this.DSentMessages();
                         this.DInbox();
+                        const source = interval(4000);
+                        const subscribe = source.subscribe(val => this.DInbox());
                     }, (error) => {console.log('error message ' + error)}
                     )
         
@@ -128,13 +168,13 @@ export class EmailComponent implements OnInit {
       if(this.retrievedRole == 'Developer'){
         this.DInbox();
       }
+      if(this.retrievedRole == 'ResourceManager'){
+        this.RMInbox();
+      }
     }
     if(this.MenuLabelChosen == "Sent Messages"){
       this.isNewMessage = false;
       this.isMessages = false;
-      this.display1 = false;
-      this.display2 = false;
-      this.nodata = false;
       this.isSentMessages = true;
       if(this.retrievedRole == 'Customer'){
         this.CSentMessages();
@@ -142,18 +182,21 @@ export class EmailComponent implements OnInit {
       if(this.retrievedRole == 'Developer'){
         this.DSentMessages();
       }
+      if(this.retrievedRole == 'ResourceManager'){
+        this.RMSentMessages();
+      }
     }
     if(this.MenuLabelChosen == "New Message"){
       this.isSentMessages = false;
       this.isMessages = false;
-      this.display1 = false;
-      this.display2 = false;
-      this.nodata = false;
       this.isNewMessage = true;
       if(this.retrievedRole == 'Customer'){
         this.LoadDevRMList();
       }
       if(this.retrievedRole == 'Developer'){
+        this.LoadDevRMCustomerList();
+      }
+      if(this.retrievedRole == 'ResourceManager'){
         this.LoadDevRMCustomerList();
       }
     }
@@ -165,13 +208,11 @@ export class EmailComponent implements OnInit {
       this.MSData = response;
       console.log(this.MSData);
       if(this.MSData.length == 0){
-        this.display1 = false;
         this.nodata = true;
         this.toastr.clear();
         this.errormessage = '*No Messges Found.';
         this.showNotification('top', 'center' , this.errormessage);
       } else {
-        this.display1 = true;
         this.nodata = false;
       }
       this.MSHeader = [];
@@ -199,13 +240,42 @@ export class EmailComponent implements OnInit {
       this.MSData = response;
       console.log(this.MSData);
       if(this.MSData.length == 0){
-        this.display2 = false;
         this.nodata = true;
         this.toastr.clear();
         this.errormessage = '*No Messges Found.';
         this.showNotification('top', 'center' , this.errormessage);
       } else {
-        this.display2 = true;
+        this.nodata = false;
+      }
+      this.MSHeader = [];
+      for (this.i = 0; this.i < this.MSData.length; this.i++){
+        for (var key in this.MSData[this.i]){
+          if(this.MSHeader.indexOf(key) === -1){
+            if(key == 'id' || key =='message'){
+
+            }else {
+              this.MSHeader.push(key);
+            }
+          }
+        }
+      }   
+    }, (error) => {this.nodata = true;this.toastr.clear();
+      this.errormessage = 'Error Happened When Loading Inbox Try Again or Contact Support';
+      this.showNotification('top', 'center' , this.errormessage);
+      console.log('error message ' + error)}
+    )
+  }
+  RMInbox(){
+    this.http.get('https://localhost:44380/api/GetRMInbox/' + this.ResourceManagerID).subscribe(
+    (response : headers[]) => {
+      this.MSData = response;
+      console.log(this.MSData);
+      if(this.MSData.length == 0){
+        this.nodata = true;
+        this.toastr.clear();
+        this.errormessage = '*No Messges Found.';
+        this.showNotification('top', 'center' , this.errormessage);
+      } else {
         this.nodata = false;
       }
       this.MSHeader = [];
@@ -283,9 +353,16 @@ export class EmailComponent implements OnInit {
   if(this.isdeveloper == true){
     this.SenderEmail = this.DEmail2;
   }
-  //api/SendCustomerMessage/{RoleDesc}/{Email}/{Title}/{Description}/{EmailTo}
-  this.http.get('https://localhost:44380/api/SendMessage/' + this.selectedDevRM.role + '/' + this.SenderEmail + '/' + this.NMTitle + '/' + this.NMDescription + '/'
-  + this.selectedDevRM.email).subscribe(
+  if(this.isrmanager == true){
+    this.SenderEmail = this.REmail2;
+  }
+  var result: SendMessages = [
+    {  RoleDesc: this.selectedDevRM.role.toString(), Email : this.SenderEmail.toString() , Title : this.NMTitle.toString() , Description : this.NMDescription.toString() , EmailTo : this.selectedDevRM.email.toString()  }
+    ];
+    const httpOptions = {
+      headers: new HttpHeaders({'Content-Type': 'application/json'})
+    }    
+   this.http.post('https://localhost:44380/api/SendMessage' , result[0] , httpOptions).subscribe(
     (response2 : headers[]) => {
       this.insertresponse = response2
       this.toastr.clear();
@@ -298,7 +375,6 @@ export class EmailComponent implements OnInit {
       console.log('error message ' + error)}
     
   )
-  
   this.NMDescription = undefined;
   this.NMTitle = undefined;
   this.selectedDevRM = undefined;
@@ -309,13 +385,43 @@ export class EmailComponent implements OnInit {
       this.SMData = response;
       console.log(this.SMData);
       if(this.SMData.length == 0){
-        this.display1 = false;
         this.nodata2 = true;
         this.toastr.clear();
         this.errormessage = '*No Sent Messges Found.';
         this.showNotification('top', 'center' , this.errormessage);
       } else {
-        this.display1 = true;
+        this.nodata2 = false;
+      }
+      this.SMHeader = [];
+      for (this.i = 0; this.i < this.SMData.length; this.i++){
+        for (var key in this.SMData[this.i]){
+          if(this.SMHeader.indexOf(key) === -1){
+            if(key == 'id' || key =='message'){
+
+            }else {
+              this.SMHeader.push(key);
+            }
+            
+          }
+        }
+      }   
+    }, (error) => {this.nodata2 = true;this.toastr.clear();
+      this.errormessage = 'Error Happened When Loading Sent Messages, Refresh and Try Again!';
+      this.showNotification('top', 'center' , this.errormessage);
+      console.log('error message ' + error)}
+    )
+  }
+  RMSentMessages(){
+    this.http.get('https://localhost:44380/api/GetRMSentMessages/' + this.ResourceManagerID).subscribe(
+    (response : headers[]) => {
+      this.SMData = response;
+      console.log(this.SMData);
+      if(this.SMData.length == 0){
+        this.nodata2 = true;
+        this.toastr.clear();
+        this.errormessage = '*No Sent Messges Found.';
+        this.showNotification('top', 'center' , this.errormessage);
+      } else {
         this.nodata2 = false;
       }
       this.SMHeader = [];

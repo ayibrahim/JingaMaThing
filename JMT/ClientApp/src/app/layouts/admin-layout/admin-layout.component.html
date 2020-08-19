@@ -1,14 +1,16 @@
 
 <div  class="wrapper">
-  <div *ngIf="iscustomer" class="sidebar">
+  <div class="sidebar" >
+  <div *ngIf="iscustomer" >
     <app-sidebar [custfull]="custfull"></app-sidebar>
   </div>
-  <div *ngIf="isdeveloper" class="sidebar">
+  <div *ngIf="isdeveloper" >
     <app-sidebar [devfull]="devfull"></app-sidebar>
   </div>
-  <div *ngIf="isrmanager" class="sidebar">
+  <div *ngIf="isrmanager" >
     <app-sidebar [rmfull]="rmfull"></app-sidebar>
-  </div>      
+  </div>   
+  </div> 
   <div class="main-panel">
     <app-navbar [NewUser]="newuser"></app-navbar>
     <router-outlet (activate)="onRouterOutletActivate($event)"></router-outlet>
@@ -41,7 +43,7 @@
           </div>
           <div class=" clearfix"></div>
         </a>
-      </li>
+      </li> 
       <li class=" adjustments-line text-center color-change">
         <span class=" color-label"> LIGHT MODE </span>
         <span class=" badge light-badge mr-2" (click)="changeDashboardColor('white-content')"> </span>

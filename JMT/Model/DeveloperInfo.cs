@@ -21,5 +21,7 @@ namespace JMT.Model
         public string Title { get; set; }
         public string RoleDesc { get; set; }
         public string Photo { get; set; }
-    }
+		public string SideBarColor { get; set; }
+		public string DashboardColor { get; set; }
+	}
 }

@@ -4,6 +4,8 @@ import { Location } from "@angular/common";
 import { Router, ActivatedRoute } from "@angular/router";
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClient } from '@angular/common/http';
+import { Subscription , Observable , interval } from 'rxjs';
+
 export class UserInfo {
   ID : number ; RoleDesc : string;
 }
@@ -30,7 +32,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   DFirstName : string; DLastName : string; DEmail : string; DPassword: string; DeveloperID : number; DPhoneNumber : string; DPhoto : any; DEmail2 : string;
   DDescription: string; DPLanguages: string; DSkills: string; DEducation: string; DCertificates: string; DTitle: string; DRoleDesc : string;
   developerlogin : Developer[]; loginresponse : customer[]; rmresponse : rmanager[];
-  UserPhoto : string;
+  UserPhoto : string; sub:Subscription; 
   private listTitles: any[];
   location: Location;
   mobile_menu_visible: any = 0;
@@ -64,7 +66,27 @@ export class NavbarComponent implements OnInit, OnDestroy {
      }
    };
   ngOnInit() {
-    console.log(this.NewUser);
+
+    this.GetUserInfo();
+    //emit value in sequence every 1 second
+    const source = interval(4000);
+    const subscribe = source.subscribe(val => this.GetUserInfo());
+
+    
+    window.addEventListener("resize", this.updateColor);
+    this.listTitles = ROUTES.filter(listTitle => listTitle);
+    const navbar: HTMLElement = this.element.nativeElement;
+    this.toggleButton = navbar.getElementsByClassName("navbar-toggler")[0];
+    this.router.events.subscribe(event => {
+      this.sidebarClose();
+      var $layer: any = document.getElementsByClassName("close-layer")[0];
+      if ($layer) {
+        $layer.remove();
+        this.mobile_menu_visible = 0;
+      }
+    });
+  }
+  GetUserInfo(){
     if(this.NewUser.RoleDesc == 'Developer'){
       this.http.get('https://localhost:44380/api/getDeveloperInfoByID/' + this.NewUser.ID)
             .subscribe(
@@ -126,20 +148,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
           }, (error) => {console.log('error message ' + error)}
           )
     }
-    window.addEventListener("resize", this.updateColor);
-    this.listTitles = ROUTES.filter(listTitle => listTitle);
-    const navbar: HTMLElement = this.element.nativeElement;
-    this.toggleButton = navbar.getElementsByClassName("navbar-toggler")[0];
-    this.router.events.subscribe(event => {
-      this.sidebarClose();
-      var $layer: any = document.getElementsByClassName("close-layer")[0];
-      if ($layer) {
-        $layer.remove();
-        this.mobile_menu_visible = 0;
-      }
-    });
   }
-
   collapse() {
     this.isCollapsed = !this.isCollapsed;
     const navbar = document.getElementsByTagName("nav")[0];
@@ -287,7 +296,14 @@ export class NavbarComponent implements OnInit, OnDestroy {
     {
       return "New-Order";
     }
-    
+    if(this.location.prepareExternalUrl(this.location.path()).includes("rmorders"))
+    {
+      return "Orders";
+    }
+    if(this.location.prepareExternalUrl(this.location.path()).includes("rmdevelopers"))
+    {
+      return "Developers";
+    }
     return "Dashboard";
   }
 

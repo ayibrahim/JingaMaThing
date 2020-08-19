@@ -45,6 +45,10 @@ import {InputTextareaModule} from 'primeng/inputtextarea';
 import {RatingModule} from 'primeng/rating';
 import {EditorModule} from 'primeng/editor';
 import {BlockUIModule} from 'primeng/blockui';
+import { RmordersComponent } from './pages/rmorders/rmorders.component';
+import { RmdevelopersComponent } from './pages/rmdevelopers/rmdevelopers.component';
+import { NotFoundComponent } from './pages/not-found/not-found.component';
+import { AccessDeniedComponent } from './pages/access-denied/access-denied.component';
 
 @NgModule({
   imports: [
@@ -80,7 +84,7 @@ import {BlockUIModule} from 'primeng/blockui';
     ToastrModule.forRoot(),
 
   ],
-  declarations: [AppComponent, AdminLayoutComponent, AuthLayoutComponent, HomeComponent, SignInComponent, SignUpComponent, UserProfileComponent, EmailComponent , NewOrderComponent, DevordersComponent, CustomerordersComponent, CustomerDashboardComponent, NotesComponent, LinksComponent ],
+  declarations: [AppComponent, AdminLayoutComponent, AuthLayoutComponent, HomeComponent, SignInComponent, SignUpComponent, UserProfileComponent, EmailComponent , NewOrderComponent, DevordersComponent, CustomerordersComponent, CustomerDashboardComponent, NotesComponent, LinksComponent, RmordersComponent, RmdevelopersComponent, NotFoundComponent, AccessDeniedComponent ],
   providers: [Globals],
   bootstrap: [AppComponent]
 })

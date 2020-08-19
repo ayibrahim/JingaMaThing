@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Dev } from 'src/app/layouts/admin-layout/admin-layout.component';
@@ -14,6 +14,10 @@ export interface Developer{
 export interface DevList{
   name : string; role : string; email : string;
 }
+export interface InsertNewOrder{
+  CustomerID: string; DevEmail: string; OrderDesc: string; OrderRequirments: string; Budget: string; DateBy: string;
+}
+interface InsertNewOrders extends Array<InsertNewOrder>{}
 @Component({
   selector: 'app-new-order',
   templateUrl: './new-order.component.html',
@@ -133,17 +137,25 @@ export class NewOrderComponent implements OnInit {
       return;
     } 
     this.toastr.clear();
-    this.http.get('https://localhost:44380/api/InsertNewOrder/' + this.CustomerID + '/' + this.selectedDev.email + '/' + this.ODescription + '/' + this.ORequirments + '/' + this.OBudget + '/' + this.ODateBy) .subscribe(
-       (response2 : headers[]) => {
-         this.newdata = response2;
+    var result: InsertNewOrders = [
+      {  CustomerID: this.CustomerID.toString(), DevEmail : this.selectedDev.email.toString() , OrderDesc : this.ODescription.toString() , OrderRequirments : this.ORequirments.toString() 
+        , Budget : this.OBudget.toString() , DateBy : this.ODateBy.toString() }
+      ];
+      const httpOptions = {
+        headers: new HttpHeaders({'Content-Type': 'application/json'})
+      }    
+      
+     this.http.post('https://localhost:44380/api/InsertNewOrder' , result[0] , httpOptions).subscribe(data => {
+         console.log(data)
          this.toastr.clear();
          this.errormessage = 'Order Created Succesfully';
-        this.showNotification('top', 'center' , this.errormessage);
-       }, (error) => {this.toastr.clear();
-        this.errormessage = 'Error Happened When Creating Order , Refresh and Try Again!';
-        this.showNotification('top', 'center' , this.errormessage);
-        console.log('error message ' + error)}
-      )
+          this.showNotification('top', 'center' , this.errormessage);
+        }, error => {
+          this.toastr.clear();
+          this.errormessage = 'Error Happened When Creating Order , Refresh and Try Again!';
+          this.showNotification('top', 'center' , this.errormessage);
+          console.log('error message ' + error)
+     });
       setTimeout(()=>{    //<<<---    using ()=> syntax
         this.toastr.clear();
         }, 4000);

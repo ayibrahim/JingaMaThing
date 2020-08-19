@@ -3,16 +3,22 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { SelectItem, GalleriaThumbnails } from 'primeng';
+
 export interface headers{}
-export interface customer{ 
-  customerID : number; email : string; firstName : string; lastName : string; password : string; phoneNumber : string; roleDesc : string; photo : string;
-}
+
 export interface Developer{
   developerID : number; email : string; firstName : string; lastName : string; password : string; phoneNumber : string; description : string; pLanguages : string; skills : string; education : string; certification : string; title : string; roleDesc : string; photo : string;
 }
 export interface UpdateNote {
   DeveloperNoteID : string ; NoteContent : string;
 }
+export interface UpdateNoteRM {
+  ResourceManagerNotesID : string ; NoteContent : string;
+}
+export interface rmanager{ 
+  resourceManagerID : number; email : string; firstName : string; lastName : string; password : string; phoneNumber : string; roleDesc : string; photo : string;
+}
+interface UpdateRMNote extends Array<UpdateNoteRM>{}
 interface UpdateDevNote extends Array<UpdateNote>{}
 @Component({
   selector: 'app-notes',
@@ -21,18 +27,23 @@ interface UpdateDevNote extends Array<UpdateNote>{}
 })
 export class NotesComponent implements OnInit {
 
-  retrievedID : string; retrievedRole : string;customerId : string;developerId : string; errormessage : String;  newdata : headers[];
-  iscustomer : boolean  = false; isdeveloper : boolean = false;
-  CFirstName : string; CLastName : string; CEmail : string;  CustomerID : number; CPhoneNumber : string;  CPassword: string; CRoleDesc : string; CPhoto : any; CEmail2: string;
+  retrievedID : string; retrievedRole : string; developerId : string; errormessage : String;  newdata : headers[];
+  isdeveloper : boolean = false;
+  RFirstName : string; RLastName : string; REmail2 : string; REmail : string; RPassword: string; ResourceManagerID : number; RPhoneNumber : string; RRoleDesc : string; RPhoto : any;
   DFirstName : string; DLastName : string; DEmail : string; DPassword: string; DeveloperID : number; DPhoneNumber : string; DPhoto : any; DEmail2 : string;
   DDescription: string; DPLanguages: string; DSkills: string; DEducation: string; DCertificates: string; DTitle: string; DRoleDesc : string;
-  developerlogin : Developer[]; loginresponse : customer[]; nodevnotes : boolean = true;
+  developerlogin : Developer[];  nodevnotes : boolean = true;
   NTitle : string;
   NotesTypes: SelectItem[]; blocked: boolean = true;
   NType: any; DevNotes : any[];  SelectedDevNoteID : string; SelectedTitle: string; SelectedNoteView : string; SelectedNoteTitleView : string;
   NewTitle : string; NewViewType : any;
   SelectedNote :string; deletedialog : boolean = false; editdialog : boolean = false; disabled : boolean = true;
   nopublicnotes : boolean = true; PublicNotes : any[]; publicblocked : boolean = true; PublicSelectedNote : string; PublicSelectedTitle : string;
+  rmresponse : rmanager[]; rmanagerId : any; isrmanager : boolean = false;
+  normnotes : boolean = true; RMNotes : any[]; blocked2 : boolean = true; SelectedRMNote : string; SelectedRMTitle : string; deletedialogrm :boolean = false;
+  editdialogrm : boolean = false; NewTitleRM : any; NewViewTypeRM : any; SelectedNoteTitleViewRM : any; NTitleRM : any; NTypeRM : any;
+  nopublicnotesrm : boolean = true; PublicNotesRM : any[]; publicblocked2 : boolean = true; PublicSelectedTitleRM : any; PublicSelectedNoteRM : any;
+  SelectedRMNoteID : any; SelectedNoteViewRM : any;
   constructor(private route: ActivatedRoute , private router : Router ,private http: HttpClient , private toastr: ToastrService) { }
 
   ngOnInit() 
@@ -40,28 +51,36 @@ export class NotesComponent implements OnInit {
     this.route.queryParams.subscribe((params=>{
       this.retrievedID = params.data;
       this.retrievedRole = params.data2;
-      if(this.retrievedRole == 'Customer'){
-        this.customerId = this.retrievedID;
-      }
       if(this.retrievedRole == 'Developer'){
         this.developerId = this.retrievedID;
       }
+      else if (this.retrievedRole == 'ResourceManager'){
+        this.rmanagerId = this.retrievedID;
+      } else {
+        this.router.navigate(['./home']);
+      }
     }))
-    if(this.customerId != undefined){
-      this.iscustomer = true;
-      this.http.get('https://localhost:44380/api/getCustomerInfoByID/' + this.customerId)
+    if(this.rmanagerId != undefined){
+      this.isrmanager = true;
+      this.http.get('https://localhost:44380/api/GetResourceManagerInfoByID/' + this.rmanagerId)
       .subscribe(
-          (response : customer[] ) => {
-           this.loginresponse = response;
-           this.CFirstName = this.loginresponse[0].firstName;
-            this.CLastName = this.loginresponse[0].lastName;
-            this.CEmail = this.loginresponse[0].email;
-            this.CEmail2 = this.loginresponse[0].email;
-            this.CPassword = this.loginresponse[0].password;
-            this.CustomerID = this.loginresponse[0].customerID;
-            this.CPhoneNumber = this.loginresponse[0].phoneNumber;
-            this.CRoleDesc = this.loginresponse[0].roleDesc;
-            this.CPhoto = this.loginresponse[0].photo;
+          (response : rmanager[] ) => {
+           this.rmresponse = response;
+           this.RFirstName = this.rmresponse[0].firstName;
+            this.RLastName = this.rmresponse[0].lastName;
+            this.REmail = this.rmresponse[0].email;
+            this.REmail2 = this.rmresponse[0].email;
+            this.RPassword = this.rmresponse[0].password;
+            this.ResourceManagerID = this.rmresponse[0].resourceManagerID;
+            this.RPhoneNumber = this.rmresponse[0].phoneNumber;
+            this.RRoleDesc = this.rmresponse[0].roleDesc;
+            this.RPhoto = this.rmresponse[0].photo;
+            this.GetRMNotes();
+            this.GetPublicNotesRM();
+            this.SelectedRMNote = '<div><h1>Hello ' + this.RFirstName + ' ' + this.RLastName + '!</h1></div><div><h2>Editor Disabled - Select Note To Start Editing.</h2></div><div><br></div>';
+            this.SelectedRMTitle = 'none';
+            this.PublicSelectedTitleRM = 'none';
+            this.PublicSelectedNoteRM = '<div><h1>Hello ' + this.RFirstName + ' ' + this.RLastName + '!</h1></div><div><h2>Editor Disabled - Select Note To View its Content.</h2></div><div><br></div>';
           }, (error) => {console.log('error message ' + error)}
           )
     }
@@ -142,6 +161,10 @@ export class NotesComponent implements OnInit {
         this.DevNotes = response;
         if (this.DevNotes.length == 0){
           this.nodevnotes = true;
+          this.toastr.clear();
+          this.errormessage = 'No Notes Found';
+          this.showNotification('top', 'center' , this.errormessage);
+          setTimeout(()=> this.toastr.clear() , 3000);
         } else {
           this.nodevnotes = false;
         }
@@ -319,4 +342,172 @@ export class NotesComponent implements OnInit {
       break;
     }
   }
-}
+    //ResourceManagerFunctions
+    CreateNewNoteRM(){
+      if(!this.NTitleRM){
+        this.toastr.clear();
+        this.errormessage = '*Note title is required';
+        this.showNotification('top', 'center' , this.errormessage);
+        setTimeout(()=> this.toastr.clear() , 3000);
+        return;
+      }
+      if(!this.NTypeRM){
+        this.toastr.clear();
+        this.errormessage = '*Note Display Type is required';
+        this.showNotification('top', 'center' , this.errormessage);
+        setTimeout(()=> this.toastr.clear() , 3000);
+        return;
+      }
+      this.http.get('https://localhost:44380/api/CreateRMNote/' + this.ResourceManagerID + '/' + this.NTitleRM + '/' + this.NTypeRM).subscribe(
+        (response : headers[]) => {
+          this.newdata = response;
+          console.log(this.newdata);
+          this.toastr.clear();
+          this.errormessage = 'Note Created Successfully';
+          this.showNotification('top', 'center' , this.errormessage);
+          setTimeout(()=> this.toastr.clear() , 3000);
+        }, (error) => {this.toastr.clear();
+          this.errormessage = 'Error Happened When Creating Note , Refresh and Try Again!';
+          this.showNotification('top', 'center' , this.errormessage);
+          setTimeout(()=> this.toastr.clear() , 3000);
+          console.log('error message ' + error)}
+        )
+      this.NTitleRM = undefined; this.NTypeRM = undefined;
+      setTimeout(()=> this.GetRMNotes() , 2000);
+    }
+    GetRMNotes()
+    {
+      this.http.get('https://localhost:44380/api/GetRMNotes/' + this.ResourceManagerID).subscribe(
+        (response : headers[]) => {
+          this.RMNotes = response;
+          if (this.RMNotes.length == 0){
+            this.normnotes = true;
+            this.toastr.clear();
+            this.errormessage = 'No Notes Found';
+            this.showNotification('top', 'center' , this.errormessage);
+            setTimeout(()=> this.toastr.clear() , 3000);
+          } else {
+            this.normnotes = false;
+          }
+        }, (error) => {this.normnotes = true;this.toastr.clear();
+          this.errormessage = 'Error Happened When Loading Resource Manager Notes Try Again or Contact Support';
+          this.showNotification('top', 'center' , this.errormessage);
+          console.log('error message ' + error)}
+        )
+    }
+    GetPublicNotesRM()
+    {
+      this.http.get('https://localhost:44380/api/GetPublicNotesRM/' + this.ResourceManagerID).subscribe(
+        (response : headers[]) => {
+          this.PublicNotesRM = response;
+          if (this.PublicNotesRM.length == 0){
+            this.nopublicnotesrm = true;
+          } else {
+            this.nopublicnotesrm = false;
+          }
+        }, (error) => {this.nopublicnotesrm = true;this.toastr.clear();
+          this.errormessage = 'Error Happened When Loading Public Notes Try Again or Contact Support';
+          this.showNotification('top', 'center' , this.errormessage);
+          console.log('error message ' + error)}
+        )
+    }
+    PublicNoteTitleClickRM(event)
+    {
+      this.PublicSelectedNoteRM = event.value[0].noteContent;
+      this.PublicSelectedTitleRM = event.value[0].title;
+    }
+    NoteTitleClickRM(event)
+    {
+      this.SelectedRMNoteID = event.value[0].resourceManagerNotesID;
+      this.SelectedRMNote = event.value[0].noteContent;
+      this.SelectedRMTitle = event.value[0].title;
+      this.SelectedNoteViewRM = event.value[0].viewType;
+      this.SelectedNoteTitleViewRM = this.SelectedRMTitle + ' - ' + this.SelectedNoteViewRM;
+      this.blocked2 = false;
+    }
+    EditDialogShowRM(){this.deletedialogrm = false; this.editdialogrm = true; this.NewTitleRM = undefined ; this.NewViewTypeRM = undefined; }
+    CloseEditDialogRM(){this.editdialogrm = false;}
+    DeleteDialogShowRM(){ this.deletedialogrm = true; this.editdialogrm = false; }
+    CloseDeleteDialogRM(){ this.deletedialogrm = false;}
+    DeleteNoteRM()
+    {
+      this.http.get('https://localhost:44380/api/DeleteRMNote/' + this.SelectedRMNoteID) .subscribe(
+        (response2 : headers[]) => {
+          this.newdata = response2;
+          this.toastr.clear();
+          this.errormessage = 'Note Deleted Succesfully';
+         this.showNotification('top', 'center' , this.errormessage);
+        }, (error) => {this.toastr.clear();
+         this.errormessage = 'Error Happened When Deleting Note , Refresh and Try Again!';
+         this.showNotification('top', 'center' , this.errormessage);
+         console.log('error message ' + error)}
+       )
+      this.deletedialogrm = false;
+      this.blocked2 = true;
+      this.SelectedRMNoteID = undefined;
+      this.SelectedRMNote = undefined;
+      this.SelectedNoteViewRM = undefined;
+      this.SelectedNoteTitleViewRM = undefined;
+      this.SelectedRMTitle = 'none';
+      this.SelectedRMNote = '<div><h1>Hello ' + this.RFirstName + ' ' + this.RLastName + '!</h1></div><div><h2>Editor Disabled - Select Note To Start Editing.</h2></div><div><br></div>';
+      setTimeout(()=> this.GetRMNotes() , 2000);
+      setTimeout(()=> this.toastr.clear() , 4000);
+    }
+    EditNoteRM()
+    {
+      if(!this.NewTitleRM){
+        this.toastr.clear();
+        this.errormessage = '*New Title is required';
+        this.showNotification('top', 'center' , this.errormessage);
+        setTimeout(()=> this.toastr.clear() , 3000);
+        return;
+      }
+      if(!this.NewViewTypeRM){
+        this.toastr.clear();
+        this.errormessage = '*New Display Type is required';
+        this.showNotification('top', 'center' , this.errormessage);
+        setTimeout(()=> this.toastr.clear() , 3000);
+        return;
+      }
+      this.http.get('https://localhost:44380/api/EditRMNoteTitleViewType/' + this.SelectedRMNoteID + '/' + this.NewTitleRM + '/' + this.NewViewTypeRM) .subscribe(
+        (response2 : headers[]) => {
+          this.newdata = response2;
+          this.toastr.clear();
+          this.errormessage = 'Note Updated Succesfully';
+         this.showNotification('top', 'center' , this.errormessage);
+        }, (error) => {this.toastr.clear();
+         this.errormessage = 'Error Happened When Updating Note , Refresh and Try Again!';
+         this.showNotification('top', 'center' , this.errormessage);
+         console.log('error message ' + error)}
+       )
+       this.SelectedRMTitle = this.NewTitleRM;
+       this.SelectedNoteViewRM = this.NewViewTypeRM;
+       this.editdialogrm = false;
+       setTimeout(()=> this.GetRMNotes() , 2000);
+       setTimeout(()=> this.toastr.clear() , 4000);
+    }
+    UpdateNoteRM()
+    {
+      console.log(this.SelectedRMNote);
+      var result2 : UpdateRMNote = [
+        {  ResourceManagerNotesID : this.SelectedRMNoteID.toString() , NoteContent : this.SelectedRMNote.toString() }
+        ];
+        const httpOptions = {
+          headers: new HttpHeaders({'Content-Type': 'application/json'})
+        }    
+       this.http.post('https://localhost:44380/api/UpdateResourceManagerNote' , result2[0] , httpOptions).subscribe(data => {
+        this.toastr.clear();
+        this.errormessage = 'Note Updated Succesfully';
+        this.showNotification('top', 'center' , this.errormessage);
+          }, error => {
+            this.toastr.clear();
+            this.errormessage = 'Error Happened When Updating Note , Refresh and Try Again!';
+            this.showNotification('top', 'center' , this.errormessage);
+            setTimeout(()=>  this.toastr.clear() , 2000);
+            console.log('error message ' + error)
+       });
+      setTimeout(()=> this.GetRMNotes() , 2000);
+      setTimeout(()=> this.toastr.clear() , 4000);
+    }
+  }
+

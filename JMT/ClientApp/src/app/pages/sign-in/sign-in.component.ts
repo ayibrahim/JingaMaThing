@@ -4,13 +4,13 @@ import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { HttpClient } from '@angular/common/http';
 export interface customer{
-  customerID : number;email : string;firstName : string;lastName : string;password : string;phoneNumber : string;roleDesc : string;photo : string;
+  customerID : number;email : string;firstName : string;lastName : string;password : string;phoneNumber : string;roleDesc : string;photo : string; sideBarColor : string; dashboardColor : string;
 }
 export interface rmanager{
-  resourceManagerID : number;email : string;firstName : string;lastName : string;password : string;phoneNumber : string;roleDesc : string;photo : string;
+  resourceManagerID : number;email : string;firstName : string;lastName : string;password : string;phoneNumber : string;roleDesc : string;photo : string; sideBarColor : string; dashboardColor : string;
 }
 export interface Developer{
-  developerID : number; email : string;firstName : string;lastName : string;password : string;phoneNumber : string;description : string;pLanguages : string;skills : string;education : string;certification : string;title : string;roleDesc : string;photo : string;
+  developerID : number; email : string;firstName : string;lastName : string;password : string;phoneNumber : string;description : string;pLanguages : string;skills : string;education : string;certification : string;title : string;roleDesc : string;photo : string; sideBarColor : string; dashboardColor : string;
 }
 @Component({
   selector: 'app-sign-in',
@@ -21,25 +21,27 @@ export interface Developer{
 export class SignInComponent implements OnInit {
   constructor(public globals: Globals , private router : Router , private toastr: ToastrService , private http : HttpClient) { }
   Email: string; Password: string; errormessage: string; loginresponse: customer[]; developerlogin : Developer[]; rmlogin : rmanager[];
-  CFirstName : string; CLastName : string; CEmail2 : string; CPassword2: string; CustomerID : number; CPhoneNumber : string; CRoleDesc : string; CPhoto : string;
-  RFirstName : string; RLastName : string; REmail2 : string; RPassword2: string; ResourceManagerID : number; RPhoneNumber : string; RRoleDesc : string; RPhoto : string;
+  CFirstName : string; CLastName : string; CEmail2 : string; CPassword2: string; CustomerID : number; CPhoneNumber : string; CRoleDesc : string; CPhoto : string; CSideBarColor : string; CDashboardColor : string;
+  RFirstName : string; RLastName : string; REmail2 : string; RPassword2: string; ResourceManagerID : number; RPhoneNumber : string; RRoleDesc : string; RPhoto : string; RSideBarColor : string; RDashboardColor : string;
   DFirstName : string; DLastName : string; DEmail2 : string; DPassword2: string; DeveloperID : number; DPhoneNumber : string;  DPhoto: string;
-  DDescription: string; DPLanguages: string; DSkills: string; DEducation: string; DCertificates: string; DTitle: string; DRoleDesc : string;
+  DDescription: string; DPLanguages: string; DSkills: string; DEducation: string; DCertificates: string; DTitle: string; DRoleDesc : string; DSideBarColor : string; DDashboardColor : string;
   CnotD : string ; 
   regexp = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
   ngOnInit() {
     //Developer
-    //this.Email = 'ayibrahi@hotmail.com';
-    //this.Password = 'testing332211'
+    // this.Email = 'ayibrahi@hotmail.com';
+    // this.Password = 'testing332211'
+    //this.Email = 'tes@ho.co';
+    //this.Password = 'testing123'
     //Customer
      //this.Email = 'ryibrahim@something.com';
      //this.Password = 'testingtesting'
 
-      // Resource Managers
-     //this.Email = 'sjeong2@testing.net';
-     //this.Password = 'testing123456';
+    // Resource Managers
+    this.Email = 'sjeong2@testing.net';
+    this.Password = 'testing123456';
 
-     //this.Login();
+    this.Login();
 
   }
   Login(){
@@ -86,10 +88,12 @@ export class SignInComponent implements OnInit {
                               this.ResourceManagerID = this.rmlogin[0].resourceManagerID;
                               this.RPhoneNumber = this.rmlogin[0].phoneNumber;
                               this.RRoleDesc = this.rmlogin[0].roleDesc;
-                              this.RPhoto = this.rmlogin[0].photo
+                              this.RPhoto = this.rmlogin[0].photo;
+                              this.RSideBarColor = this.rmlogin[0].sideBarColor;
+                              this.RDashboardColor = this.rmlogin[0].dashboardColor;
                               this.CnotD = 'resourcemanager';
-                              this.router.navigate(['./dashboard'], {state: {type: this.CnotD, FirstName: this.RFirstName , LastName: this.RLastName, PhoneNumber : this.RPhoneNumber , Email : this.REmail2, Password : this.RPassword2 
-                                ,ResourceManagerID : this.ResourceManagerID ,RoleDesc : this.RRoleDesc , Photo : this.RPhoto}});
+                              this.router.navigate(['./rmorders'], {state: {type: this.CnotD, FirstName: this.RFirstName , LastName: this.RLastName, PhoneNumber : this.RPhoneNumber , Email : this.REmail2, Password : this.RPassword2 
+                                ,ResourceManagerID : this.ResourceManagerID ,RoleDesc : this.RRoleDesc , Photo : this.RPhoto , SideBarColor : this.RSideBarColor , DashboardColor : this.RDashboardColor}});
                               }
                             } , (error) => {console.log('error message ' + error)} );
                             
@@ -107,12 +111,14 @@ export class SignInComponent implements OnInit {
                         this.DCertificates = this.developerlogin[0].certification;
                         this.DTitle = this.developerlogin[0].title;
                         this.DRoleDesc = this.developerlogin[0].roleDesc;
-                        this.DPhoto = this.developerlogin[0].photo
+                        this.DPhoto = this.developerlogin[0].photo;
+                        this.DSideBarColor = this.developerlogin[0].sideBarColor;
+                        this.DDashboardColor = this.developerlogin[0].dashboardColor;
                         this.CnotD = 'developer';
                         this.router.navigate(['./devorders'], 
                         {state: {type: this.CnotD, FirstName: this.DFirstName , LastName: this.DLastName, PhoneNumber : this.DPhoneNumber , Email : this.DEmail2, Password : this.DPassword2
                         , Description : this.DDescription , PLanguages : this.DPLanguages , Skills : this.DSkills, Education : this.DEducation , Certification : this.DCertificates,
-                          Title : this.DTitle , DeveloperID : this.DeveloperID , RoleDesc : this.DRoleDesc , Photo : this.DPhoto }});
+                          Title : this.DTitle , DeveloperID : this.DeveloperID , RoleDesc : this.DRoleDesc , Photo : this.DPhoto , SideBarColor : this.DSideBarColor , DashboardColor : this.DDashboardColor }});
                       }
                     }, (error) => {console.log('error message ' + error)}
                     )
@@ -124,10 +130,12 @@ export class SignInComponent implements OnInit {
             this.CustomerID = this.loginresponse[0].customerID;
             this.CPhoneNumber = this.loginresponse[0].phoneNumber;
             this.CRoleDesc = this.loginresponse[0].roleDesc;
-            this.CPhoto = this.loginresponse[0].photo
+            this.CPhoto = this.loginresponse[0].photo;
+            this.CSideBarColor = this.loginresponse[0].sideBarColor;
+            this.CDashboardColor = this.loginresponse[0].dashboardColor;
             this.CnotD = 'customer';
             this.router.navigate(['./customerdashboard'], {state: {type: this.CnotD, FirstName: this.CFirstName , LastName: this.CLastName, PhoneNumber : this.CPhoneNumber , Email : this.CEmail2, Password : this.CPassword2 
-              ,CustomerID : this.CustomerID ,RoleDesc : this.CRoleDesc , Photo : this.CPhoto}});
+              ,CustomerID : this.CustomerID ,RoleDesc : this.CRoleDesc , Photo : this.CPhoto , SideBarColor : this.CSideBarColor , DashboardColor : this.CDashboardColor}});
           }
           this.toastr.clear();
          }, (error) => {console.log('error message ' + error)}

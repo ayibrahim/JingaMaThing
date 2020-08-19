@@ -17,6 +17,8 @@ export interface customer{
   phoneNumber : string;
   roleDesc : string;
   photo : string;
+  sideBarColor : string;
+  dashboardColor : string;
 }
 export interface Developer{
   developerID : number;
@@ -33,10 +35,16 @@ export interface Developer{
   title : string;
   roleDesc : string;
   photo : string;
+  sideBarColor : string;
+  dashboardColor : string;
 }
 export interface DeveloperInfo{
   DFirstName: string; DLastName: string; DPhoneNumber: string; DEmail: string; DPassword: string; DDescription: string; DPLanguages: string; DSkills: string; DEducation: string; DCertificates: string; DTitle: string; 
 }
+export interface CustInfo{
+  FirstName: string; LastName: string; PhoneNumber: string; Email: string; Password: string; 
+}
+interface CustInfos extends Array<CustInfo>{}
 interface DeveloperInfos extends Array<DeveloperInfo>{}
 @Component({
   selector: 'app-sign-up',
@@ -52,9 +60,9 @@ export class SignUpComponent implements OnInit {
   isDeveloper : boolean = false;
   isDeveloper2 : boolean = false;
   isDeveloper3 : boolean = false;
-  CFirstName: string; CLastName: string; CPhoneNumber: string; CEmail: string; CPassword: string; CConfirmPassword: string; CustomerID : number;  CRoleDesc : String; CPhoto : string;
+  CFirstName: string; CLastName: string; CPhoneNumber: string; CEmail: string; CPassword: string; CConfirmPassword: string; CustomerID : number;  CRoleDesc : String; CPhoto : string; CSideBarColor : string; CDashboardColor : string;
   DFirstName: string; DLastName: string; DPhoneNumber: string; DEmail: string; DPassword: string; DConfirmPassword: string; DeveloperID : number; DRoleDesc : string; DPhoto : string;
-  DDescription: string; DPLanguages: string; DSkills: string; DEducation: string; DCertificates: string; DTitle: string; 
+  DDescription: string; DPLanguages: string; DSkills: string; DEducation: string; DCertificates: string; DTitle: string; DSideBarColor : string; DDashboardColor : string;
   loginresponse: customer[]; developerlogin : Developer[];
   DeveloperObject: DeveloperInfos[];
   regexp = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
@@ -109,21 +117,23 @@ export class SignUpComponent implements OnInit {
            this.showNotification('top', 'center' , this.errormessage);
            return;
       } else {
-        this.http.get('https://localhost:44380/api/InserNewCustomer/' + this.CFirstName + '/' + this.CLastName + '/' + this.CPhoneNumber + '/' + this.CEmail + '/' + this.CPassword) .subscribe(
-       (response2 : headers[]) => {
-         this.newdata = response2;
-         console.log(this.newdata);
-       }, (error) => {console.log('error message ' + error)} 
-     )
-
+        var result: CustInfos = [
+          {  FirstName: this.CFirstName.toString(), LastName : this.CLastName.toString() , PhoneNumber : this.CPhoneNumber.toString() , Email : this.CEmail.toString() , Password : this.CPassword.toString()  }
+          ];
+          const httpOptions = {
+            headers: new HttpHeaders({'Content-Type': 'application/json'})
+          }    
+          
+         this.http.post('https://localhost:44380/api/InserNewCustomer' , result[0] , httpOptions).subscribe(data => {
+             console.log(data)
+            }, error => {
+           console.log(error)
+         });
      setTimeout(()=>{    //<<<---    using ()=> syntax
       this.getCusotmerInfo();
       }, 1000);
       }
     }, 1000);
-   
-     
-    
   }
   getCusotmerInfo(){
     this.http.get('https://localhost:44380/api/getCustomerInfo/' + this.CEmail + '/' + this.CPassword)
@@ -138,10 +148,12 @@ export class SignUpComponent implements OnInit {
             this.CPhoneNumber = this.loginresponse[0].phoneNumber;
             this.CRoleDesc = this.loginresponse[0].roleDesc;
             this.CPhoto = this.loginresponse[0].photo;
+            this.CSideBarColor = this.loginresponse[0].sideBarColor;
+            this.CDashboardColor = this.loginresponse[0].dashboardColor;
           this.toastr.clear();
           this.CnotD = 'customer';
           this.router.navigate(['./customerdashboard'], {state: {type: this.CnotD, FirstName: this.CFirstName , LastName: this.CLastName, PhoneNumber : this.CPhoneNumber ,
-             Email : this.CEmail, Password : this.CPassword ,CustomerID : this.CustomerID ,RoleDesc : this.CRoleDesc , Photo : this.CPhoto}});
+             Email : this.CEmail, Password : this.CPassword ,CustomerID : this.CustomerID ,RoleDesc : this.CRoleDesc , Photo : this.CPhoto , SideBarColor : this.CSideBarColor , DashboardColor : this.CDashboardColor}});
          }, (error) => {console.log('error message ' + error)}
        )
   }
@@ -200,12 +212,14 @@ export class SignUpComponent implements OnInit {
                       this.DTitle = this.developerlogin[0].title;
                       this.DRoleDesc = this.developerlogin[0].roleDesc;
                       this.DPhoto = this.developerlogin[0].photo;
+                      this.DSideBarColor = this.developerlogin[0].sideBarColor;
+                      this.DDashboardColor = this.developerlogin[0].dashboardColor;
       this.toastr.clear();
       this.CnotD = 'developer';
       this.router.navigate(['./devorders'], 
       {state: {type: this.CnotD, FirstName: this.DFirstName , LastName: this.DLastName, PhoneNumber : this.DPhoneNumber , Email : this.DEmail, Password : this.DPassword
       , Description : this.DDescription , PLanguages : this.DPLanguages , Skills : this.DSkills, Education : this.DEducation , Certification : this.DCertificates,
-        Title : this.DTitle , DeveloperID : this.DeveloperID , RoleDesc : this.DRoleDesc , Photo : this.DPhoto }});
+        Title : this.DTitle , DeveloperID : this.DeveloperID , RoleDesc : this.DRoleDesc , Photo : this.DPhoto , SideBarColor : this.DSideBarColor , DashboardColor : this.DDashboardColor }});
     
     }, (error) => {console.log('error message ' + error)}
     )
