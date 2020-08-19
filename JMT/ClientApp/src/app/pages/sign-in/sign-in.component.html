@@ -1,56 +1,197 @@
+      <div *ngIf="isMainLogin">
+        <div class="limiter">
+          <div class="container-login100">
+            <div class="wrap-login100">
+              <div aTilt [tiltSettings]="tiltSettings">
+                <div class="login100-pic js-tilt" data-tilt>
+                  <img src="../../../assets/img/img-01.png" alt="IMG">
+                </div>
+              </div>
 
- <div class="limiter">
-		<div class="container-login100">
-			<div class="wrap-login100">
-      <div  aTilt 
-    [tiltSettings]="tiltSettings">
-				<div class="login100-pic js-tilt" data-tilt>
-					<img src="../../../assets/img/img-01.png" alt="IMG">
-				</div>
-    </div>  
-				<form class="login100-form validate-form">
-					<span class="login100-form-title" style="color: #57b846;">
-						Member Login
-					</span>
+              <form class="login100-form validate-form">
+                <span class="login100-form-title" style="color: #57b846;">
+                  Member Login
+                </span>
 
-					<div class="wrap-input100 validate-input" >
-						<input class="input100" type="text"  placeholder="Email" [(ngModel)]="Email" name="Email" autocomplete="doNotAutoComplete">
-						<span class="focus-input100"></span>
-						<span class="symbol-input100">
-							<i class="fa fa-envelope" aria-hidden="true"></i>
-						</span>
-					</div>
+                <div class="wrap-input100 validate-input">
+                  <input class="input100" type="text" placeholder="Email" [(ngModel)]="Email" name="Email"
+                    autocomplete="doNotAutoComplete">
+                  <span class="focus-input100"></span>
+                  <span class="symbol-input100">
+                    <i class="fa fa-envelope" aria-hidden="true"></i>
+                  </span>
+                </div>
 
-					<div class="wrap-input100 validate-input" >
-						<input class="input100" type="password"  placeholder="Password" [(ngModel)]="Password" name="Password" >
-						<span class="focus-input100"></span>
-						<span class="symbol-input100">
-							<i class="fa fa-lock" aria-hidden="true"></i>
-						</span>
-					</div>
-					
-					<div class="container-login100-form-btn">
-						<button class="login100-form-btn" (click)="Login()">
-							Login
-						</button>
-					</div>
+                <div class="wrap-input100 validate-input">
+                  <input class="input100" type="password" placeholder="Password" [(ngModel)]="Password" name="Password">
+                  <span class="focus-input100"></span>
+                  <span class="symbol-input100">
+                    <i class="fa fa-lock" aria-hidden="true"></i>
+                  </span>
+                </div>
 
-			<! ––		<div class="text-center p-t-12">
-			<! ––				<span class="txt1"> 
-			<! ––					Forgot 
-			<! ––				</span> 
-			<! ––				<a class="txt2" href="#"> 
-			<! ––					Username / Password? 
-			<! ––				</a> 
-			<! ––			</div> 
+                <div class="container-login100-form-btn">
+                  <button class="login100-form-btn" (click)="Login()">
+                    Login
+                  </button>
+                </div>
 
-					<div class="text-center p-t-136">
-						<a class="txt2" href="#" (click)="refresh()" style="color: white; ">
-							Go Home
-							<i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>
-						</a>
-					</div>
-				</form>
-			</div>
-		</div>
-	</div>
+                <div class="text-center p-t-12">
+
+                  <a class="txt2" href="JavaScript:void(0);" (click)="ForgotPassword()">
+                    <span class="txt1">
+                      Forgot Password?
+                    </span>
+
+                  </a>
+                </div>
+                <div class="text-center p-t-12">
+
+                  <a class="txt2" href="JavaScript:void(0);" (click)="ResetPassword()">
+                    <span class="txt1">
+                      Reset Password
+                    </span>
+
+                  </a>
+                </div>
+
+                <div class="text-center p-t-136">
+                  <a class="txt2" href="#" (click)="refresh()" style="color: white; ">
+                    Go Home
+                    <i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>
+                  </a>
+                </div>
+              </form>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Forgot Password Form -->
+      <div *ngIf="isForgotPassword">
+        <div class="limiter">
+          <div class="container-login100">
+            <div class="wrap-login100">
+              <div aTilt [tiltSettings]="tiltSettings">
+                <div class="login100-pic js-tilt" data-tilt>
+                  <img src="../../../assets/img/img-01.png" alt="IMG">
+                </div>
+                <button class="login100-form-btn" (click)="ReturnToStart()">
+                  Back to Start
+                </button>
+              </div>
+              <form class="login100-form validate-form">
+                <span class="login100-form-title" style="color: #57b846;">
+                  Forgot Password
+                </span>
+                <div *ngIf="isEmailSentGood === false;">
+                  <p>Please enter your email address below and we will send you information to change your password.</p>
+                  <br>
+                  <div class="wrap-input100 validate-input">
+                    <input class="input100" type="text" placeholder="Email" [(ngModel)]="ForgotEmail" name="ForgotEmail"
+                      autocomplete="doNotAutoComplete">
+                    <span class="focus-input100"></span>
+                    <span class="symbol-input100">
+                      <i class="fa fa-envelope" aria-hidden="true"></i>
+                    </span>
+                  </div>
+                  <br><br>
+                  <div class="container-login100-form-btn">
+                    <button class="login100-form-btn" (click)="SubmitForgotPassword()">
+                      Submit
+                    </button>
+                  </div>
+                </div>
+
+                <div *ngIf="isEmailSentGood === true;">
+                  <br>
+                  <span class="login100-form-title" style="color: #1D8CF8;">
+                    An email has been sent to your email address with the password that you can use to access your
+                    account.</span>
+                  <br><br><br><br>
+                </div>
+
+                <div class="text-center p-t-136">
+                  <a class="txt2" href="#" (click)="refresh()" style="color: white; ">
+                    Go Home
+                    <i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>
+                  </a>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Reset Password Form -->
+      <div *ngIf="isResetPassword">
+        <div class="limiter">
+          <div class="container-login100">
+            <div class="wrap-login100">
+              <div aTilt [tiltSettings]="tiltSettings">
+                <div class="login100-pic js-tilt" data-tilt>
+                  <img src="../../../assets/img/img-01.png" alt="IMG">
+                </div>
+                <button class="login100-form-btn" (click)="ReturnToStart()">
+                  Back to Start
+                </button>
+              </div>
+              <form class="login100-form validate-form">
+                <span class="login100-form-title" style="color: #57b846;">
+                  Reset Password
+                </span>
+                <div *ngIf="isPasswordResetGood === false;">
+                  <div class="wrap-input100 validate-input">
+                    <input class="input100" type="text" placeholder="Email" [(ngModel)]="ResetEmail" name="ResetEmail"
+                      autocomplete="doNotAutoComplete">
+                    <span class="focus-input100"></span>
+                    <span class="symbol-input100">
+                      <i class="fa fa-envelope" aria-hidden="true"></i>
+                    </span>
+                  </div>
+                  <div class="wrap-input100 validate-input">
+                    <input class="input100" type="password" placeholder="Old Password" [(ngModel)]="OldPassword"
+                      name="OldPassword">
+                    <span class="focus-input100"></span>
+                    <span class="symbol-input100">
+                      <i class="fa fa-lock" aria-hidden="true"></i>
+                    </span>
+                  </div>
+                  <div class="wrap-input100 validate-input">
+                    <input class="input100" type="password" placeholder="New Password" [(ngModel)]="NewPassword"
+                      name="NewPassword">
+                    <span class="focus-input100"></span>
+                    <span class="symbol-input100">
+                      <i class="fa fa-lock" aria-hidden="true"></i>
+                    </span>
+                  </div>
+                  <div class="wrap-input100 validate-input">
+                    <input class="input100" type="password" placeholder="Confirm New Password"
+                      [(ngModel)]="ConfirmNewPassword" name="ConfirmNewPassword">
+                    <span class="focus-input100"></span>
+                    <span class="symbol-input100">
+                      <i class="fa fa-lock" aria-hidden="true"></i>
+                    </span>
+                  </div>
+                  <div class="container-login100-form-btn">
+                    <button class="login100-form-btn" (click)="SubmitResetPassword()">
+                      Submit
+                    </button>
+                  </div>
+                </div>
+                <div *ngIf="isPasswordResetGood === true;">
+                  <br>
+                  <span class="login100-form-title" style="color: #1D8CF8;">
+                    Password Has Been Reset Succesfully.</span>
+                  <br><br><br><br>
+                </div>
+                <div class="text-center p-t-136">
+                  <a class="txt2" href="#" (click)="refresh()" style="color: white; ">
+                    Go Home
+                    <i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>
+                  </a>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>

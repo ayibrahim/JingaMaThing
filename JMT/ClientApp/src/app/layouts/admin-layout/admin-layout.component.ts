@@ -180,13 +180,6 @@ export class AdminLayoutComponent implements OnInit {
         queryParams : {data : this.custfull.CustomerID , data2 : this.custfull.RoleDesc}
       })
       }
-      if(this.historytype == 'developer'){
-        this.router.navigate(['./home']);
-      }
-      if(this.historytype == 'resourcemanager')
-      {
-        this.router.navigate(['./home']);
-      }
     }
     if(this.newvar == 'EmailComponent'){
       if(this.historytype == 'customer'){
@@ -211,22 +204,10 @@ export class AdminLayoutComponent implements OnInit {
         queryParams : {data : this.custfull.CustomerID , data2 : this.custfull.RoleDesc}
       })
       }
-      if(this.historytype == 'developer'){
-        this.router.navigate(['./home']);
-      }
-      if(this.historytype == 'resourcemanager')
-      {
-        this.router.navigate(['./home']);
-      }
+     
     }
     if(this.newvar == 'DevordersComponent'){
-      if(this.historytype == 'customer'){
-        this.router.navigate(['./home']);
-      }
-      if(this.historytype == 'resourcemanager')
-      {
-        this.router.navigate(['./home']);
-      }
+      
       if(this.historytype == 'developer'){
         this.router.navigate(['./devorders'],{
           queryParams : {data : this.devfull.DeveloperID , data2 : this.devfull.RoleDesc}
@@ -239,18 +220,10 @@ export class AdminLayoutComponent implements OnInit {
         queryParams : {data : this.custfull.CustomerID , data2 : this.custfull.RoleDesc}
       })
       }
-      if(this.historytype == 'developer'){
-        this.router.navigate(['./home']);
-      }
-      if(this.historytype == 'resourcemanager')
-      {
-        this.router.navigate(['./home']);
-      }
+      
     }
     if(this.newvar == 'LinksComponent'){
-      if(this.historytype == 'customer'){
-        this.router.navigate(['./home']);
-      }
+      
       if(this.historytype == 'resourcemanager'){
         this.router.navigate(['./links'],{
           queryParams : {data : this.rmfull.ResourceManagerID , data2 : this.rmfull.RoleDesc}
@@ -263,9 +236,7 @@ export class AdminLayoutComponent implements OnInit {
       }
     }
     if(this.newvar == 'NotesComponent'){
-      if(this.historytype == 'customer'){
-        this.router.navigate(['./home']);
-      }
+     
       if(this.historytype == 'resourcemanager'){
         this.router.navigate(['./notes'],{
           queryParams : {data : this.rmfull.ResourceManagerID , data2 : this.rmfull.RoleDesc}
@@ -278,30 +249,22 @@ export class AdminLayoutComponent implements OnInit {
       }
     }
     if(this.newvar == 'RmdevelopersComponent'){
-      if(this.historytype == 'customer'){
-        this.router.navigate(['./home']);
-      }
+     
       if(this.historytype == 'resourcemanager'){
         this.router.navigate(['./rmdevelopers'],{
           queryParams : {data : this.rmfull.ResourceManagerID , data2 : this.rmfull.RoleDesc}
         })
         }
-      if(this.historytype == 'developer'){
-        this.router.navigate(['./home']);
-      }
+
     }
     if(this.newvar == 'RmordersComponent'){
-      if(this.historytype == 'customer'){
-        this.router.navigate(['./home']);
-      }
+
       if(this.historytype == 'resourcemanager'){
         this.router.navigate(['./rmorders'],{
           queryParams : {data : this.rmfull.ResourceManagerID , data2 : this.rmfull.RoleDesc}
         })
         }
-      if(this.historytype == 'developer'){
-        this.router.navigate(['./home']);
-      }
+
     }
   }
   showNotification(from, align , message){

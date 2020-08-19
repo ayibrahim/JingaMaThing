@@ -20,6 +20,14 @@ export interface Image{}
 export interface DeveloperInfo{
   DeveloperID : string; FirstName: string; LastName: string; PhoneNumber: string; Email: string;  Description: string; PLanguages: string; Skills: string; Education: string; Certificates: string; Title: string; 
 }
+export interface UpdateCustInfo{
+  CustomerID : string ; FirstName : string; LastName : string; PhoneNumber : string; Email : string;
+}
+export interface UpdateRMInfo{
+  ResourceManagerID : string ; FirstName : string; LastName : string; PhoneNumber : string; Email : string;
+}
+interface UpdateRMInfos extends Array<UpdateRMInfo>{}
+interface UpdateCustInfos extends Array<UpdateCustInfo>{}
 interface DeveloperInfos extends Array<DeveloperInfo>{}
 @Component({
   selector: 'app-user-profile',
@@ -111,7 +119,7 @@ export class UserProfileComponent implements OnInit {
           }, (error) => {console.log('error message ' + error)}
           )
     }
-    if(this.rmanagerId != undefined){
+    else if(this.rmanagerId != undefined){
       this.isrmanager = true;
       this.http.get('https://localhost:44380/api/GetResourceManagerInfoByID/' + this.rmanagerId)
       .subscribe(
@@ -129,7 +137,7 @@ export class UserProfileComponent implements OnInit {
           }, (error) => {console.log('error message ' + error)}
           )
     }
-    if(this.developerId != undefined){
+    else if(this.developerId != undefined){
       this.isdeveloper = true;
       this.http.get('https://localhost:44380/api/getDeveloperInfoByID/' + this.developerId)
             .subscribe(
@@ -153,12 +161,10 @@ export class UserProfileComponent implements OnInit {
                         this.gallerdisplay = true;
                         this.getImages(this.DeveloperID).then(images => this.images = images);
                     }, (error) => {console.log('error message ' + error)}
-                    )
-        
-                    
-                    
+                    )           
+    } else {
+      this.router.navigate(['./access-denied']);
     }
-    
   }
   getImages(devid : number) {
     return this.http.get<any>('https://localhost:44380/api/getDevGalleryInfo/'+ devid)
@@ -257,14 +263,18 @@ export class UserProfileComponent implements OnInit {
       this.showNotification('top', 'center' , this.errormessage);
       return;
     }
-    this.http.get('https://localhost:44380/api/UpdateCustomerInfo/' + this.CustomerID + '/' + this.CFirstName + '/' + this.CLastName + '/' + this.CPhoneNumber + '/' + this.CEmail ).subscribe(
-      (response2 : headers[]) => {
-        this.newdata = response2
-        this.CEmail2 = this.CEmail;
-        console.log(this.newdata);
-      }, (error) => {console.log('error message ' + error)}
-      
-    )
+    var result: UpdateCustInfos = [
+      {  CustomerID : this.CustomerID.toString() , FirstName : this.CFirstName.toString() , LastName : this.CLastName.toString() , PhoneNumber : this.CPhoneNumber.toString() , Email : this.CEmail.toString()}
+      ];
+      const httpOptions = {
+        headers: new HttpHeaders({'Content-Type': 'application/json'})
+      }    
+      this.http.post('https://localhost:44380/api/UpdateCustomerInfo' , result[0] , httpOptions).subscribe(data => {
+         console.log(data)
+         this.CEmail2 = this.CEmail;
+        }, error => {
+       console.log(error)
+     })
     this.toastr.clear();
     this.errormessage = '*Updated Successfully';
     this.showNotification('top', 'center' , this.errormessage);
@@ -294,14 +304,18 @@ export class UserProfileComponent implements OnInit {
       this.showNotification('top', 'center' , this.errormessage);
       return;
     }
-    this.http.get('https://localhost:44380/api/UpdateRMInfo/' + this.ResourceManagerID + '/' + this.RFirstName + '/' + this.RLastName + '/' + this.RPhoneNumber + '/' + this.REmail ).subscribe(
-      (response2 : headers[]) => {
-        this.newdata = response2
-        this.REmail2 = this.REmail;
-        console.log(this.newdata);
-      }, (error) => {console.log('error message ' + error)}
-      
-    )
+    var result: UpdateRMInfos = [
+      {  ResourceManagerID : this.ResourceManagerID.toString() , FirstName : this.RFirstName.toString() , LastName : this.RLastName.toString() , PhoneNumber : this.RPhoneNumber.toString() , Email : this.REmail.toString()}
+      ];
+      const httpOptions = {
+        headers: new HttpHeaders({'Content-Type': 'application/json'})
+      }    
+      this.http.post('https://localhost:44380/api/UpdateRMInfo' , result[0] , httpOptions).subscribe(data => {
+         console.log(data)
+         this.REmail2 = this.REmail;
+        }, error => {
+       console.log(error)
+     })
     this.toastr.clear();
     this.errormessage = '*Updated Successfully';
     this.showNotification('top', 'center' , this.errormessage);

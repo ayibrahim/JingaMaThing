@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Globals } from '../../Shared/globals'
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 export interface customer{
   customerID : number;email : string;firstName : string;lastName : string;password : string;phoneNumber : string;roleDesc : string;photo : string; sideBarColor : string; dashboardColor : string;
 }
@@ -12,6 +12,11 @@ export interface rmanager{
 export interface Developer{
   developerID : number; email : string;firstName : string;lastName : string;password : string;phoneNumber : string;description : string;pLanguages : string;skills : string;education : string;certification : string;title : string;roleDesc : string;photo : string; sideBarColor : string; dashboardColor : string;
 }
+export interface test{ response : any;}
+export interface UpdaetPassword{
+   Email: string; Password: string; 
+}
+interface UpdaetPasswords extends Array<UpdaetPassword>{}
 @Component({
   selector: 'app-sign-in',
   templateUrl: './sign-in.component.html',
@@ -25,12 +30,14 @@ export class SignInComponent implements OnInit {
   RFirstName : string; RLastName : string; REmail2 : string; RPassword2: string; ResourceManagerID : number; RPhoneNumber : string; RRoleDesc : string; RPhoto : string; RSideBarColor : string; RDashboardColor : string;
   DFirstName : string; DLastName : string; DEmail2 : string; DPassword2: string; DeveloperID : number; DPhoneNumber : string;  DPhoto: string;
   DDescription: string; DPLanguages: string; DSkills: string; DEducation: string; DCertificates: string; DTitle: string; DRoleDesc : string; DSideBarColor : string; DDashboardColor : string;
-  CnotD : string ; 
+  CnotD : string ; isMainLogin : boolean = true; isForgotPassword : boolean = false; ForgotEmail : string;
+  CheckEmail : test[]; CheckPassword : test[]; isEmailSentGood : boolean = false; isResetPassword : boolean = false;
+  ResetEmail : string; OldPassword: string; NewPassword: string; ConfirmNewPassword: string; isPasswordResetGood : boolean = false;
   regexp = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
   ngOnInit() {
     //Developer
-    // this.Email = 'ayibrahi@hotmail.com';
-    // this.Password = 'testing332211'
+     //this.Email = 'ayibrahi@hotmail.com';
+     //this.Password = 'testing123'
     //this.Email = 'tes@ho.co';
     //this.Password = 'testing123'
     //Customer
@@ -42,7 +49,121 @@ export class SignInComponent implements OnInit {
     this.Password = 'testing123456';
 
     this.Login();
-
+  }
+  
+  ForgotPassword(){ this.isMainLogin = false; this.isForgotPassword = true; this.isEmailSentGood = false; this.ForgotEmail = undefined; }
+  ResetPassword(){ this.isMainLogin = false; this.isResetPassword = true; this.isPasswordResetGood = false; this.ResetEmail = undefined;
+  this.OldPassword = undefined; this.NewPassword = undefined; this.ConfirmNewPassword = undefined; }
+  SubmitForgotPassword(){
+    if(!this.ForgotEmail ){
+      this.toastr.clear();
+      this.errormessage = '*Please Enter an Email Address';
+      this.showNotification('top', 'center' , this.errormessage);
+      return;
+    }
+    var  serchfind:boolean;
+    serchfind = this.regexp.test(this.ForgotEmail);
+    if(serchfind != true){
+      this.toastr.clear();
+      this.errormessage = '*Email Must be in Correct Format';
+      this.showNotification('top', 'center' , this.errormessage);
+      return;
+    }
+    this.http.get('https://localhost:44380/api/CheckUserEmail/'+ this.ForgotEmail).subscribe(
+        (response2 : test[]) => {
+          this.CheckEmail = response2;
+        }, (error) => {console.log('error message ' + error)} 
+      )
+      setTimeout(()=>{
+        if(this.CheckEmail[0].response == 'Found'){
+          this.http.get('https://localhost:44380/api/SendForgotPasswordEmail/'+ this.ForgotEmail).subscribe(
+            (response2 : test[]) => {
+              this.CheckEmail = response2;
+              this.isEmailSentGood = true;
+            }, (error) => {console.log('error message ' + error)} 
+          )
+        } else {
+          this.toastr.clear();
+          this.errormessage = '*An account does not exist with this Email , Try Again';
+          this.showNotification('top', 'center' , this.errormessage);
+          return;
+        }
+      }, 1000);  
+  }
+  SubmitResetPassword(){
+    if(!this.ResetEmail || !this.OldPassword ||  !this.NewPassword || !this.ConfirmNewPassword){
+      this.toastr.clear();
+      this.errormessage = '*Please Fill Out All Fields';
+      this.showNotification('top', 'center' , this.errormessage);
+      return;
+    }
+    var  serchfind:boolean;
+    serchfind = this.regexp.test(this.ResetEmail);
+    if(serchfind != true){
+      this.toastr.clear();
+      this.errormessage = '*Email Must be in Correct Format';
+      this.showNotification('top', 'center' , this.errormessage);
+      return;
+    }
+    if(this.NewPassword.length < 8 || this.NewPassword.length > 16){
+      this.toastr.clear();
+      this.errormessage = '*New Password Length Must be between 8 and 16 characters';
+      this.showNotification('top', 'center' , this.errormessage);
+      return;
+    }
+    if(this.NewPassword != this.ConfirmNewPassword){
+      this.toastr.clear();
+      this.errormessage = '*New Password and Confirm New Password Must Match';
+      this.showNotification('top', 'center' , this.errormessage);
+      return;
+    }
+    this.http.get('https://localhost:44380/api/CheckUserEmail/'+ this.ResetEmail).subscribe(
+      (response2 : test[]) => {
+        this.CheckEmail = response2;
+      }, (error) => {console.log('error message ' + error)} 
+    )
+    setTimeout(()=>{
+      if(this.CheckEmail[0].response == 'Found'){
+          this.toastr.clear();
+          this.http.get('https://localhost:44380/api/CheckEmailPasswordExist/'+ this.ResetEmail + '/' + this.OldPassword).subscribe(
+            (response2 : test[]) => {
+              this.CheckPassword = response2;
+            }, (error) => {console.log('error message ' + error)} 
+          )
+          setTimeout(()=> {
+            if(this.CheckPassword[0].response == 'Found'){
+              var result: UpdaetPasswords = [
+                {   Email : this.ResetEmail.toString() , Password : this.NewPassword.toString()  }
+                ];
+                const httpOptions = {
+                  headers: new HttpHeaders({'Content-Type': 'application/json'})
+                }    
+                
+               this.http.post('https://localhost:44380/api/UpdateResetPassword' , result[0] , httpOptions).subscribe(data => {
+                   console.log(data)
+                   this.isPasswordResetGood = true;
+                  }, error => {
+                 console.log(error)
+               });
+            } else {
+              this.toastr.clear();
+              this.errormessage = '*Old Password Incorrect , Try Again!';
+              this.showNotification('top', 'center' , this.errormessage);
+              return;
+            }
+          }, 1000);
+          
+      } else {
+        this.toastr.clear();
+        this.errormessage = '*No Account Associated with Provided Email was Found, Try Again!';
+        this.showNotification('top', 'center' , this.errormessage);
+        return;
+      }} , 1000);
+  }
+  ReturnToStart(){
+    this.isMainLogin = true;
+    this.isForgotPassword = false;
+    this.isResetPassword = false;
   }
   Login(){
     if(!this.Email || !this.Password){

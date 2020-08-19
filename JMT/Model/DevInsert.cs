@@ -51,12 +51,35 @@ namespace JMT.Model {
 		
 	}
 
+	public class CustUpdate {
+		public string CustomerID { get; set; }
+		public string FirstName { get; set; }
+		public string LastName { get; set; }
+		public string PhoneNumber { get; set; }
+		public string Email { get; set; }
+
+	}
+
+	public class RMUpdate {
+		public string ResourceManagerID { get; set; }
+		public string FirstName { get; set; }
+		public string LastName { get; set; }
+		public string PhoneNumber { get; set; }
+		public string Email { get; set; }
+
+	}
 	public class SendMessage {
 		public string RoleDesc { get; set; }
 		public string Email { get; set; }
 		public string Title { get; set; }
 		public string Description { get; set; }
 		public string EmailTo { get; set; }
+
+	}
+
+	public class ResetPassword {
+		public string Email { get; set; }
+		public string Password { get; set; }
 
 	}
 }

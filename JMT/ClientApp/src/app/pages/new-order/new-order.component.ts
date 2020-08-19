@@ -40,9 +40,6 @@ export class NewOrderComponent implements OnInit {
       if(this.retrievedRole == 'Customer'){
         this.customerId = this.retrievedID;
       }
-      if(this.retrievedRole == 'Developer'){
-        this.developerId = this.retrievedID;
-      }
     }))
     if(this.customerId != undefined){
       this.iscustomer = true;
@@ -62,31 +59,8 @@ export class NewOrderComponent implements OnInit {
             this.GetDevList();
           }, (error) => {console.log('error message ' + error)}
           )
-    }
-    if(this.developerId != undefined){
-      this.isdeveloper = true;
-      this.http.get('https://localhost:44380/api/getDeveloperInfoByID/' + this.developerId)
-            .subscribe(
-                    (response2 : Developer[] ) => { 
-                      this.developerlogin = response2;
-                        this.DFirstName = this.developerlogin[0].firstName;
-                        this.DLastName = this.developerlogin[0].lastName;
-                        this.DEmail = this.developerlogin[0].email;
-                        this.DEmail2 = this.developerlogin[0].email;
-                        this.DPassword = this.developerlogin[0].password;
-                        this.DeveloperID = this.developerlogin[0].developerID;
-                        this.DPhoneNumber = this.developerlogin[0].phoneNumber;
-                        this.DDescription = this.developerlogin[0].description;
-                        this.DPLanguages = this.developerlogin[0].pLanguages;
-                        this.DSkills = this.developerlogin[0].skills;
-                        this.DEducation = this.developerlogin[0].education;
-                        this.DCertificates = this.developerlogin[0].certification;
-                        this.DTitle = this.developerlogin[0].title;
-                        this.DRoleDesc = this.developerlogin[0].roleDesc;
-                        this.DPhoto = this.developerlogin[0].photo;
-                    }, (error) => {console.log('error message ' + error)}
-                    )
-       
+    }else {
+      this.router.navigate(['./access-denied']);
     }
     this.currentdate = formatDate(new Date(), 'yyyy-MM-dd', 'en_US');
     

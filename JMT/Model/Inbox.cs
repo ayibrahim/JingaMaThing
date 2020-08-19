@@ -20,6 +20,10 @@ namespace JMT.Model
 		
     }
 
+	public class PasswordFromEmail {
+		public string Password { get; set; }
+
+	}
 	public class InboxSent {
 		public string ID { get; set; }
 		public string Name { get; set; }

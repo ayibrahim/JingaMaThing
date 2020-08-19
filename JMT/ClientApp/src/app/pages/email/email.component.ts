@@ -55,6 +55,7 @@ export class EmailComponent implements OnInit {
   display1 : boolean = false; display2 : boolean = false; MSData : any[]; MSHeader : any[]; i : number;
   SMData : any[]; SMHeader : any[];  selecteddata2 : any;
   isrmanager : boolean = false; rmanagerId : string; rmresponse : rmanager[];
+  sourceinterval : any;
   constructor(private route: ActivatedRoute , private router : Router ,private http: HttpClient , private toastr: ToastrService) { }
 
   ngOnInit() {
@@ -87,14 +88,15 @@ export class EmailComponent implements OnInit {
             this.CRoleDesc = this.loginresponse[0].roleDesc;
             this.CPhoto = this.loginresponse[0].photo;
             this.LoadDevRMList();
-            this.CSentMessages();
             this.CInbox();
-            const source = interval(4000);
-            const subscribe = source.subscribe(val => this.CInbox());
+            setTimeout(()=> this.MsDataEmpty(),1000);
+            this.sourceinterval = setInterval(() => {
+              this.CInbox()
+            }, 4000);
           }, (error) => {console.log('error message ' + error)}
           )
     }
-    if(this.rmanagerId != undefined){
+    else if(this.rmanagerId != undefined){
       this.isrmanager = true;
       this.http.get('https://localhost:44380/api/GetResourceManagerInfoByID/' + this.rmanagerId)
       .subscribe(
@@ -110,14 +112,15 @@ export class EmailComponent implements OnInit {
             this.RRoleDesc = this.rmresponse[0].roleDesc;
             this.RPhoto = this.rmresponse[0].photo;
             this.LoadDevRMCustomerList();
-            this.RMSentMessages();
             this.RMInbox();
-            const source = interval(4000);
-            const subscribe = source.subscribe(val => this.RMInbox());
+            setTimeout(()=> this.MsDataEmpty(),1000);
+            this.sourceinterval = setInterval(() => {
+              this.RMInbox()
+            }, 4000);
           }, (error) => {console.log('error message ' + error)}
           )
     }
-    if(this.developerId != undefined){
+    else if(this.developerId != undefined){
       this.isdeveloper = true;
       this.http.get('https://localhost:44380/api/getDeveloperInfoByID/' + this.developerId)
             .subscribe(
@@ -139,21 +142,36 @@ export class EmailComponent implements OnInit {
                         this.DRoleDesc = this.developerlogin[0].roleDesc;
                         this.DPhoto = this.developerlogin[0].photo;
                         this.LoadDevRMCustomerList();
-                        this.DSentMessages();
                         this.DInbox();
-                        const source = interval(4000);
-                        const subscribe = source.subscribe(val => this.DInbox());
+                        setTimeout(()=> this.MsDataEmpty(),1000);
+                        this.sourceinterval = setInterval(() => {
+                          this.DInbox()
+                        }, 4000);
                     }, (error) => {console.log('error message ' + error)}
                     )
-        
-                    
-                    
+    }else {
+      this.router.navigate(['./access-denied']);
     }
+    
     this.items = [
       {label: 'Messages', icon: 'pi pi-fw pi-inbox' , styleClass: "testingstyle"},
       {label: 'Sent Messages', icon: 'pi pi-fw pi-envelope'},
       {label: 'New Message', icon: 'pi pi-fw pi-pencil'}
   ];
+  }
+  ngOnDestroy() {
+    if (this.sourceinterval) {
+      clearInterval(this.sourceinterval);
+    }
+  }
+  MsDataEmpty(){
+    if(this.MSData.length == 0)
+    {
+      this.toastr.clear();
+      this.errormessage = '*No Messges Found.';
+      this.showNotification('top', 'center' , this.errormessage);
+      setTimeout(()=> this.toastr.clear() , 3000);
+    }
   }
   test(event){
     this.MenuLabelChosen = event.toElement.parentNode.innerText;
@@ -164,12 +182,15 @@ export class EmailComponent implements OnInit {
       this.isMessages = true;
       if(this.retrievedRole == 'Customer'){
         this.CInbox();
+        setTimeout(()=> this.MsDataEmpty(),1000);
       }
       if(this.retrievedRole == 'Developer'){
         this.DInbox();
+        setTimeout(()=> this.MsDataEmpty(),1000);
       }
       if(this.retrievedRole == 'ResourceManager'){
         this.RMInbox();
+        setTimeout(()=> this.MsDataEmpty(),1000);
       }
     }
     if(this.MenuLabelChosen == "Sent Messages"){
@@ -209,9 +230,7 @@ export class EmailComponent implements OnInit {
       console.log(this.MSData);
       if(this.MSData.length == 0){
         this.nodata = true;
-        this.toastr.clear();
-        this.errormessage = '*No Messges Found.';
-        this.showNotification('top', 'center' , this.errormessage);
+      
       } else {
         this.nodata = false;
       }
@@ -241,9 +260,7 @@ export class EmailComponent implements OnInit {
       console.log(this.MSData);
       if(this.MSData.length == 0){
         this.nodata = true;
-        this.toastr.clear();
-        this.errormessage = '*No Messges Found.';
-        this.showNotification('top', 'center' , this.errormessage);
+        
       } else {
         this.nodata = false;
       }
@@ -272,9 +289,7 @@ export class EmailComponent implements OnInit {
       console.log(this.MSData);
       if(this.MSData.length == 0){
         this.nodata = true;
-        this.toastr.clear();
-        this.errormessage = '*No Messges Found.';
-        this.showNotification('top', 'center' , this.errormessage);
+        
       } else {
         this.nodata = false;
       }

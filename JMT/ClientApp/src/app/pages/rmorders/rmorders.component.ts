@@ -37,14 +37,9 @@ export class RmordersComponent implements OnInit {
       else if(this.retrievedRole == undefined){
         if(history.state.type == 'resourcemanager'){
           this.rmanagerId = history.state.ResourceManagerID;
-        } else {
-          this.router.navigate(['./home']);
-        }
-      } else {
-        this.router.navigate(['./home']);
+        } 
       }
     }))
-    
     if(this.rmanagerId != undefined){
       this.isrmanager = true;
       this.http.get('https://localhost:44380/api/GetResourceManagerInfoByID/' + this.rmanagerId)
@@ -63,6 +58,8 @@ export class RmordersComponent implements OnInit {
             this.GetRMDevOpenOrders();
           }, (error) => {console.log('error message ' + error)}
           )
+    } else {
+      this.router.navigate(['./access-denied']);
     }
     this.currentdate = formatDate(new Date(), 'yyyy-MM-dd', 'en_US');
   }

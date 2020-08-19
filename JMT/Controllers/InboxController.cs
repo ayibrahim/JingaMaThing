@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Net.Mail;
 using System.Threading.Tasks;
 using JMT.Model;
 using Microsoft.AspNetCore.Hosting;
@@ -45,6 +46,94 @@ namespace JMT.Controllers {
 			
 			return customer;
 		}
+
+		[HttpGet]
+		[Route("api/SendForgotPasswordEmail/{Email}")]
+		public List<Response> SendForgotPasswordEmail(string Email = "") {
+			Response finalresult = new Response();
+			List<Response> Customer = new List<Response>();
+			string result = "Found";
+			string password = "";
+			using (SqlConnection con = new SqlConnection(con2)) {
+				SqlCommand cmd = new SqlCommand("GetUserPasswordFromEmail", con);
+				cmd.CommandType = CommandType.StoredProcedure;
+				cmd.Parameters.AddWithValue("@Email", Email);
+				con.Open();
+				SqlDataReader rdr = cmd.ExecuteReader();
+				while (rdr.Read()) {
+					password = (rdr["Password"].ToString());
+				}
+				con.Close();
+			}
+				MailMessage mail = new MailMessage();
+				SmtpClient SmtpServer = new SmtpClient("smtp.gmail.com");
+				//%[za$Bhm+~FJZXm6EW-]~T
+				mail.From = new MailAddress("jmtithelpdesk@gmail.com");
+				mail.To.Add(Email);
+				mail.Subject = "JMT Password Reset";
+				mail.Body = "This email was sent to you because someone submitted a forgot password request for this email."+ Environment.NewLine + Environment.NewLine +
+				   "Your Password is : " + password.ToString() + Environment.NewLine + Environment.NewLine +
+					"To reset your password visit our home page sign in and click on reset password." + Environment.NewLine + Environment.NewLine +
+					" If this was not you please contact jmtithelpdesk@gmail.com , Thank You.";
+
+				SmtpServer.Port = 587;
+				SmtpServer.Credentials = new System.Net.NetworkCredential("jmtithelpdesk@gmail.com", "%[za$Bhm+~FJZXm6EW-]~T");
+				SmtpServer.EnableSsl = true;
+
+				SmtpServer.Send(mail);
+				finalresult.response = result.ToString();
+				Customer.Add(finalresult);
+				return Customer;
+
+		}
+
+		[HttpPost]
+		[Route("api/UpdateResetPassword")]
+		public List<Response> UpdateResetPassword([FromBody]ResetPassword data) {
+			Response finalresult = new Response();
+			List<Response> Customer = new List<Response>();
+			string result = "Successful ";
+			SqlConnection con = new SqlConnection(con2);
+			SqlCommand cmd = new SqlCommand("UpdateResetPassword", con);
+			cmd.CommandType = CommandType.StoredProcedure;
+			cmd.Parameters.AddWithValue("@Email", data.Email);
+			cmd.Parameters.AddWithValue("@Password", data.Password);
+			con.Open();
+			int i = cmd.ExecuteNonQuery();
+			con.Close();
+			finalresult.response = result.ToString();
+			Customer.Add(finalresult);
+			return Customer;
+		}
+
+		[HttpGet]
+		[Route("api/CheckEmailPasswordExist/{Email}/{Password}")]
+		public List<Response> GetUserPasswordFromEmail(string Email = "" , string Password = "") {
+			Response finalresult = new Response();
+			List<Response> Customer = new List<Response>();
+			string result = "Found";
+			string result2 = "NotFound";
+			//SqlConnection con = new SqlConnection("Data Source=NiluNilesh;Integrated Security=True");  
+			SqlConnection con = new SqlConnection(con2);
+			SqlCommand cmd = new SqlCommand("CheckEmailPasswordExist", con);
+			cmd.CommandType = CommandType.StoredProcedure;
+			cmd.Parameters.AddWithValue("@Email", Email);
+			cmd.Parameters.AddWithValue("@Password", Password);
+			con.Open();
+			object i = cmd.ExecuteScalar();
+			con.Close();
+			int i2 = Convert.ToInt32(i);
+			if (i2 == 1) {
+				finalresult.response = result.ToString();
+				Customer.Add(finalresult);
+			}
+			else {
+				finalresult.response = result2.ToString();
+				Customer.Add(finalresult);
+			}
+			return Customer;
+		}
+
 		[HttpGet]
 		[Route("api/GetDeveloperInbox/{DeveloperID}")]
 		public List<Inbox> GetDeveloperID(string DeveloperID = "") {

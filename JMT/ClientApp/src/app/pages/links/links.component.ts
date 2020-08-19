@@ -63,10 +63,8 @@ export class LinksComponent implements OnInit {
       if(this.retrievedRole == 'Developer'){
         this.developerId = this.retrievedID;
       }
-      else if(this.retrievedRole == 'ResourceManager'){
+      if(this.retrievedRole == 'ResourceManager'){
         this.rmanagerId = this.retrievedID;
-      } else {
-        this.router.navigate(['./home']);
       }
     }))
    
@@ -90,7 +88,7 @@ export class LinksComponent implements OnInit {
           }, (error) => {console.log('error message ' + error)}
           )
     }
-    if(this.developerId != undefined){
+    else if(this.developerId != undefined){
       this.isdeveloper = true;
       this.http.get('https://localhost:44380/api/getDeveloperInfoByID/' + this.developerId)
             .subscribe(
@@ -116,6 +114,8 @@ export class LinksComponent implements OnInit {
                     }, (error) => {console.log('error message ' + error)}
                     )
                      
+    } else {
+      this.router.navigate(['./access-denied']);
     }
     this.LinksTypes = [
       {label:'Public', value: 'Public'},

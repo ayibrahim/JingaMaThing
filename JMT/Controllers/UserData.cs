@@ -259,55 +259,51 @@ namespace JMT.Controllers
             return customer;
         }
 
-        [HttpGet]
-        [Route("api/UpdateCustomerInfo/{CustomerID}/{FirstName}/{LastName}/{PhoneNumber}/{Email}")]
-        public List<Response> UpdateCustomerInfo(string CustomerID = "" , string FirstName = "" , string LastName = "" , string PhoneNumber = "" , string Email = "")
-        {
+       
+		[HttpPost]
+		[Route("api/UpdateCustomerInfo")]
+		public List<Response> UpdateCustomerInfo([FromBody]CustUpdate data) {
 			Response finalresult = new Response();
 			List<Response> Customer = new List<Response>();
 			string result = "Successful ";
-			using (SqlConnection con = new SqlConnection(con2))
-            {
-                SqlCommand cmd = new SqlCommand("UpdateCustomerInfo", con);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@CustomerID", CustomerID);
-                cmd.Parameters.AddWithValue("@FirstName", FirstName);
-                cmd.Parameters.AddWithValue("@LastName", LastName);
-                cmd.Parameters.AddWithValue("@PhoneNumber", PhoneNumber);
-                cmd.Parameters.AddWithValue("@Email", Email);
-                con.Open();
-                cmd.ExecuteNonQuery();
-
-				con.Close();
-			}
+			SqlConnection con = new SqlConnection(con2);
+			SqlCommand cmd = new SqlCommand("UpdateCustomerInfo", con);
+			cmd.CommandType = CommandType.StoredProcedure;
+			cmd.Parameters.AddWithValue("@CustomerID", data.CustomerID);
+			cmd.Parameters.AddWithValue("@FirstName", data.FirstName);
+			cmd.Parameters.AddWithValue("@LastName", data.LastName);
+			cmd.Parameters.AddWithValue("@PhoneNumber", data.PhoneNumber);
+			cmd.Parameters.AddWithValue("@Email", data.Email);
+			con.Open();
+			int i = cmd.ExecuteNonQuery();
+			con.Close();
 			finalresult.response = result.ToString();
 			Customer.Add(finalresult);
 			return Customer;
 		}
 
-		[HttpGet]
-		[Route("api/UpdateRMInfo/{ResourceManagerID}/{FirstName}/{LastName}/{PhoneNumber}/{Email}")]
-		public List<Response> UpdateRMInfo(string ResourceManagerID = "", string FirstName = "", string LastName = "", string PhoneNumber = "", string Email = "") {
+		[HttpPost]
+		[Route("api/UpdateRMInfo")]
+		public List<Response> UpdateRMInfo([FromBody]RMUpdate data) {
 			Response finalresult = new Response();
 			List<Response> Customer = new List<Response>();
 			string result = "Successful ";
-			using (SqlConnection con = new SqlConnection(con2)) {
-				SqlCommand cmd = new SqlCommand("UpdateRMInfo", con);
-				cmd.CommandType = CommandType.StoredProcedure;
-				cmd.Parameters.AddWithValue("@ResourceManagerID", ResourceManagerID);
-				cmd.Parameters.AddWithValue("@FirstName", FirstName);
-				cmd.Parameters.AddWithValue("@LastName", LastName);
-				cmd.Parameters.AddWithValue("@PhoneNumber", PhoneNumber);
-				cmd.Parameters.AddWithValue("@Email", Email);
-				con.Open();
-				cmd.ExecuteNonQuery();
-
-				con.Close();
-			}
+			SqlConnection con = new SqlConnection(con2);
+			SqlCommand cmd = new SqlCommand("UpdateRMInfo", con);
+			cmd.CommandType = CommandType.StoredProcedure;
+			cmd.Parameters.AddWithValue("@ResourceManagerID", data.ResourceManagerID);
+			cmd.Parameters.AddWithValue("@FirstName", data.FirstName);
+			cmd.Parameters.AddWithValue("@LastName", data.LastName);
+			cmd.Parameters.AddWithValue("@PhoneNumber", data.PhoneNumber);
+			cmd.Parameters.AddWithValue("@Email", data.Email);
+			con.Open();
+			int i = cmd.ExecuteNonQuery();
+			con.Close();
 			finalresult.response = result.ToString();
 			Customer.Add(finalresult);
 			return Customer;
 		}
+
 
 		[HttpPost]
         [Route("api/UpdateDeveloperInfo")]

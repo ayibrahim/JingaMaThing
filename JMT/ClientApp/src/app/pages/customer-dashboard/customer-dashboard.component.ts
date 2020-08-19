@@ -37,16 +37,10 @@ export class CustomerDashboardComponent implements OnInit {
       if(this.retrievedRole == 'Customer'){
         this.customerId = this.retrievedID;
       }
-      if(this.retrievedRole == 'Developer'){
-        this.developerId = this.retrievedID;
-      }
     }))
     if(this.retrievedRole == undefined){
       if(history.state.type == 'customer'){
         this.customerId = history.state.CustomerID;
-      }
-      if(history.state.type == 'developer'){
-        this.developerId = history.state.DeveloperID;
       }
     }
     if(this.customerId != undefined){
@@ -67,6 +61,8 @@ export class CustomerDashboardComponent implements OnInit {
             
           }, (error) => {console.log('error message ' + error)}
           )
+    } else {
+      this.router.navigate(['./access-denied']);
     }
     this.GetDevList();
   }

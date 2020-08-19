@@ -13,8 +13,7 @@ import { AccessDeniedComponent } from './pages/access-denied/access-denied.compo
 
 const routes: Routes = [
   { path: "home" , component : HomeComponent },
-  { path: "not-found" , component : NotFoundComponent },
-  { path: "access-denied" , component : AccessDeniedComponent },
+
   {
     path: "",
     redirectTo: "home",
@@ -41,10 +40,7 @@ const routes: Routes = [
   //     }
   //   ]
   // },
-  {
-    path: "**",
-    redirectTo: "not-found"
-  }
+ 
 ];
 
 @NgModule({

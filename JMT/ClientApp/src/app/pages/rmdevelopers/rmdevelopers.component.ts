@@ -32,8 +32,6 @@ export class RmdevelopersComponent implements OnInit {
       this.retrievedRole = params.data2;
       if(this.retrievedRole == 'ResourceManager'){
         this.rmanagerId = this.retrievedID;
-      } else {
-        this.router.navigate(['./home']);
       }
     }))
     
@@ -56,6 +54,8 @@ export class RmdevelopersComponent implements OnInit {
             this.GetDevListNotAssigned();
           }, (error) => {console.log('error message ' + error)}
           )
+    } else {
+      this.router.navigate(['./access-denied']);
     }
     
   }

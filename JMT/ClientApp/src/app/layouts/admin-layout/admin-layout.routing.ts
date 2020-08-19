@@ -12,6 +12,8 @@ import { LinksComponent } from 'src/app/pages/links/links.component';
 import { NotesComponent } from 'src/app/pages/notes/notes.component';
 import { RmdevelopersComponent } from 'src/app/pages/rmdevelopers/rmdevelopers.component';
 import { RmordersComponent } from 'src/app/pages/rmorders/rmorders.component';
+import { NotFoundComponent } from 'src/app/pages/not-found/not-found.component';
+import { AccessDeniedComponent } from 'src/app/pages/access-denied/access-denied.component';
 // import { RtlComponent } from "../../pages/rtl/rtl.component";
 
 export const AdminLayoutRoutes: Routes = [
@@ -25,7 +27,12 @@ export const AdminLayoutRoutes: Routes = [
   { path: "notes" , component : NotesComponent},
   { path: "links" , component : LinksComponent},
   { path: "rmdevelopers" , component : RmdevelopersComponent},
-  { path: "rmorders" , component : RmordersComponent}
-  
+  { path: "rmorders" , component : RmordersComponent},
+  { path: "not-found" , component : NotFoundComponent },
+  { path: "access-denied" , component : AccessDeniedComponent },
+  {
+    path: "**",
+    redirectTo: "not-found"
+  }
   // { path: "rtl", component: RtlComponent }
 ];
