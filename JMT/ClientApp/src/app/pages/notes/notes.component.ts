@@ -144,15 +144,14 @@ export class NotesComponent implements OnInit {
         this.toastr.clear();
         this.errormessage = 'Note Created Successfully';
         this.showNotification('top', 'center' , this.errormessage);
-        setTimeout(()=> this.toastr.clear() , 3000);
       }, (error) => {this.toastr.clear();
         this.errormessage = 'Error Happened When Creating Note , Refresh and Try Again!';
         this.showNotification('top', 'center' , this.errormessage);
-        setTimeout(()=> this.toastr.clear() , 3000);
         console.log('error message ' + error)}
       )
     this.NTitle = undefined; this.NType = undefined;
     setTimeout(()=> this.GetDeveloperNotes() , 2000);
+    setTimeout(()=> this.toastr.clear() , 4000);
   }
   GetDeveloperNotes()
   {
@@ -164,7 +163,6 @@ export class NotesComponent implements OnInit {
           this.toastr.clear();
           this.errormessage = 'No Notes Found';
           this.showNotification('top', 'center' , this.errormessage);
-          setTimeout(()=> this.toastr.clear() , 3000);
         } else {
           this.nodevnotes = false;
         }
@@ -173,6 +171,7 @@ export class NotesComponent implements OnInit {
         this.showNotification('top', 'center' , this.errormessage);
         console.log('error message ' + error)}
       )
+    setTimeout(()=> this.toastr.clear() , 4000);
   }
   GetPublicNotes()
   {
@@ -189,6 +188,7 @@ export class NotesComponent implements OnInit {
         this.showNotification('top', 'center' , this.errormessage);
         console.log('error message ' + error)}
       )
+    setTimeout(()=> this.toastr.clear() , 4000);
   }
   PublicNoteTitleClick(event)
   {
@@ -282,7 +282,6 @@ export class NotesComponent implements OnInit {
           this.toastr.clear();
           this.errormessage = 'Error Happened When Updating Note , Refresh and Try Again!';
           this.showNotification('top', 'center' , this.errormessage);
-          setTimeout(()=>  this.toastr.clear() , 2000);
           console.log('error message ' + error)
      });
     setTimeout(()=> this.GetDeveloperNotes() , 2000);
@@ -365,15 +364,14 @@ export class NotesComponent implements OnInit {
           this.toastr.clear();
           this.errormessage = 'Note Created Successfully';
           this.showNotification('top', 'center' , this.errormessage);
-          setTimeout(()=> this.toastr.clear() , 3000);
         }, (error) => {this.toastr.clear();
           this.errormessage = 'Error Happened When Creating Note , Refresh and Try Again!';
           this.showNotification('top', 'center' , this.errormessage);
-          setTimeout(()=> this.toastr.clear() , 3000);
           console.log('error message ' + error)}
         )
       this.NTitleRM = undefined; this.NTypeRM = undefined;
       setTimeout(()=> this.GetRMNotes() , 2000);
+      setTimeout(()=> this.toastr.clear() , 4000);
     }
     GetRMNotes()
     {
@@ -385,7 +383,6 @@ export class NotesComponent implements OnInit {
             this.toastr.clear();
             this.errormessage = 'No Notes Found';
             this.showNotification('top', 'center' , this.errormessage);
-            setTimeout(()=> this.toastr.clear() , 3000);
           } else {
             this.normnotes = false;
           }
@@ -394,6 +391,7 @@ export class NotesComponent implements OnInit {
           this.showNotification('top', 'center' , this.errormessage);
           console.log('error message ' + error)}
         )
+      setTimeout(()=> this.toastr.clear() , 4000);
     }
     GetPublicNotesRM()
     {
@@ -410,6 +408,7 @@ export class NotesComponent implements OnInit {
           this.showNotification('top', 'center' , this.errormessage);
           console.log('error message ' + error)}
         )
+      setTimeout(()=> this.toastr.clear() , 4000);
     }
     PublicNoteTitleClickRM(event)
     {
@@ -503,7 +502,6 @@ export class NotesComponent implements OnInit {
             this.toastr.clear();
             this.errormessage = 'Error Happened When Updating Note , Refresh and Try Again!';
             this.showNotification('top', 'center' , this.errormessage);
-            setTimeout(()=>  this.toastr.clear() , 2000);
             console.log('error message ' + error)
        });
       setTimeout(()=> this.GetRMNotes() , 2000);

@@ -1,7 +1,5 @@
 <div class="content">
-  <div class=" col-md-12">
-    <p-tabMenu [model]="items" [activeItem]="items[0]" (click)="menuswitch($event)"></p-tabMenu>
-  </div>
+  <p-tabMenu [model]="items" [activeItem]="items[0]" (click)="menuswitch($event)"></p-tabMenu>
   <br>
 
   <div *ngIf="isOpenOrder">
@@ -63,7 +61,8 @@
                   {{DevOpenOrders[cols]}}
                 </td>
                 <td>
-                <button pButton type="button" icon="pi pi-check" class="ui-button-success" style="width : 150px;" label="Mark Complete" (click)="MarkAsComplete(DevOpenOrders)"></button>
+                  <button pButton type="button" icon="pi pi-check" class="ui-button-success" style="width : 150px;"
+                    label="Mark Complete" (click)="MarkAsComplete(DevOpenOrders)"></button>
                 </td>
               </tr>
             </ng-template>
@@ -104,8 +103,8 @@
         <!-- End of No Data -->
         <div *ngIf="notasks === false;">
           <p-table #OTS class="tables" id="OTSTable" [columns]="TasksHeaders" [value]="TasksData"
-            [(selection)]="selecteddata2" [rows]="10" [rowsPerPageOptions]="[10,25,50]" [paginator]="true" editMode="row"
-            [reorderableColumns]="true" dataKey="developerTaskID">
+            [(selection)]="selecteddata2" [rows]="10" [rowsPerPageOptions]="[10,25,50]" [paginator]="true"
+            editMode="row" [reorderableColumns]="true" dataKey="developerTaskID">
             <ng-template pTemplate="header" let-columns>
               <tr>
                 <th *ngFor="let cols of TasksHeaders" style="text-transform: capitalize;" [pSortableColumn]="cols"
@@ -124,56 +123,62 @@
                 <th style="width:8em"></th>
               </tr>
             </ng-template>
-            <ng-template pTemplate="body" let-TasksData let-columns="TasksHeaders" let-editing="editing" let-ri="rowIndex">
-              <tr  [pEditableRow]="TasksData">
-                <td *ngFor="let cols of TasksHeaders" style="height: 10px; max-height: 10px; overflow:hidden" >
+            <ng-template pTemplate="body" let-TasksData let-columns="TasksHeaders" let-editing="editing"
+              let-ri="rowIndex">
+              <tr [pEditableRow]="TasksData">
+                <td *ngFor="let cols of TasksHeaders" style="height: 10px; max-height: 10px; overflow:hidden">
                   <div *ngIf="cols == 'orderNumber' ">
-                  {{TasksData[cols]}}
+                    {{TasksData[cols]}}
                   </div>
                   <div *ngIf="cols == 'status' ">
                     <p-cellEditor>
-                    <ng-template pTemplate="input">
-                        <p-dropdown [options]="Statuses" [(ngModel)]="TasksData[cols]" [style]="{'width':'100%'}" appendTo="body"></p-dropdown>
-                    </ng-template>
-                    <ng-template pTemplate="output">
+                      <ng-template pTemplate="input">
+                        <p-dropdown [options]="Statuses" [(ngModel)]="TasksData[cols]" [style]="{'width':'100%'}"
+                          appendTo="body"></p-dropdown>
+                      </ng-template>
+                      <ng-template pTemplate="output">
                         {{TasksData[cols]}}
-                    </ng-template>
-                    </p-cellEditor>
-                  </div>
-                   <div *ngIf="cols != 'orderNumber' && cols != 'status'">
-                  <p-cellEditor>
-                    <ng-template pTemplate="input">
-                        <input pInputText type="text" [(ngModel)]="TasksData[cols]" [style]="{'width':'100%'}">
-                    </ng-template>
-                    <ng-template pTemplate="output">
-                      {{TasksData[cols]}}
                       </ng-template>
                     </p-cellEditor>
-                     </div>
+                  </div>
+                  <div *ngIf="cols != 'orderNumber' && cols != 'status'">
+                    <p-cellEditor>
+                      <ng-template pTemplate="input">
+                        <input pInputText type="text" [(ngModel)]="TasksData[cols]" [style]="{'width':'100%'}">
+                      </ng-template>
+                      <ng-template pTemplate="output">
+                        {{TasksData[cols]}}
+                      </ng-template>
+                    </p-cellEditor>
+                  </div>
                 </td>
                 <td style="text-align:center">
-                  <button *ngIf="!editing" pButton type="button" pInitEditableRow icon="pi pi-pencil" class="ui-button-info" (click)="onRowEditInit(TasksData)"></button>
-                  <button *ngIf="editing" pButton type="button" pSaveEditableRow icon="pi pi-check" class="ui-button-success" style="margin-right: .5em" (click)="onRowEditSave(TasksData)"></button>
-                  <button *ngIf="editing" pButton type="button" pCancelEditableRow icon="pi pi-times" class="ui-button-danger" (click)="onRowEditCancel(TasksData, ri)"></button>
+                  <button *ngIf="!editing" pButton type="button" pInitEditableRow icon="pi pi-pencil"
+                    class="ui-button-info" (click)="onRowEditInit(TasksData)"></button>
+                  <button *ngIf="editing" pButton type="button" pSaveEditableRow icon="pi pi-check"
+                    class="ui-button-success" style="margin-right: .5em" (click)="onRowEditSave(TasksData)"></button>
+                  <button *ngIf="editing" pButton type="button" pCancelEditableRow icon="pi pi-times"
+                    class="ui-button-danger" (click)="onRowEditCancel(TasksData, ri)"></button>
                 </td>
               </tr>
             </ng-template>
           </p-table>
         </div>
         <p-dialog header="Delete Confirmation" [(visible)]="deletedialog" [focusOnShow]="false" [responsive]="true"
-                showEffect="fade" [modal]="true" [style]="{width: '500px'}">
-                Are you sure you want to delete this task ? 
-              <p-footer>
-                <div class="ui-dialog-buttonpane ui-helper-clearfix">
-                  <button type="button" pButton icon="pi pi-times" class="ui-button-danger" (click)="ConfirmDeleteTask()" label="Delete"></button>
-                  <button type="button" pButton  (click)="CloseDeletTaskDialog()" label="Close"></button>
-                </div>
-              </p-footer>
+          showEffect="fade" [modal]="true" [style]="{width: '500px'}">
+          Are you sure you want to delete this task ?
+          <p-footer>
+            <div class="ui-dialog-buttonpane ui-helper-clearfix">
+              <button type="button" pButton icon="pi pi-times" class="ui-button-danger" (click)="ConfirmDeleteTask()"
+                label="Delete"></button>
+              <button type="button" pButton (click)="CloseDeletTaskDialog()" label="Close"></button>
+            </div>
+          </p-footer>
         </p-dialog>
- 
+
         <br>
         <button class="btn btn-primary animation-on-hover btn-round" (click)="ShowNewTaskDialog()">Create New
-        Task</button>
+          Task</button>
         <br>
         <div *ngIf="newtaskdialog">
           <form>
@@ -190,8 +195,8 @@
               <div class=" col-md-6">
                 <div class=" form-group">
                   <label for="exampleInputTitle1"> Title </label>
-                  <input class=" form-control" type="text" placeholder="Here can be your Title" [(ngModel)]="NTTitle" name="NTTitle"
-                    autocomplete="doNotAutoComplete">
+                  <input class=" form-control" type="text" placeholder="Here can be your Title" [(ngModel)]="NTTitle"
+                    name="NTTitle" autocomplete="doNotAutoComplete">
                 </div>
               </div>
             </div>
@@ -213,18 +218,17 @@
                 </div>
               </div>
             </div>
-        
-        </form>
-        <br>
-        <button class="btn btn-success animation-on-hover btn-round" (click)="CreateNewTask()">Submit</button>
-        <button class="btn btn-danger  animation-on-hover btn-round" (click)="HideNewTaskDialog()">Close</button>
+
+          </form>
+          <br>
+          <button class="btn btn-success animation-on-hover btn-round" (click)="CreateNewTask()">Submit</button>
+          <button class="btn btn-danger  animation-on-hover btn-round" (click)="HideNewTaskDialog()">Close</button>
+        </div>
+
       </div>
-     
     </div>
   </div>
-</div>
-<div *ngIf="isPendingOrder">
-  <div class=" col-md-12">
+  <div *ngIf="isPendingOrder">
     <div class=" card">
       <div class=" card-header">
         <h5 class=" title">Accept/Decline Orders</h5>
@@ -274,18 +278,19 @@
             <p-dialog header="Edit Order" [(visible)]="displayEditDialog" [modal]="true" [style]="{width: '50vw'}"
               [baseZIndex]="10000">
               <div class="p-grid ui-fluid">
-                <label class="inputdialog"> New Price* </label> <br>
+                <label class="inputdialog" style="width: 100%;"> New Price* </label>
                 <div class="p-col-8">
-                  <p-inputNumber id="BudgetInput" placeholder="$0.00" [style]="{width: '100%'}" [(ngModel)]="ONewPrice" name="ONewPrice"
-                    mode="currency" currency="USD" locale="en-US">
+                  <p-inputNumber id="BudgetInput" placeholder="$0.00" [style]="{width: '100%'}" [(ngModel)]="ONewPrice"
+                    name="ONewPrice" mode="currency" currency="USD" locale="en-US">
                   </p-inputNumber>
                 </div>
                 <br>
-                <label class="inputdialog"> New Completion Date* </label> <br>
+                <label class="inputdialog" style="width: 100%;"> New Completion Date* </label>
                 <div class="p-col-8">
                   <p-calendar id="CalenderInput" [touchUI]="true" (onSelect)="onDate(OCompleteDate)"
-                    [(ngModel)]="OCompleteDate" name="OCompleteDate" [style]="{width: '100%'}" placeholder="Choose a Date" [showIcon]="true"
-                    showButtonBar="true" dateFormat="yy-mm-dd"></p-calendar>
+                    [(ngModel)]="OCompleteDate" name="OCompleteDate" [style]="{width: '100%'}"
+                    placeholder="Choose a Date" [showIcon]="true" showButtonBar="true" dateFormat="yy-mm-dd">
+                  </p-calendar>
                 </div>
                 <br>
               </div>
@@ -316,98 +321,95 @@
         </form>
       </div>
     </div>
-  </div>
-   <!-- Second Card -->
-    <div class=" col-md-12">
-      <div class=" card">
-        <div class=" card-header">
-          <h5 class=" title">Orders Accepted - Waiting Customer Approval</h5>
-        </div>
-        <div class=" card-body">
-          <form autocomplete="off">
-            <!-- No Data -->
-            <div *ngIf="custpendingdata">
-              <div class=" typography-line">
-                <span> </span>
-                <p class=" text-info">
-                  <strong>You have no orders pending customer approval.</strong>
-                </p>
-              </div>
-            </div>
-            <!-- End of No Data -->
-
-            <div *ngIf="custpendingdata === false">
+    <!-- Second Card -->
+    <div class=" card">
+      <div class=" card-header">
+        <h5 class=" title">Orders Accepted - Waiting Customer Approval</h5>
+      </div>
+      <div class=" card-body">
+        <form autocomplete="off">
+          <!-- No Data -->
+          <div *ngIf="custpendingdata">
+            <div class=" typography-line">
+              <span> </span>
               <p class=" text-info">
-                <strong>*Expand For Requirements</strong>
+                <strong>You have no orders pending customer approval.</strong>
               </p>
-              <br>
-              <p-table #DOP class="tables" id="DOPTable" [columns]="CustApprovPendingHeader"
-                [value]="CustApprovPendingData" [(selection)]="selecteddata3" [rows]="10"
-                [rowsPerPageOptions]="[10,25,50]" [paginator]="true" [reorderableColumns]="true"
-                dataKey="customerPendingID">
-                <ng-template pTemplate="header" let-columns>
-                  <tr>
-                    <th style="width: 3em"></th>
-                    <th *ngFor="let cols of CustApprovPendingHeader" style="text-transform: capitalize;"
-                      [pSortableColumn]="cols" pReorderableColumn pResizableColumn>
-                      {{cols}}
-                      <p-sortIcon [field]="cols"></p-sortIcon>
-                    </th>
-                  </tr>
-                  <tr>
-                    <th style="width: 3em"></th>
-                    <th id="search" *ngFor="let cols of CustApprovPendingHeader" [ngSwitch]="cols">
-                      <input placeholder="Filter...." type="text" pInputText [style]="{'width':'100%'}"
-                        (input)="DOP.filter($event.target.value, cols, 'contains', cols.filterMatchMode)"
-                        [value]="DOP.filters[cols] ? DOP.filters[cols].value : ''">
-                    </th>
-                  </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-CustApprovPendingData let-expanded="expanded"
-                  let-columns="CustApprovPendingHeader">
-                  <tr [pSelectableRow]="CustApprovPendingData">
-                    <td>
-                      <a href="#" [pRowToggler]="CustApprovPendingData">
-                        <i [ngClass]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></i>
-                      </a>
-                    </td>
-                    <td *ngFor="let cols of CustApprovPendingHeader"
-                      style="height: 10px; max-height: 10px; overflow:hidden">
-                      <div *ngIf="cols == 'priceOffered'">
-                        ${{CustApprovPendingData[cols]}}
-                      </div>
-                      <div *ngIf="cols != 'priceOffered'">
-                        {{CustApprovPendingData[cols]}}
-                      </div>
+            </div>
+          </div>
+          <!-- End of No Data -->
 
-                    </td>
-                  </tr>
-                </ng-template>
-                <ng-template pTemplate="rowexpansion" let-CustApprovPendingData let-columns="columns">
-                  <tr>
-                    <td [attr.colspan]="columns.length + 1">
-                      <div class="p-grid -fluid" style="font-size:16px;padding:20px">
-                        <div class="p-col-12 p-md-9">
-                          <div class="p-grid">
-                            <div class="p-col-12">
-                              <b>{{CustApprovPendingData.requirements}}</b>
-                            </div>
+          <div *ngIf="custpendingdata === false">
+            <p class=" text-info">
+              <strong>*Expand For Requirements</strong>
+            </p>
+            <br>
+            <p-table #DOP class="tables" id="DOPTable" [columns]="CustApprovPendingHeader"
+              [value]="CustApprovPendingData" [(selection)]="selecteddata3" [rows]="10"
+              [rowsPerPageOptions]="[10,25,50]" [paginator]="true" [reorderableColumns]="true"
+              dataKey="customerPendingID">
+              <ng-template pTemplate="header" let-columns>
+                <tr>
+                  <th style="width: 3em"></th>
+                  <th *ngFor="let cols of CustApprovPendingHeader" style="text-transform: capitalize;"
+                    [pSortableColumn]="cols" pReorderableColumn pResizableColumn>
+                    {{cols}}
+                    <p-sortIcon [field]="cols"></p-sortIcon>
+                  </th>
+                </tr>
+                <tr>
+                  <th style="width: 3em"></th>
+                  <th id="search" *ngFor="let cols of CustApprovPendingHeader" [ngSwitch]="cols">
+                    <input placeholder="Filter...." type="text" pInputText [style]="{'width':'100%'}"
+                      (input)="DOP.filter($event.target.value, cols, 'contains', cols.filterMatchMode)"
+                      [value]="DOP.filters[cols] ? DOP.filters[cols].value : ''">
+                  </th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-CustApprovPendingData let-expanded="expanded"
+                let-columns="CustApprovPendingHeader">
+                <tr [pSelectableRow]="CustApprovPendingData">
+                  <td>
+                    <a href="#" [pRowToggler]="CustApprovPendingData">
+                      <i [ngClass]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></i>
+                    </a>
+                  </td>
+                  <td *ngFor="let cols of CustApprovPendingHeader"
+                    style="height: 10px; max-height: 10px; overflow:hidden">
+                    <div *ngIf="cols == 'priceOffered'">
+                      ${{CustApprovPendingData[cols]}}
+                    </div>
+                    <div *ngIf="cols != 'priceOffered'">
+                      {{CustApprovPendingData[cols]}}
+                    </div>
 
+                  </td>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="rowexpansion" let-CustApprovPendingData let-columns="columns">
+                <tr>
+                  <td [attr.colspan]="columns.length + 1">
+                    <div class="p-grid -fluid" style="font-size:16px;padding:20px">
+                      <div class="p-col-12 p-md-9">
+                        <div class="p-grid">
+                          <div class="p-col-12">
+                            <b>{{CustApprovPendingData.requirements}}</b>
                           </div>
+
                         </div>
                       </div>
-                    </td>
-                  </tr>
-                </ng-template>
-              </p-table>
-            </div>
-          </form>
-        </div>
+                    </div>
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+        </form>
       </div>
     </div>
-</div>
-<div *ngIf="isOrderHistory">
-  <div class=" card">
+  </div>
+  <div *ngIf="isOrderHistory">
+    <div class=" card">
       <div class=" card-header">
         <h5 class=" title">Previous Orders </h5>
       </div>
@@ -428,14 +430,13 @@
           </p>
           <br>
           <p-table #DOH class="tables" id="DOHTable" [columns]="DevOrderHistoryHeaders" [value]="DevOrderHistory"
-             [(selection)]="devhistoryselected" [rows]="10" [rowsPerPageOptions]="[10,25,50]"
-            [paginator]="true" [reorderableColumns]="true" dataKey="orderNumber"
-            >
+            [(selection)]="devhistoryselected" [rows]="10" [rowsPerPageOptions]="[10,25,50]" [paginator]="true"
+            [reorderableColumns]="true" dataKey="orderNumber">
             <ng-template pTemplate="header" let-columns>
               <tr>
                 <th style="width: 3em"></th>
-                <th *ngFor="let cols of DevOrderHistoryHeaders" style="text-transform: capitalize;" [pSortableColumn]="cols"
-                  pReorderableColumn pResizableColumn>
+                <th *ngFor="let cols of DevOrderHistoryHeaders" style="text-transform: capitalize;"
+                  [pSortableColumn]="cols" pReorderableColumn pResizableColumn>
                   {{cols}}
                   <p-sortIcon [field]="cols"></p-sortIcon>
                 </th>
@@ -449,7 +450,8 @@
                 </th>
               </tr>
             </ng-template>
-            <ng-template pTemplate="body" let-DevOrderHistory let-expanded="expanded" let-columns="DevOrderHistoryHeaders">
+            <ng-template pTemplate="body" let-DevOrderHistory let-expanded="expanded"
+              let-columns="DevOrderHistoryHeaders">
               <tr [pSelectableRow]="DevOrderHistory">
                 <td>
                   <a href="#" [pRowToggler]="DevOrderHistory">
@@ -484,5 +486,5 @@
           </p-table>
         </div>
       </div>
+    </div>
   </div>
-</div>

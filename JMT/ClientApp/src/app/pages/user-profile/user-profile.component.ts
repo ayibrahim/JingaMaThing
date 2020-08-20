@@ -276,11 +276,9 @@ export class UserProfileComponent implements OnInit {
        console.log(error)
      })
     this.toastr.clear();
-    this.errormessage = '*Updated Successfully';
+    this.errormessage = 'Updated Successfully';
     this.showNotification('top', 'center' , this.errormessage);
-    setTimeout(()=>{    //<<<---    using ()=> syntax
-     this.toastr.clear();
-    }, 5000);
+    setTimeout(()=> this.toastr.clear() , 4000);
   }
 
   UpdateRMInfo(){
@@ -317,11 +315,9 @@ export class UserProfileComponent implements OnInit {
        console.log(error)
      })
     this.toastr.clear();
-    this.errormessage = '*Updated Successfully';
+    this.errormessage = 'Updated Successfully';
     this.showNotification('top', 'center' , this.errormessage);
-    setTimeout(()=>{    //<<<---    using ()=> syntax
-     this.toastr.clear();
-    }, 5000);
+    setTimeout(()=> this.toastr.clear() , 4000);
   }
   showNotification(from, align , message){
 
@@ -414,11 +410,9 @@ export class UserProfileComponent implements OnInit {
      })
 
     this.toastr.clear();
-    this.errormessage = '*Updated Successfully';
+    this.errormessage = 'Updated Successfully';
     this.showNotification('top', 'center' , this.errormessage);
-    setTimeout(()=>{    //<<<---    using ()=> syntax
-     this.toastr.clear();
- }, 5000);
+    setTimeout(()=> this.toastr.clear() , 4000);
   }
 
 
@@ -491,7 +485,7 @@ DUploadImage(files) {
   this.filename = undefined ;
   this.displaynewdialog = false;
     this.toastr.clear();
-    this.errormessage = '*Deleted Item From Gallery.';
+    this.errormessage = 'Deleted Item From Gallery.';
     this.showNotification('top', 'center' , this.errormessage);
     this.display = false;
     setTimeout(()=>{    //<<<---    using ()=> syntax
@@ -504,9 +498,7 @@ DUploadImage(files) {
     setTimeout(()=>{    //<<<---    using ()=> syntax
       this.gallerdisplay = true;
     }, 1000);
-    setTimeout(()=>{    //<<<---    using ()=> syntax
-      this.toastr.clear();
-    }, 5000);
+    setTimeout(()=> this.toastr.clear() , 4000);
 } 
 ShowGalleryDialog(){
   this.http.get('https://localhost:44380/api/getDevGalleryTable/' + this.DeveloperID).subscribe(
@@ -515,7 +507,7 @@ ShowGalleryDialog(){
       if(this.GData.length == 0){
         this.display = false;
         this.toastr.clear();
-        this.errormessage = '*No Data Found for Gallery.';
+        this.errormessage = 'No Data Found for Gallery.';
         this.showNotification('top', 'center' , this.errormessage);
       }
       this.GHeader = [];
@@ -530,6 +522,7 @@ ShowGalleryDialog(){
       
     }, (error) => {console.log('Error Happened' + error)}, () => {console.log('the subscription is completed')}
     )
+    setTimeout(()=> this.toastr.clear() , 4000);
 }
   OnRowSelect(event){
     this.DGID = event.data.imageID;
@@ -545,7 +538,7 @@ ShowGalleryDialog(){
     });
     this.displaynewdialog = false;
     this.toastr.clear();
-    this.errormessage = '*Updated Item In Gallery.';
+    this.errormessage = 'Updated Item In Gallery.';
     this.showNotification('top', 'center' , this.errormessage);
     this.display = false;
     this.gallerdisplay = false;
@@ -558,11 +551,7 @@ ShowGalleryDialog(){
     setTimeout(()=>{    //<<<---    using ()=> syntax
       this.ShowGalleryDialog();
     }, 1000);
-    setTimeout(()=>{    //<<<---    using ()=> syntax
-      this.toastr.clear();
-    }, 5000);
-
-    
+    setTimeout(()=> this.toastr.clear() , 4000);
   }
   DeleteDevGallery(){
     this.http.get('https://localhost:44380/api/DeleteDevGallery/' + this.DGID).subscribe(data => {
@@ -572,7 +561,7 @@ ShowGalleryDialog(){
     });
     this.displaynewdialog = false;
     this.toastr.clear();
-    this.errormessage = '*Deleted Item From Gallery.';
+    this.errormessage = 'Deleted Item From Gallery.';
     this.showNotification('top', 'center' , this.errormessage);
     console.log("Deleted");
     this.display = false;
@@ -586,8 +575,6 @@ ShowGalleryDialog(){
     setTimeout(()=>{    //<<<---    using ()=> syntax
       this.ShowGalleryDialog();
     }, 1000);
-    setTimeout(()=>{    //<<<---    using ()=> syntax
-      this.toastr.clear();
-    }, 5000);
+    setTimeout(()=> this.toastr.clear() , 4000);
   }
 }

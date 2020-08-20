@@ -45,10 +45,10 @@ export class SignInComponent implements OnInit {
      //this.Password = 'testingtesting'
 
     // Resource Managers
-    this.Email = 'sjeong2@testing.net';
-    this.Password = 'testing123456';
+    //this.Email = 'sjeong2@testing.net';
+    //this.Password = 'testing123456';
 
-    this.Login();
+    //this.Login();
   }
   
   ForgotPassword(){ this.isMainLogin = false; this.isForgotPassword = true; this.isEmailSentGood = false; this.ForgotEmail = undefined; }

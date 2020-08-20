@@ -73,13 +73,18 @@ export class CustomerDashboardComponent implements OnInit {
       this.DevList = response;
       if (this.DevList.length == 0){
         this.nodevlist = true;
+        this.toastr.clear();
+        this.errormessage = 'No Developers Found.';
+        this.showNotification('top', 'center' , this.errormessage);
+        setTimeout(()=> this.toastr.clear(),4000);
       } else {
         this.nodevlist = false;
       }
     }, (error) => {this.nodevlist = true;this.toastr.clear();
       this.errormessage = 'Error Happened When Loading Dev List Try Again or Contact Support';
       this.showNotification('top', 'center' , this.errormessage);
-      console.log('error message ' + error)}
+      console.log('error message ' + error);
+      setTimeout(()=> this.toastr.clear(),4000);}
     )
   }
   testing2(){
@@ -126,9 +131,9 @@ export class CustomerDashboardComponent implements OnInit {
       if(this.DevHO.length == 0){
         this.nodevhoh = true;
         this.toastr.clear();
-        this.errormessage = '*No Dev Order History Found.';
-        setTimeout(()=> this.toastr.clear(),3000);
+        this.errormessage = 'No Dev Order History Found.';
         this.showNotification('top', 'center' , this.errormessage);
+        setTimeout(()=> this.toastr.clear(),4000);
       } else {
         this.nodevhoh = false;
       }
@@ -147,7 +152,7 @@ export class CustomerDashboardComponent implements OnInit {
     }, (error) => {this.nodevhoh = true;this.toastr.clear();
       this.errormessage = 'Error Happened When Loading Developers Orders History Try Again or Contact Support';
       this.showNotification('top', 'center' , this.errormessage);
-      setTimeout(()=> this.toastr.clear(),3000);
+      setTimeout(()=> this.toastr.clear(),4000);
       console.log('error message ' + error)}
     )
   }

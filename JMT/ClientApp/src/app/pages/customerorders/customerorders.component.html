@@ -1,7 +1,5 @@
 <div class="content">
-  <div class=" col-md-12">
     <p-tabMenu [model]="items" [activeItem]="items[0]" (click)="menuswitch($event)"></p-tabMenu>
-  </div>
   <br>
 
   <div *ngIf="isOpenOrder">
@@ -211,7 +209,6 @@
 
   <div *ngIf="isPendingOrder">
     <!-- First Card -->
-    <div class=" col-md-12">
       <div class=" card">
         <div class=" card-header">
           <h5 class=" title">Pending Your Reply - Developer Order Offer </h5>
@@ -261,9 +258,7 @@
           </form>
         </div>
       </div>
-    </div>
     <!-- Second Card -->
-    <div class=" col-md-12">
       <div class=" card">
         <div class=" card-header">
           <h5 class=" title">Orders Submitted - Waiting Dev Response</h5>
@@ -349,10 +344,8 @@
           </form>
         </div>
       </div>
-    </div>
 
     <!-- Third Card -->
-    <div class=" col-md-12">
       <div class=" card">
         <div class=" card-header">
           <h5 class=" title">Orders Declined</h5>
@@ -403,7 +396,6 @@
         </div>
       </div>
     </div>
-  </div>
 
   <div *ngIf="isOrderHistory">
     <div class=" card">

@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
 import {formatDate} from '@angular/common';
+import { MenuItem } from 'primeng';
 export interface rmanager{ 
   resourceManagerID : number; email : string; firstName : string; lastName : string; password : string; phoneNumber : string; roleDesc : string; photo : string;
 }
@@ -25,6 +26,10 @@ export class RmordersComponent implements OnInit {
   RFirstName : string; RLastName : string; REmail2 : string; REmail : string; RPassword: string; ResourceManagerID : number; RPhoneNumber : string; RRoleDesc : string; RPhoto : any;
   DORHeaders : any[]; DORData: any[]; selecteddata1 : any; neworderdialog : boolean = false; OrderIDSelected : any; NPrice : any; NRequirements : any; NDateBy : any;
   notasks : boolean = true; TasksHeaders : any[]; TasksData : any[];  selecteddata2 : any; OrderSelectedLoadTask : boolean = false; currentdate : any;
+  items: MenuItem[]; isOpenOrder: boolean = true; MenuLabelChosen : any; isOrderHistory : boolean = false; isPendingOrder : boolean = false;
+  CustApprovPendingHeader : any[];CustApprovPendingData : any[]; selecteddata4 : any; custpendingdata : boolean = true;
+  nopendingdata1 : boolean = true; CustomerPendingHeader : any[]; CustomerPendingResponse : any[]; selecteddata5 : any;
+  noorderhistory : boolean = true; DevOrderHistoryHeaders : any[]; DevOrderHistory: any[]; devhistoryselected : any;
   constructor(private route: ActivatedRoute , private router : Router ,private http: HttpClient , private toastr: ToastrService) { }
 
   ngOnInit() {
@@ -61,9 +66,127 @@ export class RmordersComponent implements OnInit {
     } else {
       this.router.navigate(['./access-denied']);
     }
+    this.items = [
+      {label: 'Open Orders', icon: 'pi pi-fw pi-th-large' , styleClass: "testingstyle"},
+      {label: 'Pending Orders', icon: 'pi pi-fw pi-eye'},
+      {label: 'Order History', icon: 'pi pi-fw pi-search'}
+  ];
     this.currentdate = formatDate(new Date(), 'yyyy-MM-dd', 'en_US');
   }
+  GetDevPendingCustomerOrders(){
+    this.http.get('https://localhost:44380/api/GetPendingCustomerResponseRM/' + this.ResourceManagerID).subscribe(
+    (response : headers[]) => {
+      this.CustApprovPendingData = response;
+      if (this.CustApprovPendingData.length == 0){
+        this.custpendingdata = true;
+      } else {
+        this.custpendingdata = false;
+      }
+      this.CustApprovPendingHeader = [];
+      for (this.i = 0; this.i < this.CustApprovPendingData.length; this.i++){
+        for (var key in this.CustApprovPendingData[this.i]){
+          if(this.CustApprovPendingHeader.indexOf(key) === -1){
+            if(key == 'requirements' || key == 'customerPendingID'){
 
+            }else {
+              this.CustApprovPendingHeader.push(key);
+            }
+            
+          }
+        }
+      }   
+    }, (error) => {this.custpendingdata = true;this.toastr.clear();
+      this.errormessage = 'Error Happened When Loading Pending Orders Try Again or Contact Support';
+      this.showNotification('top', 'center' , this.errormessage);
+      console.log('error message ' + error)}
+    )
+    setTimeout(()=> this.toastr.clear() , 4000);
+  }
+  GetCPendingOrders(){
+    this.http.get('https://localhost:44380/api/GetPendingDevResponseRM/' + this.ResourceManagerID).subscribe(
+    (response : headers[]) => {
+      this.CustomerPendingResponse = response;
+      if (this.CustomerPendingResponse.length == 0){
+        this.nopendingdata1 = true;
+      } else {
+        this.nopendingdata1 = false;
+      }
+      this.CustomerPendingHeader = [];
+      for (this.i = 0; this.i < this.CustomerPendingResponse.length; this.i++){
+        for (var key in this.CustomerPendingResponse[this.i]){
+          if(this.CustomerPendingHeader.indexOf(key) === -1){
+            if(key == 'requirements' || key == 'developerPendingID'){
+
+            }else {
+              this.CustomerPendingHeader.push(key);
+            }
+            
+          }
+        }
+      }   
+    }, (error) => {this.nopendingdata1 = true;this.toastr.clear();
+      this.errormessage = 'Error Happened When Loading Pending Orders Try Again or Contact Support';
+      this.showNotification('top', 'center' , this.errormessage);
+      console.log('error message ' + error)}
+    )
+    setTimeout(()=> this.toastr.clear() , 4000);
+  }
+  GetCustomerHistoryOrders()
+  {
+    this.http.get('https://localhost:44380/api/GetDevOrderHistoryRM/' + this.ResourceManagerID).subscribe(
+    (response : headers[]) => {
+      this.DevOrderHistory = response;
+      console.log(this.DevOrderHistory);
+      if(this.DevOrderHistory.length == 0){
+        this.noorderhistory = true;
+        this.toastr.clear();
+        this.errormessage = 'No Previous Orders Found.';
+        this.showNotification('top', 'center' , this.errormessage);
+      } else {
+        this.noorderhistory = false;
+      }
+      this.DevOrderHistoryHeaders = [];
+      for (this.i = 0; this.i < this.DevOrderHistory.length; this.i++){
+        for (var key in this.DevOrderHistory[this.i]){
+          if(this.DevOrderHistoryHeaders.indexOf(key) === -1){
+            if(key == 'requirements'){
+
+            }else {
+              this.DevOrderHistoryHeaders.push(key);
+            }
+          }
+        }
+      }   
+    }, (error) => {this.noorderhistory = true;this.toastr.clear();
+      this.errormessage = 'Error Happened When Loading Previous Orders Try Again or Contact Support';
+      this.showNotification('top', 'center' , this.errormessage);
+      console.log('error message ' + error)}
+    )
+    setTimeout(()=> this.toastr.clear() , 4000);
+  }
+  menuswitch(event){
+    this.MenuLabelChosen = event.toElement.parentNode.innerText;
+    this.toastr.clear();
+    if(this.MenuLabelChosen == "Open Orders"){
+      this.isOrderHistory = false;
+      this.isPendingOrder = false;
+      this.isOpenOrder = true;
+      this.GetRMDevOpenOrders();
+    }
+    if(this.MenuLabelChosen == "Pending Orders"){
+      this.isOrderHistory = false;
+      this.isOpenOrder = false;
+      this.isPendingOrder = true;
+      this.GetDevPendingCustomerOrders();
+      this.GetCPendingOrders();
+    }
+    if(this.MenuLabelChosen == "Order History"){
+      this.isPendingOrder = false;
+      this.isOpenOrder = false;
+      this.isOrderHistory = true;
+      this.GetCustomerHistoryOrders();
+    }
+  }
   OnOrderSelect(event){
     console.log(event.data);
   }
@@ -71,6 +194,9 @@ export class RmordersComponent implements OnInit {
   EditOrder(item : any){
     this.neworderdialog = true;
     this.OrderIDSelected = item.orderNumber;
+    this.NPrice = undefined;
+    this.NDateBy = undefined;
+    this.NRequirements = undefined;
   }
   onDate(){
     this.NDateBy = this.convert(this.NDateBy);
@@ -90,7 +216,7 @@ export class RmordersComponent implements OnInit {
       if(this.DORData.length == 0){
         this.nodevorders = true;
         this.toastr.clear();
-        this.errormessage = '*No Open Orders Found.';
+        this.errormessage = 'No Open Orders Found.';
         this.showNotification('top', 'center' , this.errormessage);
       } else {
         this.nodevorders = false;
@@ -112,7 +238,7 @@ export class RmordersComponent implements OnInit {
       this.showNotification('top', 'center' , this.errormessage);
       console.log('error message ' + error)}
     )
-   
+    setTimeout(()=> this.toastr.clear() , 4000);
   }
   UpdateOrder()
   {
@@ -144,16 +270,14 @@ export class RmordersComponent implements OnInit {
         this.toastr.clear();
         this.errormessage = 'Order Updated Successfully';
         this.showNotification('top', 'center' , this.errormessage);
-        setTimeout(()=> this.toastr.clear() , 3000);
       }, (error) => {this.toastr.clear();
         this.errormessage = 'Error Happened When Updating Order , Refresh and Try Again!';
         this.showNotification('top', 'center' , this.errormessage);
-        setTimeout(()=> this.toastr.clear() , 3000);
         console.log('error message ' + error)}
       )
     this.neworderdialog = false; this.NPrice = undefined; this.NDateBy = undefined; this.NRequirements = undefined; this.OrderIDSelected = undefined;
     setTimeout(()=> this.GetRMDevOpenOrders(), 2000) ;
-
+    setTimeout(()=> this.toastr.clear() , 4000);
   }
   GetOrderTasks(event)
   {
@@ -165,8 +289,7 @@ export class RmordersComponent implements OnInit {
       if(this.TasksData.length == 0){
         this.notasks = true;
         this.toastr.clear();
-        this.errormessage = '*No Tasks Found.';
-        setTimeout(()=> this.toastr.clear(),3000);
+        this.errormessage = 'No Tasks Found.';
         this.showNotification('top', 'center' , this.errormessage);
       } else {
         this.notasks = false;
@@ -186,10 +309,9 @@ export class RmordersComponent implements OnInit {
     }, (error) => {this.notasks = true;this.toastr.clear();
       this.errormessage = 'Error Happened When Loading Tasks for Order Try Again or Contact Support';
       this.showNotification('top', 'center' , this.errormessage);
-      setTimeout(()=> this.toastr.clear(),3000);
       console.log('error message ' + error)}
     )
-   
+    setTimeout(()=> this.toastr.clear() , 4000);
   }
   showNotification(from, align , message){
 

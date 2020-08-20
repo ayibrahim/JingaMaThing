@@ -122,7 +122,7 @@ export class CustomerordersComponent implements OnInit {
       this.toastr.clear();
       this.errormessage = '*Please fill out review and rating before completing order';
       this.showNotification('top', 'center' , this.errormessage);
-      setTimeout(()=> this.toastr.clear() , 3000);
+      setTimeout(()=> this.toastr.clear() , 4000);
       return;
     }
     var result: OrderCompleted = [
@@ -140,7 +140,7 @@ export class CustomerordersComponent implements OnInit {
        console.log(error)
      });
      setTimeout(()=> this.GetCustomerDevelopedOrders() , 2000);
-     setTimeout(()=> this.toastr.clear() , 3000);
+     setTimeout(()=> this.toastr.clear() , 4000);
   }
   GetCustomerOpenOrders()
   {
@@ -173,7 +173,7 @@ export class CustomerordersComponent implements OnInit {
       this.showNotification('top', 'center' , this.errormessage);
       console.log('error message ' + error)}
     )
-   
+    setTimeout(()=> this.toastr.clear() , 4000);
   }
   GetCustomerHistoryOrders()
   {
@@ -206,7 +206,7 @@ export class CustomerordersComponent implements OnInit {
       this.showNotification('top', 'center' , this.errormessage);
       console.log('error message ' + error)}
     )
-   
+    setTimeout(()=> this.toastr.clear() , 4000);
   }
   showcustorderdevelopeddialog(requirement : any){
     this.toastr.clear();
@@ -223,7 +223,6 @@ export class CustomerordersComponent implements OnInit {
         this.notasks = true;
         this.toastr.clear();
         this.errormessage = '*No Tasks Found.';
-        setTimeout(()=> this.toastr.clear(),3000);
         this.showNotification('top', 'center' , this.errormessage);
       } else {
         this.notasks = false;
@@ -243,10 +242,9 @@ export class CustomerordersComponent implements OnInit {
     }, (error) => {this.notasks = true;this.toastr.clear();
       this.errormessage = 'Error Happened When Loading Tasks for Order Try Again or Contact Support';
       this.showNotification('top', 'center' , this.errormessage);
-      setTimeout(()=> this.toastr.clear(),3000);
       console.log('error message ' + error)}
     )
-   
+    setTimeout(()=> this.toastr.clear() , 4000);
   }
   showBasicDialog(requirmentval) {
     this.toastr.clear();
@@ -266,6 +264,7 @@ export class CustomerordersComponent implements OnInit {
         console.log('error message ' + error)}
       )
       setTimeout(()=> this.GetCustomerOrders(), 2000);
+      setTimeout(()=> this.toastr.clear() , 4000);
   }
   AcceptCustomerOrder(ID : any , CustomerID : any , DeveloperID : any , Price : any, CompletionDate : any , OrderDesc : any , Requirements : any){
     this.http.get('https://localhost:44380/api/InsertNewOrderDevCustomerApproved/' + ID + '/' + CustomerID + '/' + DeveloperID + '/' + Price + '/' + CompletionDate
@@ -281,6 +280,7 @@ export class CustomerordersComponent implements OnInit {
        console.log('error message ' + error)}
      )
     setTimeout(()=> this.GetCustomerOrders(), 2000);
+    setTimeout(()=> this.toastr.clear() , 4000);
   }
   GetCustomerOrders(){
     this.http.get('https://localhost:44380/api/GetCustomerPendingApproval/' + this.CustomerID)
@@ -337,7 +337,7 @@ export class CustomerordersComponent implements OnInit {
       this.showNotification('top', 'center' , this.errormessage);
       console.log('error message ' + error)}
     )
-   
+    setTimeout(()=> this.toastr.clear() , 4000);
   }
 
   GetCPendingDeclined(){
@@ -367,7 +367,7 @@ export class CustomerordersComponent implements OnInit {
       this.showNotification('top', 'center' , this.errormessage);
       console.log('error message ' + error)}
     )
-   
+    setTimeout(()=> this.toastr.clear() , 4000);
   }
   showNotification(from, align , message){
 

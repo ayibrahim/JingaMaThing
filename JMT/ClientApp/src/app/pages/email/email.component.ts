@@ -168,7 +168,7 @@ export class EmailComponent implements OnInit {
     if(this.MSData.length == 0)
     {
       this.toastr.clear();
-      this.errormessage = '*No Messges Found.';
+      this.errormessage = 'No Messges Found.';
       this.showNotification('top', 'center' , this.errormessage);
       setTimeout(()=> this.toastr.clear() , 3000);
     }
@@ -250,7 +250,8 @@ export class EmailComponent implements OnInit {
     }, (error) => {this.nodata = true;this.toastr.clear();
       this.errormessage = 'Error Happened When Loading Inbox Try Again or Contact Support';
       this.showNotification('top', 'center' , this.errormessage);
-      console.log('error message ' + error)}
+      console.log('error message ' + error);
+      setTimeout(()=> this.toastr.clear() , 4000);}
     )
   }
   CInbox(){
@@ -279,7 +280,8 @@ export class EmailComponent implements OnInit {
     }, (error) => {this.nodata = true;this.toastr.clear();
       this.errormessage = 'Error Happened When Loading Inbox Try Again or Contact Support';
       this.showNotification('top', 'center' , this.errormessage);
-      console.log('error message ' + error)}
+      console.log('error message ' + error);
+      setTimeout(()=> this.toastr.clear() , 4000);}
     )
   }
   RMInbox(){
@@ -308,7 +310,8 @@ export class EmailComponent implements OnInit {
     }, (error) => {this.nodata = true;this.toastr.clear();
       this.errormessage = 'Error Happened When Loading Inbox Try Again or Contact Support';
       this.showNotification('top', 'center' , this.errormessage);
-      console.log('error message ' + error)}
+      console.log('error message ' + error);
+      setTimeout(()=> this.toastr.clear() , 4000);}
     )
   }
   LoadDevRMList(){
@@ -318,7 +321,7 @@ export class EmailComponent implements OnInit {
       console.log(this.DevRMListbox);
       if(this.DevRMListbox.length == 0){
         this.toastr.clear();
-        this.errormessage = '*No Developers or Resource Managers Exist';
+        this.errormessage = 'No Developers or Resource Managers Exist';
         this.showNotification('top', 'center' , this.errormessage);
       }
     }, (error) => {this.toastr.clear();
@@ -326,6 +329,7 @@ export class EmailComponent implements OnInit {
       this.showNotification('top', 'center' , this.errormessage);
       console.log('error message ' + error)}
     )
+    setTimeout(()=> this.toastr.clear() , 4000);
   }
   LoadDevRMCustomerList(){
     this.http.get('https://localhost:44380/api/GetDevRMCustomerList').subscribe(
@@ -334,7 +338,7 @@ export class EmailComponent implements OnInit {
       console.log(this.DevRMListbox);
       if(this.DevRMListbox.length == 0){
         this.toastr.clear();
-        this.errormessage = '*No Developers , Resource Managers or Customers Exist';
+        this.errormessage = 'No Developers , Resource Managers or Customers Exist';
         this.showNotification('top', 'center' , this.errormessage);
       }
     }, (error) => {this.toastr.clear();
@@ -342,6 +346,7 @@ export class EmailComponent implements OnInit {
       this.showNotification('top', 'center' , this.errormessage);
       console.log('error message ' + error)}
     )
+    setTimeout(()=> this.toastr.clear() , 4000);
   }
   SendMessage(){
     if(this.selectedDevRM == null || this.selectedDevRM == undefined){
@@ -390,6 +395,7 @@ export class EmailComponent implements OnInit {
       console.log('error message ' + error)}
     
   )
+  setTimeout(()=> this.toastr.clear() , 4000);
   this.NMDescription = undefined;
   this.NMTitle = undefined;
   this.selectedDevRM = undefined;
@@ -402,7 +408,7 @@ export class EmailComponent implements OnInit {
       if(this.SMData.length == 0){
         this.nodata2 = true;
         this.toastr.clear();
-        this.errormessage = '*No Sent Messges Found.';
+        this.errormessage = 'No Sent Messges Found.';
         this.showNotification('top', 'center' , this.errormessage);
       } else {
         this.nodata2 = false;
@@ -425,6 +431,7 @@ export class EmailComponent implements OnInit {
       this.showNotification('top', 'center' , this.errormessage);
       console.log('error message ' + error)}
     )
+    setTimeout(()=> this.toastr.clear() , 4000);
   }
   RMSentMessages(){
     this.http.get('https://localhost:44380/api/GetRMSentMessages/' + this.ResourceManagerID).subscribe(
@@ -434,7 +441,7 @@ export class EmailComponent implements OnInit {
       if(this.SMData.length == 0){
         this.nodata2 = true;
         this.toastr.clear();
-        this.errormessage = '*No Sent Messges Found.';
+        this.errormessage = 'No Sent Messges Found.';
         this.showNotification('top', 'center' , this.errormessage);
       } else {
         this.nodata2 = false;
@@ -457,6 +464,7 @@ export class EmailComponent implements OnInit {
       this.showNotification('top', 'center' , this.errormessage);
       console.log('error message ' + error)}
     )
+    setTimeout(()=> this.toastr.clear() , 4000);
   }
   CSentMessages(){
     this.http.get('https://localhost:44380/api/GetCustomerInboxSent/' + this.CustomerID).subscribe(
@@ -467,7 +475,7 @@ export class EmailComponent implements OnInit {
         this.display2 = false;
         this.nodata2 = true;
         this.toastr.clear();
-        this.errormessage = '*No Sent Messges Found.';
+        this.errormessage = 'No Sent Messges Found.';
         this.showNotification('top', 'center' , this.errormessage);
       } else {
         this.display2 = true;
@@ -490,6 +498,7 @@ export class EmailComponent implements OnInit {
       this.showNotification('top', 'center' , this.errormessage);
       console.log('error message ' + error)}
     )
+    setTimeout(()=> this.toastr.clear() , 4000);
   }
   onDropdownChange(name : any){
     console.log(name);

@@ -133,9 +133,7 @@ export class DevordersComponent implements OnInit {
     this.GetDevOrders();
     this.DeclineID = undefined ; this.DeclineID = null;
     this.ODeclineReason = undefined ; this.ODeclineReason = null;
-    setTimeout(()=>{  
-      this.toastr.clear();
-    }, 4000);
+    setTimeout(()=> this.toastr.clear() , 4000);
       
   }
   GetDevPendingCustomerOrders(){
@@ -165,7 +163,7 @@ export class DevordersComponent implements OnInit {
       this.showNotification('top', 'center' , this.errormessage);
       console.log('error message ' + error)}
     )
-   
+    setTimeout(()=> this.toastr.clear() , 4000);
   }
   GetCustomerHistoryOrders()
   {
@@ -176,7 +174,7 @@ export class DevordersComponent implements OnInit {
       if(this.DevOrderHistory.length == 0){
         this.noorderhistory = true;
         this.toastr.clear();
-        this.errormessage = '*No Previous Orders Found.';
+        this.errormessage = 'No Previous Orders Found.';
         this.showNotification('top', 'center' , this.errormessage);
       } else {
         this.noorderhistory = false;
@@ -198,7 +196,7 @@ export class DevordersComponent implements OnInit {
       this.showNotification('top', 'center' , this.errormessage);
       console.log('error message ' + error)}
     )
-   
+    setTimeout(()=> this.toastr.clear() , 4000);
   }
   MarkAsComplete(order){
     this.http.get('https://localhost:44380/api/UpdateDevOrder/' + order.orderNumber) .subscribe(
@@ -215,9 +213,7 @@ export class DevordersComponent implements OnInit {
     setTimeout(()=>{  
       this.GetDevOpenOrders(); 
     }, 1000);
-    setTimeout(()=>{  
-      this.toastr.clear();
-    }, 3000);
+    setTimeout(()=> this.toastr.clear() , 4000);
     this.OrderSelectedLoadTask = false;
   }
   onRowEditInit(task: TaskTable) {
@@ -239,11 +235,10 @@ export class DevordersComponent implements OnInit {
           this.toastr.clear();
           this.errormessage = 'Error Happened When Updating Task , Refresh and Try Again!';
           this.showNotification('top', 'center' , this.errormessage);
-          setTimeout(()=>  this.toastr.clear() , 2000);
           console.log('error message ' + error)
      });
      setTimeout(()=> this.GetOrderTasks(this.TaskDeletOrderID) , 2000);
-     setTimeout(()=>  this.toastr.clear() , 2000);
+     setTimeout(()=> this.toastr.clear() , 4000);
   }
   onRowEditCancel(task: TaskTable, index: number) {
     this.deletedialog = true;
@@ -261,13 +256,12 @@ export class DevordersComponent implements OnInit {
        }, (error) => {this.toastr.clear();
         this.errormessage = 'Error Happened When Deleting Task , Refresh and Try Again!';
         this.showNotification('top', 'center' , this.errormessage);
-        setTimeout(()=>  this.toastr.clear() , 2000);
         console.log('error message ' + error)}
       )
     this.deletedialog = false;
     this.TaskDeleteID = undefined;
     setTimeout(()=> this.GetOrderTasks(this.TaskDeletOrderID) , 2000);
-    setTimeout(()=>  this.toastr.clear() , 2000);
+    setTimeout(()=> this.toastr.clear() , 4000);
   }
   CloseDeletTaskDialog(){
     this.deletedialog = false;
@@ -308,9 +302,7 @@ export class DevordersComponent implements OnInit {
       this.toastr.clear();
       this.errormessage = '*Complete Date must be greater than ' + this.currentdate;
       this.showNotification('top', 'center' , this.errormessage);
-      setTimeout(()=>{    //<<<---    using ()=> syntax
-        this.toastr.clear();
-        }, 4000);
+      setTimeout(()=> this.toastr.clear() , 4000);
       return;
     } 
   this.toastr.clear();
@@ -329,8 +321,10 @@ export class DevordersComponent implements OnInit {
       )
       this.displayEditDialog = false;
   setTimeout(()=> this.GetDevPendingCustomerOrders(),2000) ;
+  setTimeout(()=> this.toastr.clear() , 4000);
  }
  ShowEditDialog(ID : any){
+   this.toastr.clear();
    this.displayBasic = false;
    this.displayEditDialog = true;
    this.ONewPrice = undefined ; this.ONewPrice = null;
@@ -369,7 +363,7 @@ export class DevordersComponent implements OnInit {
       if(this.DevOpenOrders.length == 0){
         this.noopenorders = true;
         this.toastr.clear();
-        this.errormessage = '*No Open Orders Found.';
+        this.errormessage = 'No Open Orders Found.';
         this.showNotification('top', 'center' , this.errormessage);
       } else {
         this.noopenorders = false;
@@ -391,7 +385,7 @@ export class DevordersComponent implements OnInit {
       this.showNotification('top', 'center' , this.errormessage);
       console.log('error message ' + error)}
     )
-   
+    setTimeout(()=> this.toastr.clear() , 4000);
   }
   GetOrderTasks(ID : any)
   {
@@ -402,8 +396,7 @@ export class DevordersComponent implements OnInit {
       if(this.TasksData.length == 0){
         this.notasks = true;
         this.toastr.clear();
-        this.errormessage = '*No Tasks Found.';
-        setTimeout(()=> this.toastr.clear(),3000);
+        this.errormessage = 'No Tasks Found.';
         this.showNotification('top', 'center' , this.errormessage);
       } else {
         this.notasks = false;
@@ -423,10 +416,9 @@ export class DevordersComponent implements OnInit {
     }, (error) => {this.notasks = true;this.toastr.clear();
       this.errormessage = 'Error Happened When Loading Tasks for Order Try Again or Contact Support';
       this.showNotification('top', 'center' , this.errormessage);
-      setTimeout(()=> this.toastr.clear(),3000);
       console.log('error message ' + error)}
     )
-   
+    setTimeout(()=> this.toastr.clear() , 4000);
   }
   ShowNewTaskDialog(){
     this.NTTitle = undefined; this.NTDescription = undefined; this.NTNotes = undefined;
@@ -442,7 +434,6 @@ export class DevordersComponent implements OnInit {
       setTimeout(()=> this.toastr.clear(),3000);
       return;
      }
-    
     var result: NewTasks = [
       {  OrderID : this.OrderIDSelected.toString() , DeveloperID : this.DeveloperID.toString() , Description : this.NTDescription.toString() , Title : this.NTTitle.toString() , Notes : this.NTNotes.toString()  }
       ];
@@ -456,10 +447,10 @@ export class DevordersComponent implements OnInit {
      });
      this.HideNewTaskDialog();
      setTimeout(()=>  this.GetOrderTasks(this.OrderIDSelected) , 1000);
-    ;
+    
   }
   HideNewTaskDialog(){
-    
+    this.toastr.clear();
     this.newtaskdialog = false;
   }
   OnOrderOpenSelect(event){
@@ -478,12 +469,12 @@ export class DevordersComponent implements OnInit {
           this.toastr.clear();
           this.errormessage = 'You have no orders to accept or decline';
           this.showNotification('top', 'center' , this.errormessage);
-          setTimeout(()=> this.toastr.clear(),3000);
         } else {
           this.nopendingdata1 = false;
         }
         }, (error) => {console.log('error message ' + error)}
         )
+    setTimeout(()=> this.toastr.clear() , 4000);
   }
   showNotification(from, align , message){
     const color = Math.floor((Math.random() * 5) + 1);

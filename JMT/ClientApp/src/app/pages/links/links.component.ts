@@ -132,8 +132,7 @@ export class LinksComponent implements OnInit {
       if(this.DevLinksData.length == 0){
         this.nodevlinks = true;
         this.toastr.clear();
-        this.errormessage = '*No Links Found.';
-        setTimeout(()=> this.toastr.clear(),3000);
+        this.errormessage = 'No Links Found.';
         this.showNotification('top', 'center' , this.errormessage);
       } else {
         this.nodevlinks = false;
@@ -153,10 +152,9 @@ export class LinksComponent implements OnInit {
     }, (error) => {this.nodevlinks = true;this.toastr.clear();
       this.errormessage = 'Error Happened When Loading Links Try Again or Contact Support';
       this.showNotification('top', 'center' , this.errormessage);
-      setTimeout(()=> this.toastr.clear(),3000);
       console.log('error message ' + error)}
     )
-   
+    setTimeout(()=> this.toastr.clear() , 4000);
   }
   GetRMLinks()
   {
@@ -167,8 +165,7 @@ export class LinksComponent implements OnInit {
       if(this.RMLinksData.length == 0){
         this.normlinks = true;
         this.toastr.clear();
-        this.errormessage = '*No Links Found.';
-        setTimeout(()=> this.toastr.clear(),3000);
+        this.errormessage = 'No Links Found.';
         this.showNotification('top', 'center' , this.errormessage);
       } else {
         this.normlinks = false;
@@ -188,10 +185,9 @@ export class LinksComponent implements OnInit {
     }, (error) => {this.normlinks = true;this.toastr.clear();
       this.errormessage = 'Error Happened When Loading Links Try Again or Contact Support';
       this.showNotification('top', 'center' , this.errormessage);
-      setTimeout(()=> this.toastr.clear(),3000);
       console.log('error message ' + error)}
     )
-   
+    setTimeout(()=> this.toastr.clear() , 4000);
   }
   
   GetPublicRMLinks()
@@ -203,7 +199,7 @@ export class LinksComponent implements OnInit {
       if(this.PLRMData.length == 0){
         this.nopublicrmlinks = true;
         this.toastr.clear();
-        this.errormessage = '*No Public Links Found.';
+        this.errormessage = 'No Public Links Found.';
         setTimeout(()=> this.toastr.clear(),3000);
         this.showNotification('top', 'center' , this.errormessage);
       } else {
@@ -224,9 +220,9 @@ export class LinksComponent implements OnInit {
     }, (error) => {this.nopublicrmlinks = true;this.toastr.clear();
       this.errormessage = 'Error Happened When Loading Public Links Try Again or Contact Support';
       this.showNotification('top', 'center' , this.errormessage);
-      setTimeout(()=> this.toastr.clear(),3000);
       console.log('error message ' + error)}
     )
+    setTimeout(()=> this.toastr.clear() , 4000);
   }
   GetPublicLinks()
   {
@@ -237,8 +233,7 @@ export class LinksComponent implements OnInit {
       if(this.PLData.length == 0){
         this.nopubliclinks = true;
         this.toastr.clear();
-        this.errormessage = '*No Public Links Found.';
-        setTimeout(()=> this.toastr.clear(),3000);
+        this.errormessage = 'No Public Links Found.';
         this.showNotification('top', 'center' , this.errormessage);
       } else {
         this.nopubliclinks = false;
@@ -258,9 +253,9 @@ export class LinksComponent implements OnInit {
     }, (error) => {this.nopubliclinks = true;this.toastr.clear();
       this.errormessage = 'Error Happened When Loading Public Links Try Again or Contact Support';
       this.showNotification('top', 'center' , this.errormessage);
-      setTimeout(()=> this.toastr.clear(),3000);
       console.log('error message ' + error)}
     )
+    setTimeout(()=> this.toastr.clear() , 4000);
   }
   CreateNewRMlink()
   {
@@ -305,15 +300,14 @@ export class LinksComponent implements OnInit {
         this.toastr.clear();
         this.errormessage = 'Link Created Successfully';
         this.showNotification('top', 'center' , this.errormessage);
-        setTimeout(()=> this.toastr.clear() , 3000);
       }, (error) => {this.toastr.clear();
         this.errormessage = 'Error Happened When Creating Link , Refresh and Try Again!';
         this.showNotification('top', 'center' , this.errormessage);
-        setTimeout(()=> this.toastr.clear() , 3000);
         console.log('error message ' + error)}
       )
     this.RMLinkTitle = undefined; this.RMLinkType = undefined; this.RMLinkURL = undefined;
     setTimeout(()=> this.GetRMLinks() , 2000);
+    setTimeout(()=> this.toastr.clear() , 4000);
   }
   CreateNewlink()
   {
@@ -358,15 +352,14 @@ export class LinksComponent implements OnInit {
         this.toastr.clear();
         this.errormessage = 'Link Created Successfully';
         this.showNotification('top', 'center' , this.errormessage);
-        setTimeout(()=> this.toastr.clear() , 3000);
       }, (error) => {this.toastr.clear();
         this.errormessage = 'Error Happened When Creating Link , Refresh and Try Again!';
         this.showNotification('top', 'center' , this.errormessage);
-        setTimeout(()=> this.toastr.clear() , 3000);
         console.log('error message ' + error)}
       )
     this.LinkTitle = undefined; this.LinkType = undefined; this.LinkURL = undefined;
     setTimeout(()=> this.GetDevLinks() , 2000);
+    setTimeout(()=> this.toastr.clear() , 4000);
   }
   CloseDeleteDialog(){this.deletedialog = false;}
   onRowEditInit(task: LinkTable) {
@@ -390,11 +383,10 @@ export class LinksComponent implements OnInit {
           this.toastr.clear();
           this.errormessage = 'Error Happened When Updating Link , Refresh and Try Again!';
           this.showNotification('top', 'center' , this.errormessage);
-          setTimeout(()=>  this.toastr.clear() , 2000);
           console.log('error message ' + error)
      });
      setTimeout(()=> this.GetRMLinks() , 2000);
-     setTimeout(()=>  this.toastr.clear() , 2000);
+     setTimeout(()=> this.toastr.clear() , 4000);
   }
   onRowEditSave(task: LinkTable) {
     var result2 : UpdateLinks = [
@@ -411,11 +403,10 @@ export class LinksComponent implements OnInit {
           this.toastr.clear();
           this.errormessage = 'Error Happened When Updating Link , Refresh and Try Again!';
           this.showNotification('top', 'center' , this.errormessage);
-          setTimeout(()=>  this.toastr.clear() , 2000);
           console.log('error message ' + error)
      });
      setTimeout(()=> this.GetDevLinks() , 2000);
-     setTimeout(()=>  this.toastr.clear() , 2000);
+     setTimeout(()=> this.toastr.clear() , 4000);
   }
   DeleteLink()
   {
@@ -424,7 +415,7 @@ export class LinksComponent implements OnInit {
         this.newdata = response2;
         this.toastr.clear();
         this.errormessage = 'Link Deleted Succesfully';
-       this.showNotification('top', 'center' , this.errormessage);
+        this.showNotification('top', 'center' , this.errormessage);
       }, (error) => {this.toastr.clear();
        this.errormessage = 'Error Happened When Deleting Link , Refresh and Try Again!';
        this.showNotification('top', 'center' , this.errormessage);

@@ -73,6 +73,7 @@ export class RmdevelopersComponent implements OnInit {
       this.showNotification('top', 'center' , this.errormessage);
       console.log('error message ' + error)}
     )
+    setTimeout(()=> this.toastr.clear() , 4000);
   }
   AddToMyDevelopers(item){
     this.http.get('https://localhost:44380/api/AssignDevToRM/' + this.ResourceManagerID + '/' + item.developerID) .subscribe(
@@ -86,9 +87,9 @@ export class RmdevelopersComponent implements OnInit {
         this.showNotification('top', 'center' , this.errormessage);
         console.log('error message ' + error)}
       )
-    setTimeout(()=> this.toastr.clear(), 3000);
     setTimeout(()=> this.GetDevListRM(), 2000);
     setTimeout(()=> this.GetDevListNotAssigned(), 2000);
+    setTimeout(()=> this.toastr.clear() , 4000);
   }
   GetDevListNotAssigned(){
     this.http.get('https://localhost:44380/api/GetDevNotAssignedToRM/' + this.ResourceManagerID).subscribe(
@@ -104,6 +105,7 @@ export class RmdevelopersComponent implements OnInit {
       this.showNotification('top', 'center' , this.errormessage);
       console.log('error message ' + error)}
     )
+    setTimeout(()=> this.toastr.clear() , 4000);
   }
   LoadDevProfile(event){
     const ID = event.value[0].developerID;
@@ -144,8 +146,7 @@ export class RmdevelopersComponent implements OnInit {
       if(this.DevHO.length == 0){
         this.nodevhoh = true;
         this.toastr.clear();
-        this.errormessage = '*No Dev Order History Found.';
-        setTimeout(()=> this.toastr.clear(),3000);
+        this.errormessage = 'No Dev Order History Found.';
         this.showNotification('top', 'center' , this.errormessage);
       } else {
         this.nodevhoh = false;
@@ -165,9 +166,9 @@ export class RmdevelopersComponent implements OnInit {
     }, (error) => {this.nodevhoh = true;this.toastr.clear();
       this.errormessage = 'Error Happened When Loading Developers Orders History Try Again or Contact Support';
       this.showNotification('top', 'center' , this.errormessage);
-      setTimeout(()=> this.toastr.clear(),3000);
       console.log('error message ' + error)}
     )
+    setTimeout(()=> this.toastr.clear() , 4000);
   }
   testing2(){
     this.isdeveloper = false;

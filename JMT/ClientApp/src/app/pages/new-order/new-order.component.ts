@@ -72,7 +72,7 @@ export class NewOrderComponent implements OnInit {
       console.log(this.ODevList);
       if(this.ODevList.length == 0){
         this.toastr.clear();
-        this.errormessage = '*No Developers Exist';
+        this.errormessage = 'No Developers Exist';
         this.showNotification('top', 'center' , this.errormessage);
       }
     }, (error) => {this.toastr.clear();
@@ -80,6 +80,7 @@ export class NewOrderComponent implements OnInit {
       this.showNotification('top', 'center' , this.errormessage);
       console.log('error message ' + error)}
     )
+    setTimeout(()=> this.toastr.clear() , 4000);
   }
    onDate(ed){
      this.ODateBy = this.convert(this.ODateBy);
@@ -95,9 +96,7 @@ export class NewOrderComponent implements OnInit {
       this.toastr.clear();
       this.errormessage = '*Please Fill out all fields';
       this.showNotification('top', 'center' , this.errormessage);
-      setTimeout(()=>{    //<<<---    using ()=> syntax
-        this.toastr.clear();
-        }, 4000);
+      setTimeout(()=> this.toastr.clear() , 4000);
       return;
     }
     let date2 = formatDate(this.ODateBy , 'yyyy-MM-dd' , 'en_US');
@@ -105,9 +104,7 @@ export class NewOrderComponent implements OnInit {
       this.toastr.clear();
       this.errormessage = '*Date Requested must be greater than ' + this.currentdate;
       this.showNotification('top', 'center' , this.errormessage);
-      setTimeout(()=>{    //<<<---    using ()=> syntax
-        this.toastr.clear();
-        }, 4000);
+      setTimeout(()=> this.toastr.clear() , 4000);
       return;
     } 
     this.toastr.clear();
@@ -130,9 +127,7 @@ export class NewOrderComponent implements OnInit {
           this.showNotification('top', 'center' , this.errormessage);
           console.log('error message ' + error)
      });
-      setTimeout(()=>{    //<<<---    using ()=> syntax
-        this.toastr.clear();
-        }, 4000);
+     setTimeout(()=> this.toastr.clear() , 4000);
         this.selectedDev = undefined ;  this.selectedDev = null ; 
         this.OBudget = 0; this.ODateBy = undefined; this.ODateBy = null;
         this.ODescription = undefined; this.ODescription = null; 
