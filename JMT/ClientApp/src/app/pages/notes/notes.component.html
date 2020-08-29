@@ -23,7 +23,7 @@
             <div class=" col-md-6" style="max-width : 28%">
               <div class=" form-group">
 
-                <p-orderList [value]="DevNotes" filterBy="title,noteContent,viewType"
+                <p-orderList class="notesorderlist" [value]="DevNotes" filterBy="title,noteContent,viewType"
                   filterPlaceholder="Filter by Title - NoteContent - ViewType" [listStyle]="{'height':'250px'}"
                   header="Notes - Click to load in editor" (onSelectionChange)="NoteTitleClick($event)">
                   <ng-template let-DevNotes pTemplate="item">
@@ -36,7 +36,7 @@
             </div>
 
             <div class=" col-md-6">
-              <div class=" form-group" style="width: 1100px;">
+              <div class=" form-group" style="width: 1000px;">
                 <p-editor [readonly]="blocked" id="primeeditor" [(ngModel)]="SelectedNote" [style]="{'height':'550px'}">
                   <ng-template pTemplate="header">
                     <span class="ql-formats">
@@ -157,7 +157,7 @@
             <div class=" col-md-6" style="max-width : 28%">
               <div class=" form-group">
 
-                <p-orderList [value]="PublicNotes" filterBy="title,noteContent,role"
+                <p-orderList class="notesorderlist" [value]="PublicNotes" filterBy="title,noteContent,role"
                   filterPlaceholder="Filter by Title - NoteContent - Role" [listStyle]="{'height':'250px'}"
                   header="Notes - Click to load in editor" (onSelectionChange)="PublicNoteTitleClick($event)">
                   <ng-template let-PublicNotes pTemplate="item">
@@ -170,7 +170,7 @@
             </div>
 
             <div class=" col-md-6">
-              <div class=" form-group" style="width: 1100px;">
+              <div class=" form-group" style="width: 1000px;">
                 <p-editor [readonly]="publicblocked" id="primeeditor" [(ngModel)]="PublicSelectedNote"
                   [style]="{'height':'550px'}">
                   <ng-template pTemplate="header">
@@ -218,7 +218,7 @@
             <div class=" col-md-6" style="max-width : 28%">
               <div class=" form-group">
 
-                <p-orderList [value]="RMNotes" filterBy="title,noteContent,viewType"
+                <p-orderList class="notesorderlist" [value]="RMNotes" filterBy="title,noteContent,viewType"
                   filterPlaceholder="Filter by Title - NoteContent - ViewType" [listStyle]="{'height':'250px'}"
                   header="Notes - Click to load in editor" (onSelectionChange)="NoteTitleClickRM($event)">
                   <ng-template let-RMNotes pTemplate="item">
@@ -231,7 +231,7 @@
             </div>
 
             <div class=" col-md-6">
-              <div class=" form-group" style="width: 1100px;">
+              <div class=" form-group" style="width: 1000px;">
                 <p-editor [readonly]="blocked2" id="primeeditor" [(ngModel)]="SelectedRMNote"
                   [style]="{'height':'550px'}">
                   <ng-template pTemplate="header">
@@ -353,7 +353,7 @@
             <div class=" col-md-6" style="max-width : 28%">
               <div class=" form-group">
 
-                <p-orderList [value]="PublicNotesRM" filterBy="title,noteContent,role"
+                <p-orderList class="notesorderlist" [value]="PublicNotesRM" filterBy="title,noteContent,role"
                   filterPlaceholder="Filter by Title - NoteContent - Role" [listStyle]="{'height':'250px'}"
                   header="Notes - Click to load in editor" (onSelectionChange)="PublicNoteTitleClickRM($event)">
                   <ng-template let-PublicNotesRM pTemplate="item">
@@ -366,7 +366,7 @@
             </div>
 
             <div class=" col-md-6">
-              <div class=" form-group" style="width: 1100px;">
+              <div class=" form-group" style="width: 1000px;">
                 <p-editor [readonly]="publicblocked2" id="primeeditor" [(ngModel)]="PublicSelectedNoteRM"
                   [style]="{'height':'550px'}">
                   <ng-template pTemplate="header">

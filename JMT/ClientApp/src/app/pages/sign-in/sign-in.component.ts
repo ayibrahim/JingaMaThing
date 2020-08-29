@@ -36,17 +36,16 @@ export class SignInComponent implements OnInit {
   regexp = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
   ngOnInit() {
     //Developer
-     //this.Email = 'ayibrahi@hotmail.com';
+     //this.Email = 'ayibrahim@cincinnatistate.edu';
      //this.Password = 'testing123'
-    //this.Email = 'tes@ho.co';
-    //this.Password = 'testing123'
+
     //Customer
-     //this.Email = 'ryibrahim@something.com';
-     //this.Password = 'testingtesting'
+     //this.Email = 'ryibrahim@cincinnatistate.edu';
+     //this.Password = 'testing123'
 
     // Resource Managers
-    //this.Email = 'sjeong2@testing.net';
-    //this.Password = 'testing123456';
+    //this.Email = 'sjeong2@cincinnatistate.edu';
+    //this.Password = 'testing123';
 
     //this.Login();
   }

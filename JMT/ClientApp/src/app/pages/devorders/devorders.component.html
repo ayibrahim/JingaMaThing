@@ -278,14 +278,14 @@
             <p-dialog header="Edit Order" [(visible)]="displayEditDialog" [modal]="true" [style]="{width: '50vw'}"
               [baseZIndex]="10000">
               <div class="p-grid ui-fluid">
-                <label class="inputdialog" style="width: 100%;"> New Price* </label>
+                <label class="inputdialog" style="width: 100%;"> New Price* </label><br>
                 <div class="p-col-8">
                   <p-inputNumber id="BudgetInput" placeholder="$0.00" [style]="{width: '100%'}" [(ngModel)]="ONewPrice"
                     name="ONewPrice" mode="currency" currency="USD" locale="en-US">
                   </p-inputNumber>
                 </div>
                 <br>
-                <label class="inputdialog" style="width: 100%;"> New Completion Date* </label>
+                <label class="inputdialog" style="width: 100%;"> New Completion Date* </label><br>
                 <div class="p-col-8">
                   <p-calendar id="CalenderInput" [touchUI]="true" (onSelect)="onDate(OCompleteDate)"
                     [(ngModel)]="OCompleteDate" name="OCompleteDate" [style]="{width: '100%'}"

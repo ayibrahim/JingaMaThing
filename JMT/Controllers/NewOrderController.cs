@@ -36,30 +36,7 @@ namespace JMT.Controllers {
 			return devlist;
 		}
 
-		[HttpGet]
-		[Route("api/InsertNewOrder/{CustomerID}/{DevEmail}/{OrderDesc}/{OrderRequirments}/{Budget}/{DateBy}")]
-		public List<Response> InsertOrder(string CustomerID = "", string DevEmail = "", string OrderDesc = "", string OrderRequirments = "", string Budget = "" , string DateBy = "") {
-			Response finalresult = new Response();
-			List<Response> Order = new List<Response>();
-			string result = "Successful ";
-			//SqlConnection con = new SqlConnection("Data Source=NiluNilesh;Integrated Security=True");  
-			SqlConnection con = new SqlConnection(con2);
-			SqlCommand cmd = new SqlCommand("InsertNewOrder", con);
-			cmd.CommandType = CommandType.StoredProcedure;
-			cmd.Parameters.AddWithValue("@CustomerID", CustomerID);
-			cmd.Parameters.AddWithValue("@DevEmail", DevEmail);
-			cmd.Parameters.AddWithValue("@OrderDesc", OrderDesc);
-			cmd.Parameters.AddWithValue("@OrderRequirments", OrderRequirments);
-			cmd.Parameters.AddWithValue("@Budget", Budget);
-			cmd.Parameters.AddWithValue("@DateBy", DateBy);
-			con.Open();
-			int i = cmd.ExecuteNonQuery();
-
-			con.Close();
-			finalresult.response = result.ToString();
-			Order.Add(finalresult);
-			return Order;
-		}
+		
 
 		[HttpPost]
 		[Route("api/InsertNewOrder")]
@@ -235,23 +212,22 @@ namespace JMT.Controllers {
 			return Order;
 		}
 
-		[HttpGet]
-		[Route("api/InsertNewOrderDevCustomerApproved/{CustomerPendingID}/{CustomerID}/{DeveloperID}/{Price}/{CompletionDate}/{OrderDesc}/{Requirements}")]
-		public List<Response> InsertNewOrderDevCustomerApproved(string CustomerPendingID = "" , string CustomerID = "" , string DeveloperID = "" , string Price = "" ,
-			string CompletionDate = "" , string OrderDesc = "" , string Requirements = "") {
+		[HttpPost]
+		[Route("api/InsertNewOrderDevCustomerApproved")]
+		public List<Response> InsertNewOrderDevCustomerApproved([FromBody]DevCustomerApproved data) {
 			Response finalresult = new Response();
 			List<Response> Order = new List<Response>();
 			string result = "Successful ";
 			SqlConnection con = new SqlConnection(con2);
 			SqlCommand cmd = new SqlCommand("InsertNewOrderDevCustomerApproved", con);
 			cmd.CommandType = CommandType.StoredProcedure;
-			cmd.Parameters.AddWithValue("@CustomerPendingID", CustomerPendingID);
-			cmd.Parameters.AddWithValue("@CustomerID", CustomerID);
-			cmd.Parameters.AddWithValue("@DeveloperID", DeveloperID);
-			cmd.Parameters.AddWithValue("@Price", Price);
-			cmd.Parameters.AddWithValue("@CompletionDate", CompletionDate);
-			cmd.Parameters.AddWithValue("@OrderDesc", OrderDesc);
-			cmd.Parameters.AddWithValue("@Requirements", Requirements);
+			cmd.Parameters.AddWithValue("@CustomerPendingID", data.CustomerPendingID);
+			cmd.Parameters.AddWithValue("@CustomerID", data.CustomerID);
+			cmd.Parameters.AddWithValue("@DeveloperID", data.DeveloperID);
+			cmd.Parameters.AddWithValue("@Price", data.Price);
+			cmd.Parameters.AddWithValue("@CompletionDate", data.CompletionDate);
+			cmd.Parameters.AddWithValue("@OrderDesc", data.OrderDesc);
+			cmd.Parameters.AddWithValue("@Requirements", data.Requirements);
 			con.Open();
 			int i = cmd.ExecuteNonQuery();
 

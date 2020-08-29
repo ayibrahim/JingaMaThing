@@ -1,11 +1,11 @@
-::ng-deep body .ui-orderlist .ui-orderlist-controls {
+::ng-deep body .notesorderlist .ui-orderlist .ui-orderlist-controls {
     
-    display: none;
+    display: none ;
 }
-::ng-deep body .ui-orderlist-list-container {
-    height: 500px;
+::ng-deep body .notesorderlist .ui-orderlist-list-container {
+    height: 500px ;
 }
-::ng-deep body .ui-orderlist-list{
+::ng-deep body .notesorderlist .ui-orderlist-list{
     height: 100% !important;
 }
 

@@ -485,7 +485,7 @@ DUploadImage(files) {
   this.filename = undefined ;
   this.displaynewdialog = false;
     this.toastr.clear();
-    this.errormessage = 'Deleted Item From Gallery.';
+    this.errormessage = 'Uploaded Item To Gallery.';
     this.showNotification('top', 'center' , this.errormessage);
     this.display = false;
     setTimeout(()=>{    //<<<---    using ()=> syntax

@@ -90,9 +90,6 @@ export class DevordersComponent implements OnInit {
                         this.DRoleDesc = this.developerlogin[0].roleDesc;
                         this.DPhoto = this.developerlogin[0].photo;
                         this.GetDevOpenOrders();
-                        this.GetDevOrders();
-                        this.GetDevPendingCustomerOrders();
-                        this.GetCustomerHistoryOrders();
                     }, (error) => {console.log('error message ' + error)}
                     )
        
@@ -130,10 +127,11 @@ export class DevordersComponent implements OnInit {
         console.log('error message ' + error)}
       )
     this.displaydecline = false;
-    this.GetDevOrders();
     this.DeclineID = undefined ; this.DeclineID = null;
     this.ODeclineReason = undefined ; this.ODeclineReason = null;
+    setTimeout(()=> this.GetDevOrders() , 2000);
     setTimeout(()=> this.toastr.clear() , 4000);
+    
       
   }
   GetDevPendingCustomerOrders(){

@@ -12,7 +12,6 @@ export interface customer{
 export interface Developer{
   developerID : number; email : string; firstName : string; lastName : string; password : string; phoneNumber : string; description : string; pLanguages : string; skills : string; education : string; certification : string; title : string; roleDesc : string; photo : string;
 }
-
 export interface CustomerPendingApproval{
   customerPendingID : number;customerID : number;developerID : number;priceOffered : string;dateOffered : string;requirements : string;orderDesc : string;name : string;
 }
@@ -22,6 +21,10 @@ export interface TaskTable {
 export interface OrderComplete {
   OrderID : string; Review : string; Rating : string; 
 }
+export interface ACustomerOrder {
+  CustomerPendingID : string; CustomerID : string; DeveloperID : string; Price : string; CompletionDate : string; OrderDesc : string;  Requirements : string; 
+}
+interface ACustomerOrders extends Array<ACustomerOrder>{}
 interface OrderCompleted extends Array<OrderComplete>{}
 @Component({
   selector: 'app-customerorders',
@@ -267,18 +270,26 @@ export class CustomerordersComponent implements OnInit {
       setTimeout(()=> this.toastr.clear() , 4000);
   }
   AcceptCustomerOrder(ID : any , CustomerID : any , DeveloperID : any , Price : any, CompletionDate : any , OrderDesc : any , Requirements : any){
-    this.http.get('https://localhost:44380/api/InsertNewOrderDevCustomerApproved/' + ID + '/' + CustomerID + '/' + DeveloperID + '/' + Price + '/' + CompletionDate
-    + '/' + OrderDesc + '/' + Requirements ) .subscribe(
-      (response2 : headers[]) => {
-        this.newdata = response2;
-        this.toastr.clear();
-        this.errormessage = 'Accepted Succesfully';
-        this.showNotification('top', 'center' , this.errormessage);
-      }, (error) => {this.toastr.clear();
-       this.errormessage = 'Error Happened When Accepting Order , Refresh and Try Again!';
-       this.showNotification('top', 'center' , this.errormessage);
-       console.log('error message ' + error)}
-     )
+
+
+    var result2 : ACustomerOrders = [
+      {  CustomerPendingID : ID.toString() , CustomerID : CustomerID.toString() , DeveloperID : DeveloperID.toString() , Price : Price.toString() , CompletionDate : CompletionDate.toString() 
+        , OrderDesc : OrderDesc.toString()  , Requirements : Requirements.toString()  }
+      ];
+      const httpOptions = {
+        headers: new HttpHeaders({'Content-Type': 'application/json'})
+      }    
+     this.http.post('https://localhost:44380/api/InsertNewOrderDevCustomerApproved' , result2[0] , httpOptions).subscribe(data => {
+      this.toastr.clear();
+      this.errormessage = 'Accepted Succesfully';
+      this.showNotification('top', 'center' , this.errormessage);
+        }, error => {
+          this.toastr.clear();
+          this.errormessage = 'Error Happened When Accepting Order , Refresh and Try Again!';
+          this.showNotification('top', 'center' , this.errormessage);
+          console.log('error message ' + error)
+     });
+    
     setTimeout(()=> this.GetCustomerOrders(), 2000);
     setTimeout(()=> this.toastr.clear() , 4000);
   }
