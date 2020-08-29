@@ -20,34 +20,7 @@ namespace JMT.Controllers {
 			_hostingEnvironment = hostingEnvironment;
 		}
 
-		[HttpPost]
-		[Route("api/InsertNewDeveloper")]
-		public List<Response> InsertDeveloper([FromBody]DevInsert data) {
-			Response finalresult = new Response();
-			List<Response> Customer = new List<Response>();
-			string result = "Successful ";
-			//SqlConnection con = new SqlConnection("Data Source=NiluNilesh;Integrated Security=True");  
-			SqlConnection con = new SqlConnection(con2);
-			SqlCommand cmd = new SqlCommand("InsertNewDeveloper", con);
-			cmd.CommandType = CommandType.StoredProcedure;
-			cmd.Parameters.AddWithValue("@FirstName", data.DFirstName);
-			cmd.Parameters.AddWithValue("@LastName", data.DLastName);
-			cmd.Parameters.AddWithValue("@PhoneNumber", data.DPhoneNumber);
-			cmd.Parameters.AddWithValue("@Email", data.DEmail);
-			cmd.Parameters.AddWithValue("@Password", data.DPassword);
-			cmd.Parameters.AddWithValue("@Description", data.DDescription);
-			cmd.Parameters.AddWithValue("@PLanguages", data.DPLanguages);
-			cmd.Parameters.AddWithValue("@Skills", data.DSkills);
-			cmd.Parameters.AddWithValue("@Education", data.DEducation);
-			cmd.Parameters.AddWithValue("@Certifications", data.DCertificates);
-			cmd.Parameters.AddWithValue("@DesiredTitle", data.DTitle);
-			con.Open();
-			int i = cmd.ExecuteNonQuery();
-			con.Close();
-			finalresult.response = result.ToString();
-			Customer.Add(finalresult);
-			return Customer;
-		}
+		
 
 
 		[HttpPost]
