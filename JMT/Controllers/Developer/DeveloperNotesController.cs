@@ -11,7 +11,8 @@ namespace JMT.Controllers.Developer
 {
     public class DeveloperNotesController : Controller
     {
-        string con2 = "Data Source = itd2.cincinnatistate.edu; Initial Catalog=CPDM-IbrahimA;User id=cpdm-ayibrahim;Password=0654407;";
+		//Mark As Done
+		string con2 = "Server = DESKTOP-PBEU3TN;Database=JMT;Trusted_Connection=True";
 
 		[HttpGet]
 		[Route("api/CreateDevNote/{DeveloperID}/{Title}/{ViewType}")]

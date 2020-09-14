@@ -10,15 +10,9 @@ using Microsoft.Data.SqlClient;
 
 namespace JMT.Controllers {
 	[Produces("application/json")]
-
+	//Mark As Done
 	public class CustomerDashboard : Controller {
-		string testing2 = "";
-		private IHostingEnvironment _hostingEnvironment;
-		string con2 = "Data Source = itd2.cincinnatistate.edu; Initial Catalog=CPDM-IbrahimA;User id=cpdm-ayibrahim;Password=0654407;";
-		public CustomerDashboard(IHostingEnvironment hostingEnvironment) {
-			_hostingEnvironment = hostingEnvironment;
-		}
-
+		string con2 = "Server = DESKTOP-PBEU3TN;Database=JMT;Trusted_Connection=True";
 		[HttpGet]
 		[Route("api/GetDevListCustomerDashboard")]
 		public List<DevListCustDashboard> GetDeveloperID() {
@@ -64,7 +58,7 @@ namespace JMT.Controllers {
 					customer.Add(finalcustomer);
 				}
 				con.Close();
-			}
+			}	
 			return customer;
 		}
 
@@ -122,7 +116,7 @@ namespace JMT.Controllers {
 			using (SqlConnection con = new SqlConnection(con2)) {
 				SqlCommand cmd = new SqlCommand("DevHistoryCustomerReview", con);
 				cmd.CommandType = CommandType.StoredProcedure;
-				cmd.Parameters.AddWithValue("@DeveloperID", DeveloperID);
+				cmd.Parameters.AddWithValue("@DeveloperID", DeveloperID);	
 				con.Open();
 				SqlDataReader rdr = cmd.ExecuteReader();
 				while (rdr.Read()) {

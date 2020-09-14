@@ -10,10 +10,10 @@ using Microsoft.Data.SqlClient;
 
 namespace JMT.Controllers {
 	[Produces("application/json")]
-
+	//Mark As Done
 	public class RMDevPendingOrdersController : Controller
     {
-		string con2 = "Data Source = itd2.cincinnatistate.edu; Initial Catalog=CPDM-IbrahimA;User id=cpdm-ayibrahim;Password=0654407;";
+		string con2 = "Server = DESKTOP-PBEU3TN;Database=JMT;Trusted_Connection=True";
 		[HttpGet]
 		[Route("api/GetPendingDevResponseRM/{ResourceManagerID}")]
 		public List<RMDevPendingList> GetPendingDevResponseRM(string ResourceManagerID = "") {

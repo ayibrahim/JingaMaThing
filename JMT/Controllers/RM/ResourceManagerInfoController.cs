@@ -10,8 +10,9 @@ using Microsoft.Data.SqlClient;
 namespace JMT.Controllers
 {
     public class ResourceManagerInfoController : Controller
-    {
-        string con2 = "Data Source = itd2.cincinnatistate.edu; Initial Catalog=CPDM-IbrahimA;User id=cpdm-ayibrahim;Password=0654407;";
+	{
+		//Mark As Done
+		string con2 = "Server = DESKTOP-PBEU3TN;Database=JMT;Trusted_Connection=True";
 
 		[HttpGet]
 		[Route("api/GetResourceManagerInfo/{Email}/{Password}")]
@@ -69,6 +70,8 @@ namespace JMT.Controllers
 					finalcustomer.Password = (rdr["Password"].ToString());
 					finalcustomer.RoleDesc = (rdr["RoleDesc"].ToString());
 					finalcustomer.Photo = (rdr["Photo"].ToString());
+					finalcustomer.SideBarColor = (rdr["SideBarColor"].ToString());
+					finalcustomer.DashboardColor = (rdr["DashboardColor"].ToString());
 					customer.Add(finalcustomer);
 				}
 				con.Close();

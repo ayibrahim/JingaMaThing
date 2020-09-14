@@ -10,17 +10,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 
 namespace JMT.Controllers {
-	
-	
+
+	//Mark As Done
 	public class RMNotesConroller : Controller {
-		string testing2 = "";
-		private IHostingEnvironment _hostingEnvironment;
-		string con2 = "Data Source = itd2.cincinnatistate.edu; Initial Catalog=CPDM-IbrahimA;User id=cpdm-ayibrahim;Password=0654407;";
-		public RMNotesConroller(IHostingEnvironment hostingEnvironment) {
-			_hostingEnvironment = hostingEnvironment;
-		}
 
-
+		string con2 = "Server = DESKTOP-PBEU3TN;Database=JMT;Trusted_Connection=True";
 		[HttpGet]
 		[Route("api/CreateRMNote/{ResourceManagerID}/{Title}/{ViewType}")]
 		public List<Response> CreateRMNote(string ResourceManagerID = "", string Title = "", string ViewType = "") {
@@ -41,9 +35,6 @@ namespace JMT.Controllers {
 			Customer.Add(finalresult);
 			return Customer;
 		}
-
-
-		
 
 		[HttpGet]
 		[Route("api/EditRMNoteTitleViewType/{ResourceManagerNotesID}/{Title}/{ViewType}")]

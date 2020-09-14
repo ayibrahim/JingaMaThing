@@ -197,7 +197,7 @@ export class DevordersComponent implements OnInit {
     setTimeout(()=> this.toastr.clear() , 4000);
   }
   MarkAsComplete(order){
-    this.http.get('https://localhost:44380/api/UpdateDevOrder/' + order.orderNumber) .subscribe(
+    this.http.get('https://localhost:44380/api/UpdateDevOrderComplete/' + order.orderNumber) .subscribe(
       (response2 : headers[]) => {
         this.newdata = response2;
         this.toastr.clear();

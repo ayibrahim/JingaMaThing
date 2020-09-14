@@ -10,10 +10,10 @@ using Microsoft.Data.SqlClient;
 
 namespace JMT.Controllers {
 	[Produces("application/json")]
-
+	//Mark As Done
 	public class OpenOrderController : Controller
     {
-		string con2 = "Data Source = itd2.cincinnatistate.edu; Initial Catalog=CPDM-IbrahimA;User id=cpdm-ayibrahim;Password=0654407;";
+		string con2 = "Server = DESKTOP-PBEU3TN;Database=JMT;Trusted_Connection=True";
 		[HttpGet]	
 		[Route("api/GetDevOpenOrders/{DeveloperID}")]
 		public List<DevOpenOrder> GetDevOpenOrders(string DeveloperID = "") {
@@ -110,7 +110,7 @@ namespace JMT.Controllers {
 				con.Open();
 				SqlDataReader rdr = cmd.ExecuteReader();
 				while (rdr.Read()) {
-					CustOpenOrders finalcustomer = new CustOpenOrders();
+					CustOpenOrders finalcustomer = new CustOpenOrders();	
 					finalcustomer.OrderNumber = Convert.ToInt32(rdr["OrderNumber"]);
 					finalcustomer.CustomerID = Convert.ToInt32(rdr["CustomerID"]);
 					finalcustomer.DeveloperName = (rdr["DeveloperName"].ToString());
@@ -229,14 +229,14 @@ namespace JMT.Controllers {
 		}
 
 		[HttpGet]
-		[Route("api/UpdateDevOrder/{OrderID}")]
+		[Route("api/UpdateDevOrderComplete/{OrderID}")]
 		public List<Response> UpdateDevOrder(string OrderID = "") {
 			Response finalresult = new Response();
 			List<Response> Order = new List<Response>();
 			string result = "Successful ";
 			//SqlConnection con = new SqlConnection("Data Source=NiluNilesh;Integrated Security=True");  
 			SqlConnection con = new SqlConnection(con2);
-			SqlCommand cmd = new SqlCommand("UpdateDevOrder", con);
+			SqlCommand cmd = new SqlCommand("UpdateDevOrderComplete", con);
 			cmd.CommandType = CommandType.StoredProcedure;
 			cmd.Parameters.AddWithValue("@OrderID", OrderID);
 			con.Open();

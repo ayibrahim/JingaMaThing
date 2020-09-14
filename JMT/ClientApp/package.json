@@ -61,7 +61,7 @@
   "homepage": "https://demos.creative-tim.com/black-dashboard-angular/#/dashboard",
   "private": false,
   "dependencies": {
-    "@angular/animations": "^9.1.11",
+    "@angular/animations": "^9.1.12",
     "@angular/cdk": "^9.2.4",
     "@angular/common": "9.0.5",
     "@angular/compiler": "9.0.5",

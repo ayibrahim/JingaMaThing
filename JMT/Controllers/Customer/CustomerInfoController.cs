@@ -6,18 +6,18 @@ using System.Threading.Tasks;
 using JMT.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
 
 namespace JMT.Controllers
 {
     public class CustomerInfoController : Controller
     {
-        string con2 = "Data Source = itd2.cincinnatistate.edu; Initial Catalog=CPDM-IbrahimA;User id=cpdm-ayibrahim;Password=0654407;";
-		//db dbop = new db();
-
+		string con2 = "Server = DESKTOP-PBEU3TN;Database=JMT;Trusted_Connection=True";
 		[HttpPost]
 		[Route("api/InserNewCustomer")]
 		public List<Response> InsertDeveloper([FromBody] CustInsert data)
 		{
+			
 			Response finalresult = new Response();
 			List<Response> Customer = new List<Response>();
 			string result = "Successful ";
@@ -93,6 +93,8 @@ namespace JMT.Controllers
 					finalcustomer.Password = (rdr["Password"].ToString());
 					finalcustomer.RoleDesc = (rdr["RoleDesc"].ToString());
 					finalcustomer.Photo = (rdr["Photo"].ToString());
+					finalcustomer.SideBarColor = (rdr["SideBarColor"].ToString());
+					finalcustomer.DashboardColor = (rdr["DashboardColor"].ToString());
 					customer.Add(finalcustomer);
 				}
 				con.Close();
@@ -129,7 +131,6 @@ namespace JMT.Controllers
 		{
 			object result = "";
 			string finalresult = "";
-
 			SqlConnection con = new SqlConnection(con2);
 			SqlCommand cmd = new SqlCommand("SELECT Photo From TCustomers Where Email = '" + Email + "'", con);
 			con.Open();

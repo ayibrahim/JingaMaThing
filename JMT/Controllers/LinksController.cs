@@ -13,15 +13,7 @@ namespace JMT.Controllers {
 	
 	
 	public class LinksController : Controller {
-		string testing2 = "";
-		private IHostingEnvironment _hostingEnvironment;
-		string con2 = "Data Source = itd2.cincinnatistate.edu; Initial Catalog=CPDM-IbrahimA;User id=cpdm-ayibrahim;Password=0654407;";
-		public LinksController(IHostingEnvironment hostingEnvironment) {
-			_hostingEnvironment = hostingEnvironment;
-		}
-
-
-		
+		string con2 = "Server = DESKTOP-PBEU3TN;Database=JMT;Trusted_Connection=True";
 		[HttpPost]
 		[Route("api/CreateDevLink")]
 		public List<Response> CreateDevLink([FromBody]CreateDevLink data) {

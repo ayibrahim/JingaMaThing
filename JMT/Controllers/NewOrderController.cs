@@ -10,10 +10,10 @@ using Microsoft.Data.SqlClient;
 
 namespace JMT.Controllers {
 	[Produces("application/json")]
-
+	//Mark As Done
 	public class NewOrderController : Controller
     {
-		string con2 = "Data Source = itd2.cincinnatistate.edu; Initial Catalog=CPDM-IbrahimA;User id=cpdm-ayibrahim;Password=0654407;";
+		string con2 = "Server = DESKTOP-PBEU3TN;Database=JMT;Trusted_Connection=True";
 		[HttpGet]
 		[Route("api/GetListofDevs")]
 		public List<DevList> GetDevList() {
@@ -139,7 +139,7 @@ namespace JMT.Controllers {
 					finalcustomer.Budget = (rdr["Budget"].ToString());
 					finalcustomer.Requirements = (rdr["Requirements"].ToString());
 					finalcustomer.Name = (rdr["Name"].ToString());
-					devlist.Add(finalcustomer);
+					devlist.Add(finalcustomer);	
 				}
 				con.Close();
 			}
@@ -202,7 +202,7 @@ namespace JMT.Controllers {
 			SqlConnection con = new SqlConnection(con2);
 			SqlCommand cmd = new SqlCommand("UpdateCustomerDeclined", con);
 			cmd.CommandType = CommandType.StoredProcedure;
-			cmd.Parameters.AddWithValue("@CustomerPendingID", CustomerPendingID);
+			cmd.Parameters.AddWithValue("@ ", CustomerPendingID);
 			con.Open();
 			int i = cmd.ExecuteNonQuery();
 
