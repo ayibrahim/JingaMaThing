@@ -98,7 +98,7 @@ namespace JMT.Controllers
 				string test = "";
 				var file = Request.Form.Files[0];
 				string folderName = "Images";
-				string AssetsFolderPath = @"C:\Users\aibrahi\Desktop\JMT\JMT\wwwroot\MyStaticFiles";
+				string AssetsFolderPath = @"C:\Users\ayibr\OneDrive\Desktop\JMT\JMT\wwwroot\MyStaticFiles";
 				string newPath = Path.Combine(AssetsFolderPath, folderName);
 				string newPath2 = newPath + @"\" + Email;
 				if (!Directory.Exists(newPath))

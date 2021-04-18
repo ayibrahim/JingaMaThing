@@ -202,7 +202,7 @@ namespace JMT.Controllers {
 			SqlConnection con = new SqlConnection(con2);
 			SqlCommand cmd = new SqlCommand("UpdateCustomerDeclined", con);
 			cmd.CommandType = CommandType.StoredProcedure;
-			cmd.Parameters.AddWithValue("@ ", CustomerPendingID);
+			cmd.Parameters.AddWithValue("@CustomerPendingID", CustomerPendingID);
 			con.Open();
 			int i = cmd.ExecuteNonQuery();
 

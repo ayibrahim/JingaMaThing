@@ -147,7 +147,7 @@ namespace JMT.Controllers.Developer
 					finalcustomer.NoteID = Convert.ToInt32(rdr["NoteID"]);
 					finalcustomer.Title = (rdr["Title"].ToString());
 					finalcustomer.NoteContent = (rdr["NoteContent"].ToString());
-					finalcustomer.Role = (rdr["Role"].ToString());
+					finalcustomer.Role = (rdr["RoleDesc"].ToString());
 					customer.Add(finalcustomer);
 				}
 				con.Close();
@@ -167,7 +167,7 @@ namespace JMT.Controllers.Developer
 					finalcustomer.NoteID = Convert.ToInt32(rdr["NoteID"]);
 					finalcustomer.Title = (rdr["Title"].ToString());
 					finalcustomer.NoteContent = (rdr["NoteContent"].ToString());
-					finalcustomer.Role = (rdr["Role"].ToString());
+					finalcustomer.Role = (rdr["RoleDesc"].ToString());
 					customer.Add(finalcustomer);
 				}
 				con.Close();

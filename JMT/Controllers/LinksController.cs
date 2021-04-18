@@ -205,7 +205,7 @@ namespace JMT.Controllers {
 					finalcustomer.LinkID = Convert.ToInt32(rdr["LinkID"]);
 					finalcustomer.Title = (rdr["Title"].ToString());
 					finalcustomer.HyperLink = (rdr["HyperLink"].ToString());
-					finalcustomer.Role = (rdr["Role"].ToString());
+					finalcustomer.Role = (rdr["RoleDesc"].ToString());
 					customer.Add(finalcustomer);
 				}
 				con.Close();
@@ -223,7 +223,7 @@ namespace JMT.Controllers {
 					finalcustomer.LinkID = Convert.ToInt32(rdr["LinkID"]);
 					finalcustomer.Title = (rdr["Title"].ToString());
 					finalcustomer.HyperLink = (rdr["HyperLink"].ToString());
-					finalcustomer.Role = (rdr["Role"].ToString());
+					finalcustomer.Role = (rdr["RoleDesc"].ToString());
 					customer.Add(finalcustomer);
 				}
 				con.Close();
@@ -249,7 +249,7 @@ namespace JMT.Controllers {
 					finalcustomer.LinkID = Convert.ToInt32(rdr["LinkID"]);
 					finalcustomer.Title = (rdr["Title"].ToString());
 					finalcustomer.HyperLink = (rdr["HyperLink"].ToString());
-					finalcustomer.Role = (rdr["Role"].ToString());
+					finalcustomer.Role = (rdr["RoleDesc"].ToString());
 					customer.Add(finalcustomer);
 				}
 				con.Close();
@@ -267,7 +267,7 @@ namespace JMT.Controllers {
 					finalcustomer.LinkID = Convert.ToInt32(rdr["LinkID"]);
 					finalcustomer.Title = (rdr["Title"].ToString());
 					finalcustomer.HyperLink = (rdr["HyperLink"].ToString());
-					finalcustomer.Role = (rdr["Role"].ToString());
+					finalcustomer.Role = (rdr["RoleDesc"].ToString());
 					customer.Add(finalcustomer);
 				}
 				con.Close();

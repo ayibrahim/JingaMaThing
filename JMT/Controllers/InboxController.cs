@@ -71,6 +71,8 @@ namespace JMT.Controllers {
 					" If this was not you please contact jmtithelpdesk@gmail.com , Thank You.";
 
 				SmtpServer.Port = 587;
+				SmtpServer.UseDefaultCredentials = false;
+
 				SmtpServer.Credentials = new System.Net.NetworkCredential("jmtithelpdesk@gmail.com", "%[za$Bhm+~FJZXm6EW-]~T");
 				SmtpServer.EnableSsl = true;
 
