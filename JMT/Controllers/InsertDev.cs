@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using HBPOS.Data;
 using JMT.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
@@ -13,7 +14,8 @@ namespace JMT.Controllers {
 
 	//Mark As Done
 	public class InsertDev : Controller {
-		string con2 = "Server = DESKTOP-PBEU3TN;Database=JMT;Trusted_Connection=True";
+		public static db dbObj = new db();
+		string con2 = dbObj.getConString();
 		[HttpPost]
 		[Route("api/InsertNewTask")]
 		public List<Response> InsertNewTask([FromBody]NewTask data) {

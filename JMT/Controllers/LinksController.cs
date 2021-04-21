@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using HBPOS.Data;
 using JMT.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
@@ -13,7 +14,8 @@ namespace JMT.Controllers {
 	
 	
 	public class LinksController : Controller {
-		string con2 = "Server = DESKTOP-PBEU3TN;Database=JMT;Trusted_Connection=True";
+		public static db dbObj = new db();
+		string con2 = dbObj.getConString();
 		[HttpPost]
 		[Route("api/CreateDevLink")]
 		public List<Response> CreateDevLink([FromBody]CreateDevLink data) {

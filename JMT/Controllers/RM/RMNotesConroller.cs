@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using HBPOS.Data;
 using JMT.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
@@ -14,7 +15,8 @@ namespace JMT.Controllers {
 	//Mark As Done
 	public class RMNotesConroller : Controller {
 
-		string con2 = "Server = DESKTOP-PBEU3TN;Database=JMT;Trusted_Connection=True";
+		public static db dbObj = new db();
+		string con2 = dbObj.getConString();
 		[HttpGet]
 		[Route("api/CreateRMNote/{ResourceManagerID}/{Title}/{ViewType}")]
 		public List<Response> CreateRMNote(string ResourceManagerID = "", string Title = "", string ViewType = "") {

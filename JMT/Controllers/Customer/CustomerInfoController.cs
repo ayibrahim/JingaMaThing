@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using HBPOS.Data;
 using JMT.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
@@ -12,7 +13,9 @@ namespace JMT.Controllers
 {
     public class CustomerInfoController : Controller
     {
-		string con2 = "Server = DESKTOP-PBEU3TN;Database=JMT;Trusted_Connection=True";
+		public static db dbObj = new db();
+		string con2 = dbObj.getConString();
+
 		[HttpPost]
 		[Route("api/InserNewCustomer")]
 		public List<Response> InsertDeveloper([FromBody] CustInsert data)

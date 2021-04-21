@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Net.Mail;
 using System.Threading.Tasks;
+using HBPOS.Data;
 using JMT.Model;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -13,7 +14,8 @@ namespace JMT.Controllers {
 	[Produces("application/json")]
 	//Mark As Done
 	public class InboxController : Controller {
-		string con2 = "Server = DESKTOP-PBEU3TN;Database=JMT;Trusted_Connection=True";
+		public static db dbObj = new db();
+		string con2 = dbObj.getConString();
 		[HttpGet]
 		[Route("api/GetCustomerInbox/{CustomerID}")]
 		public List<Inbox> GetCustomerInfo(string CustomerID = "") {

@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using HBPOS.Data;
 using JMT.Exceptions;
 using JMT.Model;
 using Microsoft.AspNetCore.Hosting;
@@ -16,7 +17,15 @@ namespace JMT.Controllers
 	//Mark As Done
 	public class SharedRolesController : ControllerBase
     {
-		string con2 = "Server = DESKTOP-PBEU3TN;Database=JMT;Trusted_Connection=True";
+		public static db dbObj = new db();
+		string con2 = dbObj.getConString();
+
+		private readonly IHostingEnvironment _appEnvironment;
+
+		public SharedRolesController(IHostingEnvironment appEnvironment)
+		{
+			_appEnvironment = appEnvironment;
+		}
 
 		[HttpGet]
 		[Route("api/CheckUserEmail/{Email}")]
@@ -98,7 +107,7 @@ namespace JMT.Controllers
 				string test = "";
 				var file = Request.Form.Files[0];
 				string folderName = "Images";
-				string AssetsFolderPath = @"C:\Users\ayibr\OneDrive\Desktop\JMT\JMT\wwwroot\MyStaticFiles";
+				string AssetsFolderPath = _appEnvironment.WebRootPath.ToString() + @"\MyStaticFiles";
 				string newPath = Path.Combine(AssetsFolderPath, folderName);
 				string newPath2 = newPath + @"\" + Email;
 				if (!Directory.Exists(newPath))
