@@ -106,7 +106,7 @@ namespace JMT
 
                 if (env.IsDevelopment())
                 {
-                    spa.Options.StartupTimeout = new TimeSpan(0, 0, 10);
+                    spa.Options.StartupTimeout = new TimeSpan(1, 0, 0);
                     spa.UseAngularCliServer(npmScript: "start");
              
                 }
